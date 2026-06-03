@@ -51,9 +51,17 @@ async function refreshToken() {
             if (PASSWORD) params.append("password", PASSWORD);
             if (SCOPE) params.append("scope", SCOPE);
 
+            const basicAuth =
+                CLIENT_ID && CLIENT_SECRET
+                    ? `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`
+                    : null;
+
             const res = await fetch(url, {
                 method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    ...(basicAuth ? { Authorization: basicAuth } : {}),
+                },
                 body: params.toString(),
                 mode: "cors",
                 credentials: "omit",
