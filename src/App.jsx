@@ -1,9 +1,26 @@
+import { useEffect, useState } from 'react';
+import { get } from './services/api';
+
 function App() {
-  return (
-    <>
-     
-    </>
-  )
+  const [status, setStatus] = useState('Chargement des tickets...');
+
+  useEffect(() => {
+    async function loadTickets() {
+      const result = await get('Assistance/Ticket');
+      console.log('Tickets:', result);
+
+      if (result && result.error) {
+        setStatus(`Erreur: ${result.message || 'inconnue'}`);
+        return;
+      }
+
+      setStatus('Tickets chargés, voir la console.');
+    }
+
+    loadTickets();
+  }, []);
+
+  return <div>{status}</div>;
 }
 
-export default App
+export default App;
