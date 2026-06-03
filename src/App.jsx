@@ -6,7 +6,7 @@ function App() {
 
   useEffect(() => {
     async function loadTickets() {
-      const result = await get('Assistance/Ticket');
+      const result = await get('Assistance/Ticket',1);
       console.log('Tickets:', result);
 
       if (typeof result === 'string') {

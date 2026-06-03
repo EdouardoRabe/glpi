@@ -92,8 +92,24 @@ function _enqueueRequest() {
     });
 }
 
-async function apiCall(method, endpoint, data = null) {
-    const url = `${BASE_URL}/api.php/v2.3/${endpoint}`;
+function buildUrl(endpoint, resourceId = null, query = {}) {
+    const path = resourceId !== null && resourceId !== undefined && resourceId !== ""
+        ? `${endpoint}/${resourceId}`
+        : endpoint;
+    const url = new URL(`${BASE_URL}/api.php/v2.3/${path}`, window.location.origin);
+
+    Object.entries(query).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+            url.searchParams.set(key, String(value));
+        }
+    });
+
+    return url.toString();
+}
+
+async function apiCall(method, endpoint, resourceId = null, data = null, options = {}) {
+    const query = method === "DELETE" ? { force: options.force ?? true } : options.query || {};
+    const url = buildUrl(endpoint, resourceId, query);
     const headers = { Accept: "application/json" };
 
     if (_token) {
@@ -155,11 +171,16 @@ async function apiCall(method, endpoint, data = null) {
     }
 }
 
-export const get = (endpoint) => apiCall("GET", endpoint);
-export const post = (endpoint, data) => apiCall("POST", endpoint, data);
-export const put = (endpoint, data) => apiCall("PUT", endpoint, data);
-export const patch = (endpoint, data) => apiCall("PATCH", endpoint, data);
-export const del = (endpoint, data) => apiCall("DELETE", endpoint, data);
+export const get = (endpoint, resourceId = null, options = {}) =>
+    apiCall("GET", endpoint, resourceId, null, options);
+export const post = (endpoint, data, resourceId = null, options = {}) =>
+    apiCall("POST", endpoint, resourceId, data, options);
+export const put = (endpoint, data, resourceId = null, options = {}) =>
+    apiCall("PUT", endpoint, resourceId, data, options);
+export const patch = (endpoint, data, resourceId = null, options = {}) =>
+    apiCall("PATCH", endpoint, resourceId, data, options);
+export const del = (endpoint, resourceId = null, options = {}) =>
+    apiCall("DELETE", endpoint, resourceId, null, options);
 export const refreshTokenManually = () => refreshToken();
 export const getToken = () => _token;
 
