@@ -17,40 +17,46 @@ docs/
 │   ├── 1.2-jsx-syntaxe.md
 │   ├── 1.3-composants-fonctionnels.md
 │   ├── 1.4-props.md
-│   ├── 1.5-useState.md
-│   ├── 1.6-useEffect.md
-│   └── 1.7-rendu-conditionnel.md
+│   └── 1.5-rendu-conditionnel.md
 │
-├── 2-INTERACTION-DONNEES/            Niveau 2 : Travail avec données
+├── 2-HOOKS/                           ⭐ HOOKS REACT (La clé de la réactivité)
+│   ├── 2.1-useState.md
+│   ├── 2.2-useEffect.md
+│   ├── 2.3-useRef.md
+│   ├── 2.4-useReducer.md
+│   ├── 2.5-useContext.md
+│   ├── 2.6-useCallback-useMemo.md
+│   ├── 2.7-custom-hooks.md
+│   └── README-HOOKS.md
+│
+├── 3-INTERACTION-DONNEES/            Niveau 2 : Travail avec données
 │   ├── 2.1-listes-et-keys.md
 │   ├── 2.2-formulaires-complets.md
 │   ├── 2.3-fetch-et-api.md
 │   └── 2.4-styles-css.md
 │
-├── 3-NAVIGATION/                      Niveau 3 : Navigation multi-pages
+├── 4-NAVIGATION/                      Niveau 3 : Navigation multi-pages
 │   ├── 3.1-react-router-bases.md
 │   ├── 3.2-parametres-url.md
 │   └── 3.3-navigation-avancee.md
 │
-├── 4-AVANCE/                          Niveau 4 : Patterns professionnels
+├── 5-AVANCE/                          Niveau 4 : Patterns professionnels
 │   ├── 4.1-context-api.md
 │   ├── 4.2-custom-hooks.md
 │   └── 4.3-patterns-professionnels.md
 │
-├── 5-COMPOSANTS-REELS/               Niveau 5 : Composants prêts à utiliser
+├── 6-COMPOSANTS-REELS/               Niveau 5 : Composants prêts à utiliser
 │   ├── 5.1-composants-base.md
 │   ├── 5.2-composants-interactifs.md
 │   └── 5.3-layouts-et-structures.md
 │
-├── 6-GUIDES-UTILES/                  Références & aide-mémoires
+├── 7-GUIDES-UTILES/                  Références & aide-mémoires
 │   ├── GUIDE-IMPORTS.md
 │   ├── GUIDE-GUILLEMETS.md
 │   ├── GUIDE-OPTIONAL-CHAINING.md
-│   ├── GUIDE-API-KEYS.md
-│   ├── GUIDE-CSV-JSON.md
-│   └── GUIDE-CSV-XML.md
+│   └── GUIDE-API-KEYS.md
 │
-└── 7-PROJETS-COMPLETS/               Exemples concrets & projets
+└── 8-PROJETS-COMPLETS/               Exemples concrets & projets
     ├── PROJET-1-TodoApp-Simple.md
     ├── PROJET-2-ListeProduits.md
     └── PROJET-GLPI-Dashboard.md
@@ -95,9 +101,10 @@ docs/
 ### Pour faire le projet GLPI
 
 1. Assure-toi d'avoir les fondamentaux ✅
-2. [Fetch & API](2-INTERACTION-DONNEES/2.3-fetch-et-api.md)
-3. [Auth & Clés API](6-GUIDES-UTILES/GUIDE-API-KEYS.md)
-4. [Projet GLPI](7-PROJETS-COMPLETS/PROJET-GLPI-Dashboard.md)
+2. [2-HOOKS](2-HOOKS/README-HOOKS.md) - useState & useEffect essentiels
+3. [Fetch & API](3-INTERACTION-DONNEES/2.3-fetch-et-api.md)
+4. [Auth & Clés API](7-GUIDES-UTILES/GUIDE-API-KEYS.md)
+5. [Projet GLPI](8-PROJETS-COMPLETS/PROJET-GLPI-Dashboard.md)
 
 ---
 
@@ -130,17 +137,17 @@ Les erreurs à éviter
 
 ### Débutant complet (1ère fois)
 ```
-0-START-HERE → 1-FONDAMENTAUX → 2-INTERACTION-DONNEES → Petit projet
+0-START-HERE → 1-FONDAMENTAUX → 2-HOOKS → 3-INTERACTION-DONNEES → Petit projet
 ```
 
 ### Intermédiaire (avec bases)
 ```
-2-INTERACTION-DONNEES → 3-NAVIGATION → 4-AVANCE
+2-HOOKS → 3-INTERACTION-DONNEES → 4-NAVIGATION → 5-AVANCE
 ```
 
 ### Projet GLPI
 ```
-Fondamentaux ✅ → 2.3-Fetch → Guides → PROJET-GLPI
+Fondamentaux ✅ → 2-HOOKS ✅ → 3.3-Fetch → 7-GUIDES → 8-PROJET-GLPI
 ```
 
 ---

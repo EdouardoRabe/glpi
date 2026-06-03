@@ -11,26 +11,34 @@
    ├─ Setup & Installation
    ├─ JSX & Composants
    ├─ Props
-   ├─ useState & useEffect
    └─ Rendu Conditionnel
          ↓
-🟡 Niveau 2: INTERACTION & DONNÉES
+🟡 Niveau 2: HOOKS REACT ⭐ (La clé de la réactivité)
+   ├─ useState
+   ├─ useEffect
+   ├─ useRef
+   ├─ useReducer
+   ├─ useContext
+   ├─ Custom Hooks
+   └─ Et plus...
+         ↓
+🟠 Niveau 3: INTERACTION & DONNÉES
    ├─ Listes & .map()
    ├─ Formulaires
    ├─ Appels API (Fetch)
    └─ CSS & Styling
          ↓
-🔵 Niveau 3: NAVIGATION
+🔵 Niveau 4: NAVIGATION
    ├─ React Router
    ├─ Paramètres URL
    └─ Navigation Avancée
          ↓
-🟣 Niveau 4: AVANCÉ (Optimisation & Patterns)
-   ├─ Context API
-   ├─ Custom Hooks
-   └─ Patterns Professionnels
+🟣 Niveau 5: AVANCÉ (Optimisation & Patterns)
+   ├─ Context API Avancée
+   ├─ Patterns Professionnels
+   └─ Performance
          ↓
-🟠 Niveau 5: COMPOSANTS RÉUTILISABLES
+🟠 Niveau 6: COMPOSANTS RÉUTILISABLES
    ├─ Composants de base
    ├─ Composants interactifs
    └─ Layouts & Structures
@@ -46,27 +54,29 @@
 2. [JSX - Syntaxe](../1-FONDAMENTAUX/1.2-jsx-syntaxe.md)
 3. [Composants Fonctionnels](../1-FONDAMENTAUX/1.3-composants-fonctionnels.md)
 4. [Props](../1-FONDAMENTAUX/1.4-props.md)
-5. [useState](../1-FONDAMENTAUX/1.5-useState.md)
-6. [useEffect](../1-FONDAMENTAUX/1.6-useEffect.md)
+5. [Rendu Conditionnel](../1-FONDAMENTAUX/1.5-rendu-conditionnel.md)
+6. **➡️ HOOKS** : [useState](../2-HOOKS/2.1-useState.md) et [useEffect](../2-HOOKS/2.2-useEffect.md)
 7. **→ Fais un petit projet** : Compteur, Todo simple
-8. [Rendu Conditionnel](../1-FONDAMENTAUX/1.7-rendu-conditionnel.md)
+8. Explore les autres hooks : [useRef](../2-HOOKS/2.3-useRef.md), [useReducer](../2-HOOKS/2.4-useReducer.md)
 
 ### 📚 **Tu connais déjà les bases et tu veux progresser**
 
-1. [Listes & .map()](../2-INTERACTION-DONNEES/2.1-listes-et-keys.md)
-2. [Formulaires](../2-INTERACTION-DONNEES/2.2-formulaires-complets.md)
-3. [Fetch & API](../2-INTERACTION-DONNEES/2.3-fetch-et-api.md)
-4. [React Router](../3-NAVIGATION/3.1-react-router-bases.md)
-5. **→ Fais un projet** : Liste de produits, API météo
-6. [Context API](../4-AVANCE/4.1-context-api.md)
+1. [2-HOOKS](../2-HOOKS/README-HOOKS.md) (tous les hooks pour la maîtrise totale)
+2. [Listes & .map()](../3-INTERACTION-DONNEES/2.1-listes-et-keys.md)
+3. [Formulaires](../3-INTERACTION-DONNEES/2.2-formulaires-complets.md)
+4. [Fetch & API](../3-INTERACTION-DONNEES/2.3-fetch-et-api.md)
+5. [React Router](../4-NAVIGATION/3.1-react-router-bases.md)
+6. **→ Fais un projet** : Liste de produits, API météo
+7. [Context API Avancée](../5-AVANCE/4.1-context-api.md)
 
 ### 🎯 **Tu veux faire un projet GLPI**
 
-1. Assure-toi d'avoir les fondamentaux ✅
-2. [Fetch & API GLPI](../2-INTERACTION-DONNEES/2.3-fetch-et-api.md)
-3. [Gestion d'authentification](../2-INTERACTION-DONNEES/2.3-fetch-et-api.md#authentification)
-4. [Context API](../4-AVANCE/4.1-context-api.md) (pour l'état global)
-5. [Projet GLPI Dashboard](../7-PROJETS-COMPLETS/PROJET-GLPI-Dashboard.md)
+1. Complète les fondamentaux ✅ : 1-FONDAMENTAUX
+2. Apprends les **Hooks essentiels** : [2-HOOKS](../2-HOOKS/README-HOOKS.md)
+3. [Fetch & API](../3-INTERACTION-DONNEES/2.3-fetch-et-api.md)
+4. [useContext](../2-HOOKS/2.5-useContext.md) (état global)
+5. [Guide API Keys - Sécurité](../7-GUIDES-UTILES/GUIDE-API-KEYS.md)
+6. [Projet GLPI Dashboard](../8-PROJETS-COMPLETS/PROJET-GLPI-Dashboard.md)
 
 ---
 
@@ -74,10 +84,10 @@
 
 **Lis ces guides avant de coder :**
 
-- [Guide Imports](../6-GUIDES-UTILES/GUIDE-IMPORTS.md) - Comment faire des imports (87% des erreurs !)
-- [Guide Guillemets](../6-GUIDES-UTILES/GUIDE-GUILLEMETS.md) - Simples `''`, doubles `""`, backticks `` ` ``
-- [Guide Optional Chaining](../6-GUIDES-UTILES/GUIDE-OPTIONAL-CHAINING.md) - Les opérateurs `?.` et `??`
-- [Guide API Keys](../6-GUIDES-UTILES/GUIDE-API-KEYS.md) - Sécuriser tes clés API avec `.env`
+- [Guide Imports](../7-GUIDES-UTILES/GUIDE-IMPORTS.md) - Comment faire des imports (87% des erreurs !)
+- [Guide Guillemets](../7-GUIDES-UTILES/GUIDE-GUILLEMETS.md) - Simples `''`, doubles `""`, backticks `` ` ``
+- [Guide Optional Chaining](../7-GUIDES-UTILES/GUIDE-OPTIONAL-CHAINING.md) - Les opérateurs `?.` et `??`
+- [Guide API Keys](../7-GUIDES-UTILES/GUIDE-API-KEYS.md) - Sécuriser tes clés API avec `.env`
 
 ---
 
