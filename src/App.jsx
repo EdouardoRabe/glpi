@@ -9,6 +9,10 @@ function App() {
       const result = await get('Assistance/Ticket');
       console.log('Tickets:', result);
 
+      if (typeof result === 'string') {
+        console.warn('La réponse est une chaîne HTML/texte, pas du JSON GLPI.');
+      }
+
       if (result && result.error) {
         setStatus(`Erreur: ${result.message || 'inconnue'}`);
         return;

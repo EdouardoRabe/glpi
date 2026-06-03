@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_GLPI_BASE_URL || "";
 const TOKEN_PATH =
-    import.meta.env.VITE_GLPI_TOKEN_PATH || "/api.php/v2.3/initSession";
+    import.meta.env.VITE_GLPI_TOKEN_PATH || "/api.php/v2.3/token";
 const GRANT_TYPE = import.meta.env.VITE_GLPI_GRANT_TYPE || "password";
 const CLIENT_ID = import.meta.env.VITE_GLPI_CLIENT_ID || "";
 const CLIENT_SECRET = import.meta.env.VITE_GLPI_CLIENT_SECRET || "";
@@ -51,16 +51,10 @@ async function refreshToken() {
             if (PASSWORD) params.append("password", PASSWORD);
             if (SCOPE) params.append("scope", SCOPE);
 
-            const basicAuth =
-                CLIENT_ID && CLIENT_SECRET
-                    ? `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`
-                    : null;
-
             const res = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
-                    ...(basicAuth ? { Authorization: basicAuth } : {}),
                 },
                 body: params.toString(),
                 mode: "cors",
@@ -100,10 +94,14 @@ function _enqueueRequest() {
 
 async function apiCall(method, endpoint, data = null) {
     const url = `${BASE_URL}/api.php/v2.3/${endpoint}`;
-    const headers = { "Content-Type": "application/json" };
+    const headers = { Accept: "application/json" };
 
     if (_token) {
         headers["Authorization"] = `Bearer ${_token}`;
+    }
+
+    if (method === "POST" || method === "PUT" || method === "PATCH") {
+        headers["Content-Type"] = "application/json";
     }
 
     const opts = {
