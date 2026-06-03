@@ -51,11 +51,18 @@ docs/
 │   └── 5.3-layouts-et-structures.md
 │
 ├── 7-GUIDES-UTILES/                  Références & aide-mémoires
+│   ├── INDEX-RECHERCHE.md ⭐ (Chercher rapidement)
 │   ├── GUIDE-IMPORTS.md
 │   ├── GUIDE-GUILLEMETS.md
 │   ├── GUIDE-OPTIONAL-CHAINING.md
 │   ├── GUIDE-API-KEYS.md
-│   └── GUIDE-CLOSURES-STALE-STATE.md
+│   ├── GUIDE-CLOSURES-STALE-STATE.md
+│   ├── GUIDE-FORMULAIRE-ELEMENTS.md (Input, Checkbox, Radio, Select)
+│   ├── GUIDE-ETAT-RE-RENDER.md (Pourquoi ça change/change pas?)
+│   ├── GUIDE-ASYNC-USEEFFECT.md (Fetch, loading, cleanup)
+│   ├── GUIDE-ARRAY-METHODES.md (.map, .filter, .find, .reduce)
+│   ├── GUIDE-ERREURS-MESSAGES.md (10+ erreurs et fixes)
+│   └── GUIDE-AVANT-APRES-PATTERNS.md (30+ ❌ BAD vs ✅ GOOD)
 │
 ├── 8-PATTERNS-REELS/                 ⭐ CAS D'USAGE PRATIQUES
 │   ├── README.md (Index des patterns)
