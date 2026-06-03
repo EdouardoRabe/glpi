@@ -54,9 +54,21 @@ docs/
 │   ├── GUIDE-IMPORTS.md
 │   ├── GUIDE-GUILLEMETS.md
 │   ├── GUIDE-OPTIONAL-CHAINING.md
-│   └── GUIDE-API-KEYS.md
+│   ├── GUIDE-API-KEYS.md
+│   └── GUIDE-CLOSURES-STALE-STATE.md
 │
-└── 8-PROJETS-COMPLETS/               Exemples concrets & projets
+├── 8-PATTERNS-REELS/                 ⭐ CAS D'USAGE PRATIQUES
+│   ├── README.md (Index des patterns)
+│   ├── 01-FORMULAIRES-VALIDATION/
+│   ├── 02-AUTHENTIFICATION/
+│   ├── 03-DONNEES-CRUD/
+│   ├── 04-NOTIFICATIONS/
+│   ├── 05-MODALES-POPUPS/
+│   ├── 06-ETATS-LOADING/
+│   ├── 07-RECHERCHE-FILTRES/
+│   └── 08-ERREURS-HANDLING/
+│
+└── 9-PROJETS-COMPLETS/               Exemples concrets & projets
     ├── PROJET-1-TodoApp-Simple.md
     ├── PROJET-2-ListeProduits.md
     └── PROJET-GLPI-Dashboard.md
