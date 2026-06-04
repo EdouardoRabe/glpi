@@ -2,93 +2,150 @@ import api from "../utils/api";
 import { clause, and, or, fetchAll } from "../utils/query";
 
 class Ticket {
-    endpoint = "Assistance/Ticket";
-    limit = 100;
 
-    constructor() { return }
+    static endpoint = "Assistance/Ticket";
+    static limit    = 100;
 
-    async #fetchAll(queryParams = {}, endpoint = this.endpoint, limit = this.limit) {
-        return await fetchAll(queryParams, endpoint, limit);
+    constructor(data = {}) {
+        this.id                              = data.id                              ?? null;
+        this.name                            = data.name                            ?? null;
+        this.content                         = data.content                         ?? null;
+        this.type                            = data.type                            ?? null;
+        this.status                          = data.status                          ?? null;
+        this.priority                        = data.priority                        ?? null;
+        this.urgency                         = data.urgency                         ?? null;
+        this.impact                          = data.impact                          ?? null;
+        this.global_validation               = data.global_validation               ?? null;
+        this.is_deleted                      = data.is_deleted                      ?? false;
+        this.external_id                     = data.external_id                     ?? null;
+
+        this.date                            = data.date                            ?? null;
+        this.date_creation                   = data.date_creation                   ?? null;
+        this.date_mod                        = data.date_mod                        ?? null;
+        this.date_close                      = data.date_close                      ?? null;
+        this.date_solve                      = data.date_solve                      ?? null;
+        this.begin_waiting_date              = data.begin_waiting_date              ?? null;
+        this.take_into_account_date          = data.take_into_account_date          ?? null;
+        this.resolution_date                 = data.resolution_date                 ?? null;
+        this.internal_resolution_date        = data.internal_resolution_date        ?? null;
+        this.internal_take_into_account_date = data.internal_take_into_account_date ?? null;
+
+        this.actiontime                      = data.actiontime                      ?? 0;
+        this.close_duration                  = data.close_duration                  ?? 0;
+        this.resolution_duration             = data.resolution_duration             ?? 0;
+        this.waiting_duration                = data.waiting_duration                ?? 0;
+        this.take_into_account_duration      = data.take_into_account_duration      ?? 0;
+
+        this.entity                          = data.entity ?? null;
+        this.location                        = data.location ?? null;
+        this.category                        = data.category ?? null;
+        this.request_type                    = data.request_type ?? null;
+        this.user_recipient                  = data.user_recipient ?? null;
+        this.user_editor                     = data.user_editor ?? null;
+
+        this.sla_tto                         = data.sla_tto                         ?? null;
+        this.sla_ttr                         = data.sla_ttr                         ?? null;
+        this.sla_level_ttr                   = data.sla_level_ttr                   ?? null;
+        this.sla_waiting_duration            = data.sla_waiting_duration            ?? 0;
+        this.ola_tto                         = data.ola_tto                         ?? null;
+        this.ola_ttr                         = data.ola_ttr                         ?? null;
+        this.ola_level_ttr                   = data.ola_level_ttr                   ?? null;
+        this.ola_tto_begin_date              = data.ola_tto_begin_date              ?? null;
+        this.ola_ttr_begin_date              = data.ola_ttr_begin_date              ?? null;
+        this.ola_waiting_duration            = data.ola_waiting_duration            ?? 0;
+
+        this.team                            = data.team                            ?? [];
+        this.costs                           = data.costs                           ?? [];
     }
 
-    async getAll() {
-        return await this.#fetchAll();
+    static fromArray(dataArray = []) {
+        return dataArray.map(item => new Ticket(item));
     }
 
-    async getById(id) {
-        const result = await api.get(this.endpoint, id);
+    static async #fetchAll(queryParams = {}) {
+        const raw = await fetchAll(queryParams, Ticket.endpoint, Ticket.limit);
+        return Ticket.fromArray(raw);
+    }
+
+
+    static async getAll() {
+        return await Ticket.#fetchAll();
+    }
+
+    static async getById(id) {
+        const result = await api.get(Ticket.endpoint, id);
         if (result?.error) {
             throw new Error(
                 result.message || `Ticket #${id} introuvable (status ${result.status})`
             );
         }
-        return result;
+        return new Ticket(result);
     }
 
-    async getBy(column, value) {
+    static async getBy(column, value) {
         const filter = clause(column, "==", value);
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 
-    async getByAnd(criteria) {
+    static async getByAnd(criteria) {
         if (!Array.isArray(criteria) || criteria.length === 0) {
             throw new Error("getByAnd : le paramètre doit être un tableau non vide");
         }
         const filter = and(
             ...criteria.map(({ column, value }) => clause(column, "==", value))
         );
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 
-    async getByOr(criteria) {
+    static async getByOr(criteria) {
         if (!Array.isArray(criteria) || criteria.length === 0) {
             throw new Error("getByOr : le paramètre doit être un tableau non vide");
         }
         const filter = or(
             ...criteria.map(({ column, value }) => clause(column, "==", value))
         );
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 
-    async getByNot(column, value) {
+    static async getByNot(column, value) {
         const filter = clause(column, "!=", value);
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
-  
-    async getByNotAnd(criteria) {
+
+    static async getByNotAnd(criteria) {
         if (!Array.isArray(criteria) || criteria.length === 0) {
             throw new Error("getByNotAnd : le paramètre doit être un tableau non vide");
         }
         const filter = and(
             ...criteria.map(({ column, value }) => clause(column, "!=", value))
         );
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 
-    async getByNotOr(criteria) {
+    static async getByNotOr(criteria) {
         if (!Array.isArray(criteria) || criteria.length === 0) {
             throw new Error("getByNotOr : le paramètre doit être un tableau non vide");
         }
         const filter = or(
             ...criteria.map(({ column, value }) => clause(column, "!=", value))
         );
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 
-    async getIncl(ids) {
+    static async getIncl(ids) {
         if (!Array.isArray(ids) || ids.length === 0) {
             throw new Error("getIncl : le paramètre doit être un tableau d'IDs non vide");
         }
         const filter = clause("id", "=in=", ids);
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 
-    async getExcl(ids) {
+    static async getExcl(ids) {
         if (!Array.isArray(ids) || ids.length === 0) {
             throw new Error("getExcl : le paramètre doit être un tableau d'IDs non vide");
         }
         const filter = clause("id", "=out=", ids);
-        return await this.#fetchAll({ filter });
+        return await Ticket.#fetchAll({ filter });
     }
 }
 

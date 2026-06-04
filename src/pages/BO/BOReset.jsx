@@ -5,8 +5,7 @@ export default function BOReset() {
     useEffect(() => {
         const loadTicket = async () => {
             try {
-                const ticketClass = new Ticket();
-                const tickets = await ticketClass.getAll();
+                const tickets = await Ticket.getAll();
                 console.log("Tickets loaded:", tickets);
             } catch (err) {
                 console.error("Error fetching tickets:", err);
