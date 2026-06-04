@@ -5,7 +5,7 @@ class Ticket {
 
     static endpoint = "Assistance/Ticket";
     static limit    = 100;
-    static protectedIds = [6]; 
+    static protectedIds = []; 
 
     constructor(data = {}) {
         this.id                              = data.id                              ?? null;
