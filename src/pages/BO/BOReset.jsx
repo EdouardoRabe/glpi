@@ -14,10 +14,16 @@ export default function BOReset() {
                 // tickets.save();
                 // console.log("Tickets created:", tickets);
 
-                const tickets = await Ticket.getAll();
-                console.log("Fetched tickets:", tickets);
+                // const tickets = await Ticket.getAll();
+                // console.log("Fetched tickets:", tickets);
 
-                // const ticket = await Ticket.getById(1);
+                // const ticket = await Ticket.getById(2);
+                // await ticket.delete();
+                // console.log("Ticket deleted:", ticket);
+
+                // const tickets2 = await Ticket.getAll();
+                // console.log("Fetched tickets:", tickets2);
+
                 // await ticket.update({name: "edouardo99", type:2});
                 // console.log("Ticket updated:", ticket);
             } catch (err) {
