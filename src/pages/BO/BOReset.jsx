@@ -13,7 +13,9 @@ export default function BOReset() {
             else {
                 newSet.add(item);
             }   
-            return newSet;
+            return new Set(
+                [...newSet].sort((a, b) => a.order - b.order)
+            );
         });
     }
 
@@ -22,7 +24,7 @@ export default function BOReset() {
             alert("Veuillez sélectionner au moins une catégorie à réinitialiser.");
             return;
         }
-        console.log("Selected categories for reset:", Array.from(selected).map(i => i.name));
+        console.log("Selected categories for reset:", Array.from(selected).map(i => i.name), "order:", Array.from(selected).map(i => i.order));
     }
 
     return (
@@ -32,11 +34,11 @@ export default function BOReset() {
                 <>
                     <label htmlFor={`checkbox-${item.order}`}>{item.name}</label>
                     <input 
-                            id={`checkbox-${item.order}`}
-                            key={item.order}
-                            type="checkbox" 
-                            checked={selected.has(item)} 
-                            onChange={() => {handleSelection(item)}} 
+                        id={`checkbox-${item.order}`}
+                        key={item.order}
+                        type="checkbox" 
+                        checked={selected.has(item)} 
+                        onChange={() => {handleSelection(item)}} 
                     />
                     <br/>
                 </>

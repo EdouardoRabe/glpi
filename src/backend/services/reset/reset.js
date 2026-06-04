@@ -1,3 +1,5 @@
+import { deleteAll } from "../../utils/api";
+
 export const toDelete = [
     {order: 1,              name: 'Tickets',          endpoint: '/Assistance/Ticket' },
     {order: 2,              name: 'Changes',          endpoint: '/Assistance/Change' },
@@ -17,14 +19,27 @@ export const toDelete = [
     {order: 16,             name: 'Contacts',         endpoint: '/Management/Contact' },
     {order: 17,             name: 'Projects',         endpoint: '/Project' },
     {order: 18,             name: 'KnowledgeBase',    endpoint: '/Setup/KnowledgeBase' },
-    {order: 19,             name: 'Users',            endpoint: '/Administration/User' },
+    // {order: 19,             name: 'Users',            endpoint: '/Administration/User' },
 ];
 
 export const protectedIds = [
     {name: 'Users',          ids: [1, 2, 3, 4, 5, 6] },
 ];
 
+export const reset = async (selected) => {
+    try {
+        for (const item of selected) {
+            const protectedItem = protectedIds.find(p => p.name === item.name);
+            await deleteAll(item.endpoint, protectedItem ? protectedItem.ids : []);
+            console.log(`Reset completed for ${item.name}`);
+        }
+    } catch (error) {
+        throw new Error(`Failed to delete: ${error.message}`, error);
+    }
+}
+
 export default {
     toDelete,
     protectedIds,
+    reset,
 }
