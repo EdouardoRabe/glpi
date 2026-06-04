@@ -45,6 +45,8 @@ export default function BOReset() {
             ))}
 
             <button onClick={() => {handleReset()}}>Reset</button>
+
+            <button onClick={() => {setSelected(new Set(toDelete))}}>Select All</button>
         </div>
     )
 }
