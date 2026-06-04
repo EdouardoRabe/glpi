@@ -1,0 +1,7 @@
+npm install
+npm install react-router-dom
+npm install papaparse
+npm install material-react-table
+npm install jszip
+npm install jspdf
+npm install jspdf-autotable
