@@ -5,6 +5,7 @@ class Ticket {
 
     static endpoint = "Assistance/Ticket";
     static limit    = 100;
+    static protectedIds = [6]; 
 
     constructor(data = {}) {
         this.id                              = data.id                              ?? null;
@@ -91,6 +92,10 @@ class Ticket {
             throw new Error(result.message || `Erreur lors de la suppression du ticket #${this.id}`);
         }
         this.id = null;
+    }
+
+    static async deleteAll() {
+        await api.deleteAll(Ticket.endpoint, Ticket.protectedIds);
     }
 
     static fromArray(dataArray = []) {

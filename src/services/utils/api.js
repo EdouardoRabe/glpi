@@ -176,6 +176,30 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
     }
 }
 
+export async function deleteAll(endpoint, protectedIds = [] ){
+    try {
+        const items = await get(endpoint);
+        if (items?.error) {
+            console.error(`Failed to fetch items for deletion: ${items.message}`);
+            return;
+        }   
+        for (const item of items) {
+            if (protectedIds.includes(item.id)) {
+                console.log(`Skipping protected item #${item.id}`);
+                continue;
+            }
+            const delResult = await del(endpoint, item.id, { force: true });
+            if (delResult?.error) {
+                console.error(`Failed to delete item #${item.id}: ${delResult.message}`);
+            } else {
+                console.log(`Deleted item #${item.id}`);
+            }
+        }
+    } catch (err) {
+        console.error(`Error in deleteAll for ${endpoint}:`, err);
+    }
+}
+
 export const get = (endpoint, resourceId = null, options = {}) =>
     apiCall("GET", endpoint, resourceId, null, options);
 export const post = (endpoint, data, resourceId = null, options = {}) =>
@@ -189,4 +213,4 @@ export const del = (endpoint, resourceId = null, options = {}) =>
 export const refreshTokenManually = () => refreshToken();
 export const getToken = () => _token;
 
-export default { get, post, put, patch, del, refreshTokenManually, getToken };
+export default { get, post, put, patch, del, refreshTokenManually, getToken, deleteAll};
