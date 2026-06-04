@@ -136,10 +136,8 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
 
         if (res.status === 401 || res.status === 403) {
             if (_isRefreshing) {
-                // Attendre le refresh en cours
                 await _enqueueRequest();
             } else {
-                // Lancer le refresh
                 try {
                     await refreshToken();
                 } catch (err) {
@@ -147,7 +145,6 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
                     return { error: true, message: "Token refresh failed", status: 401 };
                 }
             }
-            // Dans les DEUX cas, rappeler apiCall au complet avec le nouveau token
             return apiCall(method, endpoint, data);
         }
 
