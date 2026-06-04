@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import Ticket from "../../services/model/Ticket"
+import Ticket from "../../backend/model/Ticket"
 
 export default function BOReset() {
     useEffect(() => {
