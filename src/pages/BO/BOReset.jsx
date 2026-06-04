@@ -5,15 +5,17 @@ import { get, post, put, del } from "../../backend/utils/expressapi";
 export default function BOReset() {
     const [selected, setSelected] = useState(new Set());
 
-    useEffect(() => {
-        try {
-            const config = async () => await get('/config');
-            console.log('depuis express:', config);
-        } catch (error) {
-            console.error('Erreur lors de la récupération de la configuration:', error);
-        }
+   useEffect(() => {
+        const fetchConfig = async () => {
+            try {
+                const config = await get('/config');
+                console.log('depuis express:', config);
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        };
+        fetchConfig();
     }, []);
-
     const handleSelection = (item) => {
         setSelected(prev => {
             const newSet = new Set(prev);
