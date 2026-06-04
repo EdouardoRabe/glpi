@@ -3,10 +3,11 @@ import { parseCSV } from '../../utils/csv.js';
 
 const ticket = async (data)=> {
     try {
-        const result = await parseCSV(data);
+        const text = await data?.text();
+        const result = await parseCSV(text);
         
         for (const item of result) {
-            const dataTicket = { name : item?.name, type : item?.type};
+            const dataTicket = { name : item?.name, type : Number(item?.type) };
             const ticket = new Ticket(dataTicket);
             try {
                 await ticket.save();

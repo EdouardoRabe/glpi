@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ticket from "../../backend/services/import/import";
+import Ticket from "../../backend/model/Ticket";
 
 export default function BOImport() {
     const [file, setFile] = useState(null);
@@ -11,6 +12,10 @@ export default function BOImport() {
     const handleFileUpload = async () => {
         try {
             await ticket(file);
+            
+            const tickets2 = await Ticket.getAll();
+            console.log("Fetched tickets:", tickets2);
+
         } catch (error) {
             console.log("Erreur lors de l'import: ", error);
         }
