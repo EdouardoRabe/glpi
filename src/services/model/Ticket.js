@@ -6,7 +6,6 @@ class Ticket {
 
     constructor() { return }
 
-
     #rsqlValue(value) {
         if (typeof value === "number") return String(value);
         const str = String(value);
@@ -24,6 +23,10 @@ class Ticket {
 
     #and(...clauses) {
         return clauses.filter(Boolean).join(";");
+    }
+
+    #or(...clauses) {
+        return clauses.filter(Boolean).join(",");
     }
 
 
@@ -71,7 +74,6 @@ class Ticket {
         return await this.#fetchAll({ filter });
     }
 
-
     async getByAnd(criteria) {
         if (!Array.isArray(criteria) || criteria.length === 0) {
             throw new Error("getByAnd : le paramètre doit être un tableau non vide");
@@ -82,12 +84,20 @@ class Ticket {
         return await this.#fetchAll({ filter });
     }
 
+    async getByOr(criteria) {
+        if (!Array.isArray(criteria) || criteria.length === 0) {
+            throw new Error("getByOr : le paramètre doit être un tableau non vide");
+        }
+        const filter = this.#or(
+            ...criteria.map(({ column, value }) => this.#clause(column, "==", value))
+        );
+        return await this.#fetchAll({ filter });
+    }
 
     async getByNot(column, value) {
         const filter = this.#clause(column, "!=", value);
         return await this.#fetchAll({ filter });
     }
-
   
     async getByNotAnd(criteria) {
         if (!Array.isArray(criteria) || criteria.length === 0) {
@@ -99,7 +109,16 @@ class Ticket {
         return await this.#fetchAll({ filter });
     }
 
-  
+    async getByNotOr(criteria) {
+        if (!Array.isArray(criteria) || criteria.length === 0) {
+            throw new Error("getByNotOr : le paramètre doit être un tableau non vide");
+        }
+        const filter = this.#or(
+            ...criteria.map(({ column, value }) => this.#clause(column, "!=", value))
+        );
+        return await this.#fetchAll({ filter });
+    }
+
     async getIncl(ids) {
         if (!Array.isArray(ids) || ids.length === 0) {
             throw new Error("getIncl : le paramètre doit être un tableau d'IDs non vide");
