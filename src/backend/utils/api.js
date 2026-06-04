@@ -179,6 +179,7 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
 export async function deleteAll(endpoint, protectedIds = [] ){
     try {
         const items = await get(endpoint);
+        console.log(`Fetched ${items.length} items from ${endpoint} for deletion.`);
         if (items?.error) {
             console.error(`Failed to fetch items for deletion: ${items.message}`);
             return;

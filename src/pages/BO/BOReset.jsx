@@ -1,5 +1,5 @@
 import {useState, useEffect } from "react"
-import { toDelete } from "../../backend/services/reset/reset";
+import { toDelete, reset } from "../../backend/services/reset/reset";
 
 export default function BOReset() {
     const [selected, setSelected] = useState(new Set());
@@ -19,12 +19,12 @@ export default function BOReset() {
         });
     }
 
-    const handleReset = () => {
+    const handleReset = async() => {
         if (selected.size === 0) {
             alert("Veuillez sélectionner au moins une catégorie à réinitialiser.");
             return;
         }
-        console.log("Selected categories for reset:", Array.from(selected).map(i => i.name), "order:", Array.from(selected).map(i => i.order));
+        await reset(Array.from(selected));
     }
 
     return (
