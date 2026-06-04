@@ -57,7 +57,42 @@ class Ticket {
         this.team                            = data.team                            ?? [];
         this.costs                           = data.costs                           ?? [];
     }
-    
+
+    async save() {
+        if (this.id !== null) {
+            throw new Error("save() : ce ticket a déjà un ID, utilisez update()");
+        }
+        const result = await api.post(Ticket.endpoint, this);
+        if (result?.error) {
+            throw new Error(result.message || "Erreur lors de la création du ticket");
+        }
+        this.id = result.id ?? null;
+        return this;
+    }
+
+    async update(fields = {}) {
+        if (this.id === null) {
+            throw new Error("update() : ce ticket n'a pas d'ID, utilisez save()");
+        }
+        Object.assign(this, fields);
+        const result = await api.patch(Ticket.endpoint, fields, this.id);
+        if (result?.error) {
+            throw new Error(result.message || `Erreur lors de la mise à jour du ticket #${this.id}`);
+        }
+        return this;
+    }
+ 
+    async delete() {
+        if (this.id === null) {
+            throw new Error("delete() : ce ticket n'a pas d'ID");
+        }
+        const result = await api.del(Ticket.endpoint, this.id);
+        if (result?.error) {
+            throw new Error(result.message || `Erreur lors de la suppression du ticket #${this.id}`);
+        }
+        this.id = null;
+    }
+
     static fromArray(dataArray = []) {
         return dataArray.map(item => new Ticket(item));
     }
