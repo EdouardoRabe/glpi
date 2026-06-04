@@ -6,10 +6,7 @@ export default function BOReset() {
         const loadTicket = async () => {
             try {
                 const ticketClass = new Ticket();
-                const tickets = await ticketClass.getByNotOr([
-                    { column: "name", value: "edouardo3" },
-                    { column: "status.id", value: 1 }, 
-                ]);
+                const tickets = await ticketClass.getAll();
                 console.log("Tickets loaded:", tickets);
             } catch (err) {
                 console.error("Error fetching tickets:", err);
