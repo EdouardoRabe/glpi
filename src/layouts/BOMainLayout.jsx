@@ -10,7 +10,7 @@ function BOMainLayout() {
                 </div>
                 <div >
                     <Link to={"/"}>Reset</Link>
-              
+                    <Link to={"/import"}>Import</Link>
                 </div>
             </nav>
 
