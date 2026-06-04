@@ -30,13 +30,13 @@ class Ticket {
     }
 
 
-    async #fetchAll(queryParams = {}) {
+    async #fetchAll(queryParams = {}, endpoint = this.endpoint, limit = this.limit) {
         let start = 0;
         const allItems = [];
 
         while (true) {
-            const result = await api.get(this.endpoint, null, {
-                query: { ...queryParams, start, limit: this.limit },
+            const result = await api.get(endpoint, null, {
+                query: { ...queryParams, start, limit: limit },
             });
 
             if (result?.error) {
@@ -48,8 +48,8 @@ class Ticket {
             const items = Array.isArray(result) ? result : result?.data ?? [];
             allItems.push(...items);
 
-            if (items.length < this.limit) break;
-            start += this.limit;
+            if (items.length < limit) break;
+            start += limit;
         }
 
         return allItems;

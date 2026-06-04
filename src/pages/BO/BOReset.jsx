@@ -6,7 +6,7 @@ export default function BOReset() {
         const loadTicket = async () => {
             try {
                 const ticketClass = new Ticket();
-                const tickets = await ticketClass.getByNotAnd([
+                const tickets = await ticketClass.getByNotOr([
                     { column: "name", value: "edouardo3" },
                     { column: "status.id", value: 1 }, 
                 ]);
