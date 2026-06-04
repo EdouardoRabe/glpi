@@ -134,7 +134,15 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
     try {
         let res = await fetch(url, opts);
 
-        if (res.status === 401 || res.status === 403) {
+        if (res.status === 401 || res.status === 403 || res.status === 400) {
+            const body = await res.json().catch(() => ({}));
+            const isTokenError = body?.status === "ERROR_INVALID_PARAMETER" 
+                && body?.title?.toLowerCase().includes("token");
+
+            if (res.status === 400 && !isTokenError) {
+                return { error: true, status: 400, message: JSON.stringify(body) };
+            }
+            
             if (_isRefreshing) {
                 await _enqueueRequest();
             } else {
@@ -145,7 +153,7 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
                     return { error: true, message: "Token refresh failed", status: 401 };
                 }
             }
-            return apiCall(method, endpoint, data);
+            return apiCall(method, endpoint, resourceId, data, options);
         }
 
         if (res.ok) {
