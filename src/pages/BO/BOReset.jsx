@@ -1,46 +1,48 @@
-import { useEffect } from "react"
-import Ticket from "../../backend/model/Ticket"
+import {useState, useEffect } from "react"
+import { toDelete } from "../../backend/services/reset/reset";
 
 export default function BOReset() {
-    useEffect(() => {
-        const loadTicket = async () => {
-            try {
-                // const data = {
-                //     name : "edouardo55",
-                //     content : "test",
-                //     type : "1",
-                // }
-                // const tickets = new Ticket(data);
-                // tickets.save();
-                // console.log("Tickets created:", tickets);
+    const [selected, setSelected] = useState(new Set());
 
-                // await Ticket.deleteAll();
-                // console.log("All tickets deleted");
-
-                // const tickets2 = await Ticket.getAll();
-                // console.log("Fetched tickets:", tickets2);
-
-                // const ticket = await Ticket.getById(2);
-                // await ticket.delete();
-                // console.log("Ticket deleted:", ticket);
-
-                // const tickets2 = await Ticket.getAll();
-                // console.log("Fetched tickets:", tickets2);
-
-                // await ticket.update({name: "edouardo99", type:2});
-                // console.log("Ticket updated:", ticket);
-
-            
-            } catch (err) {
-                console.error("Error fetching tickets:", err);
+    const handleSelection = (item) => {
+        setSelected(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(item)) {
+                newSet.delete(item);
             }
-        };
-        loadTicket();
-    }, []);
+            else {
+                newSet.add(item);
+            }   
+            return newSet;
+        });
+    }
+
+    const handleReset = () => {
+        if (selected.size === 0) {
+            alert("Veuillez sélectionner au moins une catégorie à réinitialiser.");
+            return;
+        }
+        console.log("Selected categories for reset:", Array.from(selected).map(i => i.name));
+    }
 
     return (
         <div>
             <h1>BOReset</h1>
+            {toDelete?.map(item => (
+                <>
+                    <label htmlFor={`checkbox-${item.order}`}>{item.name}</label>
+                    <input 
+                            id={`checkbox-${item.order}`}
+                            key={item.order}
+                            type="checkbox" 
+                            checked={selected.has(item)} 
+                            onChange={() => {handleSelection(item)}} 
+                    />
+                    <br/>
+                </>
+            ))}
+
+            <button onClick={() => {handleReset()}}>Reset</button>
         </div>
     )
 }

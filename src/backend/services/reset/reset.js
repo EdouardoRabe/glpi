@@ -1,21 +1,30 @@
 export const toDelete = [
-    {           name: 'Tickets',          endpoint: '/Assistance/Ticket' },
-    {           name: 'Changes',          endpoint: '/Assistance/Change' },
-    {           name: 'Problems',         endpoint: '/Assistance/Problem' },
-    {           name: 'Computers',        endpoint: '/Assets/Computer' },
-    {           name: 'Monitors',         endpoint: '/Assets/Monitor' },
-    {           name: 'NetworkEquipment', endpoint: '/Assets/NetworkEquipment' },
-    {           name: 'Printers',         endpoint: '/Assets/Printer' },
-    {           name: 'Phones',           endpoint: '/Assets/Phone' },
-    {           name: 'Peripherals',      endpoint: '/Assets/Peripheral' },
-    {           name: 'Software',         endpoint: '/Assets/Software' },
-    {           name: 'SoftwareLicense',  endpoint: '/Assets/SoftwareLicense' },
-    {           name: 'Contracts',        endpoint: '/Management/Contract' },
-    {           name: 'Documents',        endpoint: '/Management/Document' },
-    {           name: 'Budgets',          endpoint: '/Management/Budget' },
-    {           name: 'Suppliers',        endpoint: '/Management/Supplier' },
-    {           name: 'Contacts',         endpoint: '/Management/Contact' },
-    {           name: 'Projects',         endpoint: '/Project' },
-    {           name: 'KnowledgeBase',    endpoint: '/Setup/KnowledgeBase' },
-    {           name: 'Users',            endpoint: '/Administration/User' },
-]
+    {order: 1,              name: 'Tickets',          endpoint: '/Assistance/Ticket' },
+    {order: 2,              name: 'Changes',          endpoint: '/Assistance/Change' },
+    {order: 3,              name: 'Problems',         endpoint: '/Assistance/Problem' },
+    {order: 4,              name: 'Computers',        endpoint: '/Assets/Computer' },
+    {order: 5,              name: 'Monitors',         endpoint: '/Assets/Monitor' },
+    {order: 6,              name: 'NetworkEquipment', endpoint: '/Assets/NetworkEquipment' },
+    {order: 7,              name: 'Printers',         endpoint: '/Assets/Printer' },
+    {order: 8,              name: 'Phones',           endpoint: '/Assets/Phone' },
+    {order: 9,              name: 'Peripherals',      endpoint: '/Assets/Peripheral' },
+    {order: 10,             name: 'Software',         endpoint: '/Assets/Software' },
+    {order: 11,             name: 'SoftwareLicense',  endpoint: '/Assets/SoftwareLicense' },
+    {order: 12,             name: 'Contracts',        endpoint: '/Management/Contract' },
+    {order: 13,             name: 'Documents',        endpoint: '/Management/Document' },
+    {order: 14,             name: 'Budgets',          endpoint: '/Management/Budget' },
+    {order: 15,             name: 'Suppliers',        endpoint: '/Management/Supplier' },
+    {order: 16,             name: 'Contacts',         endpoint: '/Management/Contact' },
+    {order: 17,             name: 'Projects',         endpoint: '/Project' },
+    {order: 18,             name: 'KnowledgeBase',    endpoint: '/Setup/KnowledgeBase' },
+    {order: 19,             name: 'Users',            endpoint: '/Administration/User' },
+];
+
+export const protectedIds = [
+    {name: 'Users',          ids: [1, 2, 3, 4, 5, 6] },
+];
+
+export default {
+    toDelete,
+    protectedIds,
+}
