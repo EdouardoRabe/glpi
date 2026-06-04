@@ -1,4 +1,4 @@
-import {useState, useEffect } from "react"
+import {useState} from "react"
 import { toDelete, reset } from "../../backend/services/reset/reset";
 
 export default function BOReset() {
