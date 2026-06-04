@@ -12,7 +12,7 @@ export const toDelete = [
     {order: 9,              name: 'Peripherals',      endpoint: 'Assets/Peripheral' },
     {order: 10,             name: 'Software',         endpoint: 'Assets/Software' },
     {order: 11,             name: 'SoftwareLicense',  endpoint: 'Assets/SoftwareLicense' },
-    {order: 12,             name: 'Certificates',     endpoint: 'Management/Certificate' },
+    {order: 12,             name: 'Certificates',     endpoint: 'Assets/Certificate' },
     {order: 13,             name: 'Contracts',        endpoint: 'Management/Contract' },
     {order: 14,             name: 'Documents',        endpoint: 'Management/Document' },
     {order: 15,             name: 'Budgets',          endpoint: 'Management/Budget' },
