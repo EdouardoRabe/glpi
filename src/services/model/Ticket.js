@@ -8,14 +8,14 @@ class Ticket {
 
     constructor(data = {}) {
         this.id                              = data.id                              ?? null;
-        this.name                            = data.name                            ?? null;
-        this.content                         = data.content                         ?? null;
-        this.type                            = data.type                            ?? null;
+        this.name                            = data.name                            ?? "";
+        this.content                         = data.content                         ?? "";
+        this.type                            = data.type                            ?? 1;
         this.status                          = data.status                          ?? null;
-        this.priority                        = data.priority                        ?? null;
-        this.urgency                         = data.urgency                         ?? null;
-        this.impact                          = data.impact                          ?? null;
-        this.global_validation               = data.global_validation               ?? null;
+        this.priority                        = data.priority                        ?? 3;
+        this.urgency                         = data.urgency                         ?? 3;
+        this.impact                          = data.impact                          ?? 3;
+        this.global_validation               = data.global_validation               ?? 1;
         this.is_deleted                      = data.is_deleted                      ?? false;
         this.external_id                     = data.external_id                     ?? null;
 
@@ -35,29 +35,29 @@ class Ticket {
         this.resolution_duration             = data.resolution_duration             ?? 0;
         this.waiting_duration                = data.waiting_duration                ?? 0;
         this.take_into_account_duration      = data.take_into_account_duration      ?? 0;
+        this.ola_waiting_duration            = data.ola_waiting_duration            ?? 0;
+        this.sla_waiting_duration            = data.sla_waiting_duration            ?? 0;
 
-        this.entity                          = data.entity ?? null;
-        this.location                        = data.location ?? null;
-        this.category                        = data.category ?? null;
-        this.request_type                    = data.request_type ?? null;
-        this.user_recipient                  = data.user_recipient ?? null;
-        this.user_editor                     = data.user_editor ?? null;
+        this.entity                          = data.entity                          ?? null;
+        this.location                        = data.location                        ?? null;
+        this.category                        = data.category                        ?? null;
+        this.request_type                    = data.request_type                    ?? null;
+        this.user_recipient                  = data.user_recipient                  ?? null;
+        this.user_editor                     = data.user_editor                     ?? null;
 
         this.sla_tto                         = data.sla_tto                         ?? null;
         this.sla_ttr                         = data.sla_ttr                         ?? null;
         this.sla_level_ttr                   = data.sla_level_ttr                   ?? null;
-        this.sla_waiting_duration            = data.sla_waiting_duration            ?? 0;
         this.ola_tto                         = data.ola_tto                         ?? null;
         this.ola_ttr                         = data.ola_ttr                         ?? null;
         this.ola_level_ttr                   = data.ola_level_ttr                   ?? null;
         this.ola_tto_begin_date              = data.ola_tto_begin_date              ?? null;
         this.ola_ttr_begin_date              = data.ola_ttr_begin_date              ?? null;
-        this.ola_waiting_duration            = data.ola_waiting_duration            ?? 0;
 
         this.team                            = data.team                            ?? [];
         this.costs                           = data.costs                           ?? [];
     }
-
+    
     static fromArray(dataArray = []) {
         return dataArray.map(item => new Ticket(item));
     }
