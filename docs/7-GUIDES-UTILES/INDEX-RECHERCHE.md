@@ -48,12 +48,22 @@
 ---
 
 ### "Je dois utiliser .map(), .filter(), .find()"
-→ [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md)
+→ [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md) ou [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md)
 - .map() - transformer
 - .filter() - garder certains
 - .find() - trouver UN
 - .reduce() - agréger
 - Autres (.includes, .some, .every, .sort)
+
+---
+
+### "Je dois réunir deux tableaux ou utiliser Map/Set"
+→ [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md)
+- Réunir tableaux (spread, concat, push)
+- Opérations Set (union, intersection, différence)
+- Map vs Object
+- Supprimer doublons
+- Combiner Array + Map + Set
 
 ---
 
@@ -90,6 +100,8 @@
 - .reduce() → [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#reduce)
 - Supprimer element → [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#supprimer)
 - Modifier element → [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#modifier)
+- Réunir tableaux → [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md#réunir-deux-tableaux)
+- Map, Set, opérations → [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md)
 
 ### **Async & API**
 - useEffect + fetch → [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md)
@@ -134,7 +146,7 @@
 ## 🆎 PAR MOT-CLÉ
 
 **A** - Array · Async · await
-→ [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md) · [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md)
+→ [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md) · [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md) · [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md)
 
 **B** - Button · bind
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#button) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#event)
@@ -161,7 +173,7 @@
 → [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#map) · [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md)
 
 **M** - Map · Mutation · Memo
-→ [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#map) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#mutation)
+→ [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md#partie-2--les-map) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#map) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#mutation)
 
 **O** - Object · Optional chaining · onClick
 → [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) · [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md)
@@ -172,8 +184,8 @@
 **R** - Radio · Reduce · Re-render
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#radio) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#reduce) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md)
 
-**S** - Select · setState · spread · Sort
-→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#select) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#sort)
+**S** - Select · setState · spread · Sort · Set
+→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#select) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#sort) · [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md#partie-3--les-set)
 
 **U** - undefined · Update
 → [GUIDE-ERREURS-MESSAGES.md](./GUIDE-ERREURS-MESSAGES.md#undefined) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#modifier)
@@ -191,6 +203,7 @@
 | [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) | Pourquoi ça change/change pas? | Debug state |
 | [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md) | Fetch, loading, erreur, cleanup | API calls |
 | [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md) | .map(), .filter(), .find(), .reduce() | Manipuler tableaux |
+| [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md) | Array complet, Map, Set, opérations ensembles | Réunir, filtrer, Map/Set |
 | [GUIDE-ERREURS-MESSAGES.md](./GUIDE-ERREURS-MESSAGES.md) | 10+ erreurs courantes + fixes | Debug erreurs |
 | [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) | 30+ ❌ BAD vs ✅ GOOD | Apprendre patterns |
 | [GUIDE-CLOSURES-STALE-STATE.md](./GUIDE-CLOSURES-STALE-STATE.md) | Closures, async, setState | Comprendre async |
@@ -202,6 +215,7 @@
 - **Favorisez [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md)** pour apprendre VISUELLEMENT
 - **Gardez [GUIDE-ERREURS-MESSAGES.md](./GUIDE-ERREURS-MESSAGES.md)** à portée de main
 - **Consultez [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md)** comme cheat sheet
+- **Utilisez [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md)** pour les opérations complexes sur Array/Map/Set
 
 ---
 
