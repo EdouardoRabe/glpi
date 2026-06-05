@@ -539,6 +539,195 @@ const map2 = new Map(Object.entries(obj2))
 // Map { 'x' => 10, 'y' => 20 }
 ```
 
+### Associer deux tableaux / sources de données dans une Map
+
+**Cas d'usage courant** : tu as un tableau de tickets, et tu dois récupérer les items pour chaque ticket. Tu veux une Map avec `{ ticketId → {ticket, items} }`.
+
+#### Pattern 1 : Synchrone (tous les items déjà dispo)
+
+```javascript
+const tickets = [
+  { id: 1, name: 'Ticket A' },
+  { id: 2, name: 'Ticket B' },
+]
+
+const items = [
+  { id: 101, ticketId: 1, description: 'Item 1' },
+  { id: 102, ticketId: 1, description: 'Item 2' },
+  { id: 103, ticketId: 2, description: 'Item 3' },
+]
+
+// Créer une Map: key = ticketId, value = {ticket, items}
+const ticketMap = new Map()
+
+tickets.forEach(ticket => {
+  const ticketItems = items.filter(item => item.ticketId === ticket.id)
+  ticketMap.set(ticket.id, {
+    ticket,
+    items: ticketItems,
+  })
+})
+
+// Utiliser
+const ticketData = ticketMap.get(1)
+// { ticket: {...}, items: [{...}, {...}] }
+
+// Itérer
+for (const [ticketId, data] of ticketMap) {
+  console.log(`Ticket ${ticketId}:`, data.ticket.name)
+  console.log(`  Items: ${data.items.length}`)
+}
+```
+
+#### Pattern 2 : Asynchrone (fetch items pour chaque ticket)
+
+```javascript
+// Cas: tu dois appeler await ticket.getItems(ticketId) pour chaque ticket
+
+const tickets = [...]  // du serveur
+
+// Créer la Map avec await (dans une fonction async)
+const buildTicketMap = async () => {
+  const ticketMap = new Map()
+
+  for (const ticket of tickets) {
+    const items = await ticket.getItems(ticket.id)  // ⚠️ Fetch séquentiel
+    ticketMap.set(ticket.id, {
+      ticket,
+      items,
+    })
+  }
+
+  return ticketMap
+}
+
+const map = await buildTicketMap()
+```
+
+#### Pattern 3 : Parallèle (meilleure performance)
+
+```javascript
+// Fetch tous les items en parallèle (plus rapide)
+
+const buildTicketMapParallel = async () => {
+  const ticketMap = new Map()
+
+  // 1. Créer les promises pour TOUS les tickets en parallèle
+  const promises = tickets.map(async (ticket) => {
+    const items = await ticket.getItems(ticket.id)
+    return { ticket, items }
+  })
+
+  // 2. Attendre que TOUS les fetches se terminent
+  const allData = await Promise.all(promises)
+
+  // 3. Construire la Map
+  allData.forEach(({ ticket, items }) => {
+    ticketMap.set(ticket.id, { ticket, items })
+  })
+
+  return ticketMap
+}
+
+const map = await buildTicketMapParallel()
+```
+
+#### Pattern 4 : Avec reduce (plus concis)
+
+```javascript
+// Synchrone avec reduce
+const ticketMap = tickets.reduce((map, ticket) => {
+  const ticketItems = items.filter(item => item.ticketId === ticket.id)
+  map.set(ticket.id, { ticket, items: ticketItems })
+  return map
+}, new Map())
+
+// Asynchrone (attention: reduce ne supporte pas async directement)
+// Préférer la boucle ou Promise.all ci-dessus
+```
+
+#### Cas d'usage dans React : Hook custom
+
+```javascript
+import { useState, useEffect } from 'react'
+
+const useTicketMapWithItems = (tickets) => {
+  const [ticketMap, setTicketMap] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (!tickets || tickets.length === 0) {
+      setTicketMap(new Map())
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    // Fetch tous les items en parallèle
+    Promise.all(
+      tickets.map(async (ticket) => {
+        const items = await ticket.getItems(ticket.id)
+        return { ticket, items }
+      })
+    )
+      .then((allData) => {
+        const map = new Map()
+        allData.forEach(({ ticket, items }) => {
+          map.set(ticket.id, { ticket, items })
+        })
+        setTicketMap(map)
+      })
+      .catch((err) => {
+        setError(err.message)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [tickets])
+
+  return { ticketMap, loading, error }
+}
+
+// Utilisation
+export default function TicketListWithItems() {
+  const [tickets, setTickets] = useState([])
+  const { ticketMap, loading, error } = useTicketMapWithItems(tickets)
+
+  useEffect(() => {
+    Ticket.getAll().then(setTickets)
+  }, [])
+
+  if (loading) return <p>Chargement...</p>
+  if (error) return <p>Erreur: {error}</p>
+
+  return (
+    <div>
+      {Array.from(ticketMap.entries()).map(([ticketId, { ticket, items }]) => (
+        <div key={ticketId}>
+          <h3>{ticket.name}</h3>
+          <ul>
+            {items.map(item => (
+              <li key={item.id}>{item.description}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+#### Avantages de ce pattern
+
+| Aspect | Tableau imbriqué | Map |
+|--------|------------------|-----|
+| Accès rapide par ID | ❌ `.find()` lent | ✅ `.get(id)` O(1) |
+| Lisibilité | ❌ tickets[i].items | ✅ ticketMap.get(id).items |
+| Modification | ❌ Besoin filter + spread | ✅ map.set(id, {...}) |
+| Taille | ❌ Duplique structure | ✅ Référence unique |
+
 ---
 
 ## 🔴 PARTIE 3 : LES SET
@@ -832,6 +1021,13 @@ const count = arr.reduce((sum, x) => sum + x, 0)
 const map = new Map([['key', 'value']])
 map.get('key')
 map.has('key')
+
+// Map - combiner deux tableaux
+const ticketMap = new Map()
+tickets.forEach(ticket => {
+  const items = itemList.filter(i => i.ticketId === ticket.id)
+  ticketMap.set(ticket.id, { ticket, items })
+})
 
 // Set - valeurs uniques
 const unique = new Set(arr)

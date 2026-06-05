@@ -1,4 +1,5 @@
 import api from "../utils/api";
+import apiV1 from "../utils/apiV1"
 import { clause, and, or, fetchAll } from "../utils/query";
 
 class Ticket {
@@ -186,6 +187,10 @@ class Ticket {
         }
         const filter = clause("id", "=out=", ids);
         return await Ticket.#fetchAll({ filter });
+    }
+
+    static async getItems(id){
+        return  await apiV1.getV1(`Ticket/${id}/Item_Ticket`);
     }
 }
 

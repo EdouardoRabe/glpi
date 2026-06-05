@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react"
 import Computer from "../../backend/model/Computer";
 import Monitor from "../../backend/model/Monitor";
+import Ticket from "../../backend/model/Ticket";
 
 export default function BODashboard (){
     const [computers, setComputers] = useState([]);
     const [monitors, setMonitors] = useState([]);
+    const [tickets, setTickets] = useState([]);
         
     useEffect(() =>{
         const loadElements = async () =>{
             const com = await Computer.getAll();
             const mon = await Monitor.getAll();
-           
+            const tic = await Ticket.getAll();
+
             setComputers(com);
             setMonitors(mon);
+            setTickets();
            
         };
         loadElements();
