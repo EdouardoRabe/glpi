@@ -34,18 +34,6 @@ export default function BODashboard (){
                 <h4>Total ordinateurs : {totalComputers}</h4>
                 <h4>Total moniteurs : {totalMonitors}</h4>
             </div>
-            {
-                Array.from(tickets.entries()).map( ([ ticketId, {ticket, items} ]) =>(
-                        <div key={ticketId}>
-                            <p>{ticket.name}</p>
-                            {items.map( (item) => (
-                                    <p key={item.name}>{item.name}</p>
-                                )
-                            )}
-                        </div>
-                    )
-                )
-            }
         </div>
     )
 }

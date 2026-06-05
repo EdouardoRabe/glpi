@@ -546,6 +546,24 @@ const map2 = new Map(Object.entries(obj2))
 #### Pattern 1 : Synchrone (tous les items déjà dispo)
 
 ```javascript
+     {
+                Array.from(tickets.entries()).map( ([ ticketId, {ticket, items, nbCom, nbMon} ]) =>(
+                        <div key={ticketId}>
+                            <p>{ticket.name}</p>
+                            <p>Ordinateurs : {nbCom}</p>
+                            <p>Moniteurs : {nbMon}</p>
+                            {items.map( (item) => (
+                                    <p key={item.name}>{item.name}</p>
+                                )
+                            )}
+                        </div>
+                    )
+                )
+    }
+
+```
+
+```javascript
 const tickets = [
   { id: 1, name: 'Ticket A' },
   { id: 2, name: 'Ticket B' },

@@ -209,11 +209,18 @@ class Ticket {
         const entries = await Promise.all(
             tic.map(async ticket => {
                 const items = await Ticket.getItems(ticket.id);
+                let nbCom = 0;
+                let nbMon = 0;
                 const full = await Promise.all(
-                    items.map(item => Ticket.getItemAssets(item.itemtype, item.items_id))
+                    items.map(item => {
+                        if(item.itemtype === "Computer") nbCom++;
+                        else if(item.itemtype === "Monitor") nbMon++;
+                        return Ticket.getItemAssets(item.itemtype, item.items_id);
+                    })
                 );
-
-                return [ticket.id, { ticket, items: full }];
+                console.log(`Ticket #${ticket.id} — "${ticket.name}" : ${nbCom} ordinateurs, ${nbMon} moniteurs`);
+                console.log(ticket);
+                return [ticket.id, { ticket, items: full, nbCom, nbMon }];
             })
         );
 
