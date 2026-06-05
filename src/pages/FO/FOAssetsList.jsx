@@ -12,13 +12,17 @@ export default function FOAssetsList() {
     const [computers, setComputers] = useState([]);
     const [monitors, setMonitors] = useState([]);
     const [states, setStates] = useState([]);
-    const [selectedState, setSelectedState] = useState(null);
     const [locations, setLocations] = useState([]);
-    const [selectedLocation, setSelectedLocation] = useState(null);
     const [manufacturers, setManufacturers] = useState([]);
-    const [selectedManufacturer, setSelectedManufacturer] = useState(null)
     const [models, setModels] = useState([]);
-    const [selectedModel, setSelectedModel] = useState([]);
+    const [filters, setFilters] = useState(
+        {
+            modelId : 0,
+            locationId : 0,
+            stateId: 0,
+            manufacturerId: 0
+        }
+    )
 
     useEffect(() =>{
         const loadElements = async () =>{
@@ -41,17 +45,19 @@ export default function FOAssetsList() {
         loadElements();
     }, [])
 
-    useEffect(() =>{
-
-    },[selectedLocation, selectedManufacturer])
-
+   const handleFilterChange = (key, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [key]: value === '' ? '' : value,  
+        }))
+    }
     return (
         <div>
             <h1>Liste des elements</h1>
             <div>
                 <select 
-                    value={selectedState}
-                    onChange={(e) => setSelectedState(e.target.value)}
+                    value={filters.stateId}
+                    onChange={(e) => handleFilterChange('stateId', e.target.value)}
                 >
                     <option value="">State</option>
                     { states.map( (state) =>(
@@ -64,8 +70,8 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <select 
-                    value={selectedLocation}
-                    onChange={(e) => setSelectedLocation(e.target.value)}
+                    value={filters.manufacturerId}
+                     onChange={(e) => handleFilterChange('locationId', e.target.value)}
                 >
                     <option value="">Location</option>
                     { locations.map( (location) =>(
@@ -78,8 +84,8 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <select 
-                    value={selectedManufacturer}
-                    onChange={(e) => setSelectedManufacturer(e.target.value)}
+                    value={filters.manufacturerId}
+                      onChange={(e) => handleFilterChange('manufacturerId', e.target.value)}
                 >
                     <option value="">Fabriquant</option>
                     { manufacturers.map( (manufacturer) =>(
@@ -92,8 +98,8 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <select 
-                    value={selectedModel}
-                    onChange={(e) => setSelectedModel(e.target.value)}
+                    value={filters.modelId}
+                      onChange={(e) => handleFilterChange('modelId', e.target.value)}
                 >
                     <option value="">Model</option>
                     { models.map( (model) =>(
