@@ -38,6 +38,10 @@ export const TICKET_TYPE = {
     request:  2,
 };
 
+export const TYPE_LABEL_BY_ID = Object.fromEntries(
+  Object.entries(TICKET_TYPE).map(([label, id]) => [String(id), label])
+);
+
 export const TICKET_STATUS = {
     new:                1,
     processing_assigned: 2,
