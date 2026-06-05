@@ -1,8 +1,10 @@
 import {createBrowserRouter} from "react-router-dom";
 import BOMainLayout from "../layouts/BOMainLayout.jsx";
+import FOMainLayout from "../layouts/FOMainLayout.jsx";
 import BOReset from "../pages/BO/BOReset.jsx";
 import BOImport from "../pages/BO/BOImport.jsx";
 import BOLogin from "../pages/BO/BOLogin.jsx";
+import FOAssetsList from "../pages/FO/FOAssetsList.jsx";
 
 
 export const router = createBrowserRouter([
@@ -23,6 +25,17 @@ export const router = createBrowserRouter([
                 path: "import",
                 element: <BOImport/>
             }
+        ]
+    },
+    {
+        path: "/frontOffice",
+        element: <FOMainLayout/>,
+
+        children: [
+            {
+                path: "assets",
+                element:  <FOAssetsList/>
+            },
         ]
     },
 ])
