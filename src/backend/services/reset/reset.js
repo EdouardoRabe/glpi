@@ -19,11 +19,11 @@ export const toDelete = [
     {order: 16,             name: 'Suppliers',        endpoint: 'Management/Supplier' },
     {order: 17,             name: 'Contacts',         endpoint: 'Management/Contact' },
     {order: 18,             name: 'Projects',         endpoint: 'Project' },
-    // {order: 19,             name: 'Users',            endpoint: 'Administration/User' },
+    {order: 19,             name: 'Users',            endpoint: 'Administration/User' },
 ];
 
 export const protectedIds = [
-    {name: 'Users',          ids: [1, 2, 3, 4, 5, 6] },
+    {name: 'Users',          ids: [2, 3, 4, 5, 6] },
 ];
 
 export const reset = async (selected) => {
