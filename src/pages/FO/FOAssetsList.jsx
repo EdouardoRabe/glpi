@@ -12,9 +12,13 @@ export default function FOAssetsList() {
     const [computers, setComputers] = useState([]);
     const [monitors, setMonitors] = useState([]);
     const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState(null);
     const [locations, setLocations] = useState([]);
-    const [manufacturer, setManufacturer] = useState([]);
-    const [model, setModel] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState(null);
+    const [manufacturers, setManufacturers] = useState([]);
+    const [selectedManufacturer, setSelectedManufacturer] = useState(null)
+    const [models, setModels] = useState([]);
+    const [selectedModel, setSelectedModel] = useState([]);
 
     useEffect(() =>{
         const loadElements = async () =>{
@@ -26,11 +30,14 @@ export default function FOAssetsList() {
             const modCom = await ComputerModel.getAll();
             const modMon = await MonitorModel.getAll();
 
+            const mod = [...modCom, ...modMon];
+
             setComputers(com);
             setMonitors(mon);
             setStates(sta);
             setLocations(loc);
-            setManufacturer(man);
+            setManufacturers(man);
+            setModels(mod);
         };
         loadElements();
     }, [])
@@ -38,6 +45,62 @@ export default function FOAssetsList() {
     return (
         <div>
             <h1>Liste des elements</h1>
+            <div>
+                <select 
+                    value={selectedState}
+                    onChange={(e) => setSelectedState(e.target.value)}
+                >
+                    <option value="">State</option>
+                    { states.map( (state) =>(
+                        <option key={state.id} value={state.id}>{state.name}</option>
+                        )
+                    )
+
+                    }
+                </select>
+            </div>
+            <div>
+                <select 
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                >
+                    <option value="">Location</option>
+                    { locations.map( (location) =>(
+                        <option key={location.id} value={location.id}>{location.name}</option>
+                        )
+                    )
+
+                    }
+                </select>
+            </div>
+            <div>
+                <select 
+                    value={selectedManufacturer}
+                    onChange={(e) => setSelectedManufacturer(e.target.value)}
+                >
+                    <option value="">Fabriquant</option>
+                    { manufacturers.map( (manufacturer) =>(
+                        <option key={manufacturer.id} value={manufacturer.id}>{manufacturer.name}</option>
+                        )
+                    )
+
+                    }
+                </select>
+            </div>
+            <div>
+                <select 
+                    value={selectedModel}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                >
+                    <option value="">Model</option>
+                    { models.map( (model) =>(
+                        <option key={model.id} value={model.id}>{model.name}</option>
+                        )
+                    )
+
+                    }
+                </select>
+            </div>
             <div>
                 <h2>Liste des ordinateurs</h2>
                 {computers.map( (computer) => (
