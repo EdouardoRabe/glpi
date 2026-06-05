@@ -50,7 +50,7 @@ export default function BOReset() {
         <div>
             <h1>BOReset</h1>
             {toDelete?.map(item => (
-                <>
+                <div key={item.order}>
                     <label htmlFor={`checkbox-${item.order}`}>{item.name}</label>
                     <input 
                         id={`checkbox-${item.order}`}
@@ -60,7 +60,7 @@ export default function BOReset() {
                         onChange={() => {handleSelection(item)}} 
                     />
                     <br/>
-                </>
+                </div>
             ))}
 
             <button onClick={() => {handleReset()}}>Reset</button>
