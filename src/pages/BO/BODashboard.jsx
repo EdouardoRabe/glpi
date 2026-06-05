@@ -6,17 +6,17 @@ import Ticket from "../../backend/model/Ticket";
 export default function BODashboard (){
     const [computers, setComputers] = useState([]);
     const [monitors, setMonitors] = useState([]);
-    const [tickets, setTickets] = useState([]);
+    const [tickets, setTickets] = useState(new Map());
         
     useEffect(() =>{
         const loadElements = async () =>{
             const com = await Computer.getAll();
             const mon = await Monitor.getAll();
-            const tic = await Ticket.getAll();
+            const tic = await Ticket.getTicketsWithItems();
 
             setComputers(com);
             setMonitors(mon);
-            setTickets();
+            setTickets(tic);
            
         };
         loadElements();
@@ -34,6 +34,18 @@ export default function BODashboard (){
                 <h4>Total ordinateurs : {totalComputers}</h4>
                 <h4>Total moniteurs : {totalMonitors}</h4>
             </div>
+            {
+                Array.from(tickets.entries()).map( ([ ticketId, {ticket, items} ]) =>(
+                        <div key={ticketId}>
+                            <p>{ticket.name}</p>
+                            {items.map( (item) => (
+                                    <p key={item.name}>{item.name}</p>
+                                )
+                            )}
+                        </div>
+                    )
+                )
+            }
         </div>
     )
 }

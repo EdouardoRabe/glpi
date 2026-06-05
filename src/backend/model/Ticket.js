@@ -1,6 +1,8 @@
 import api from "../utils/api";
 import apiV1 from "../utils/apiV1"
 import { clause, and, or, fetchAll } from "../utils/query";
+import Computer from "./Computer";
+import Monitor from "./Monitor";
 
 class Ticket {
 
@@ -190,7 +192,36 @@ class Ticket {
     }
 
     static async getItems(id){
-        return  await apiV1.getV1(`Ticket/${id}/Item_Ticket`);
+        const items = await apiV1.getV1(`Ticket/${id}/Item_Ticket`);
+        return items;
+    }
+
+    static async getItemAssets(itemType, itemId){
+        return itemType === "Computer"
+            ? Computer.getById(itemId)
+            : Monitor.getById(itemId);
+    }
+
+    static async getTicketsWithItems(){
+        const tic = await Ticket.getAll();
+        const ticketMap = new Map();
+
+        const entries = await Promise.all(
+            tic.map(async ticket => {
+                const items = await Ticket.getItems(ticket.id);
+                const full = await Promise.all(
+                    items.map(item => Ticket.getItemAssets(item.itemtype, item.items_id))
+                );
+
+                return [ticket.id, { ticket, items: full }];
+            })
+        );
+
+        entries.forEach(([ticketId, data]) => {
+            ticketMap.set(ticketId, data);
+        });
+
+        return ticketMap;
     }
 }
 
