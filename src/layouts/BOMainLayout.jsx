@@ -35,7 +35,7 @@ function BOMainLayout() {
 
     return (
         <div>
-            { !isLoginRoute && (
+            {!isLoginRoute && (
                 <nav >
                     <div >
                         <span  />
