@@ -1,6 +1,13 @@
 import {Link, Outlet} from "react-router-dom";
+import { refreshTokenManually } from "../backend/utils/api";
 
 function BOMainLayout() {
+
+    const handleRefresh = async () =>{
+        await refreshTokenManually();
+    }
+
+
     return (
         <div>
             <nav >
@@ -11,6 +18,7 @@ function BOMainLayout() {
                 <div >
                     <Link to={"/"}>Reset</Link>
                     <Link to={"/import"}>Import</Link>
+                    <button onClick={handleRefresh}>Refresh Token</button>
                 </div>
             </nav>
 
