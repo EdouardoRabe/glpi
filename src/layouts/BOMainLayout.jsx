@@ -1,8 +1,22 @@
 import {Link, Outlet} from "react-router-dom";
 import { refreshTokenManually } from "../backend/utils/api";
 import { initSessionV1 } from "../backend/utils/apiV1";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function BOMainLayout() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkLogin = () => {
+            const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+            if (!isLoggedIn) {
+                navigate("/");
+            }
+        };
+
+        checkLogin();
+    }, []);
 
     const handleRefresh = async () =>{
         await refreshTokenManually();
@@ -10,6 +24,11 @@ function BOMainLayout() {
 
         await initSessionV1();
         console.log("Session re-initialized via V1 API");
+    }
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("isLoggedIn");
+        navigate("/");
     }
 
 
@@ -21,9 +40,10 @@ function BOMainLayout() {
                     <span>Back Office</span>
                 </div>
                 <div >
-                    <Link to={"/"}>Reset</Link>
+                    <Link to={"/reset"}>Reset</Link>
                     <Link to={"/import"}>Import</Link>
                     <button onClick={handleRefresh}>Refresh Token</button>
+                    <button onClick={handleLogout}>Logout</button>
                 </div>
             </nav>
 
