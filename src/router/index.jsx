@@ -6,6 +6,7 @@ import BOImport from "../pages/BO/BOImport.jsx";
 import BOLogin from "../pages/BO/BOLogin.jsx";
 import FOAssetsList from "../pages/FO/FOAssetsList.jsx";
 import BODashboard from "../pages/BO/BODashboard.jsx";
+import BOTicketList from "../pages/BO/BOTicketList.jsx";
 
 
 export const router = createBrowserRouter([
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
             {
                 path: "dashboard",
                 element: <BODashboard/>
+            },
+            {
+                path: "tickets",
+                element: <BOTicketList/>
             }
         ]
     },
