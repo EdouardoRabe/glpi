@@ -58,7 +58,16 @@ export default function FOAssetsList() {
         if(filters.modelId > 0 && computer.model.id !=filters.modelId) return false
         if(filters.stateId > 0 && computer.status.id !=filters.stateId) return false
         return true;
-    })
+    });
+
+    
+    const filterdMonitors = monitors.filter( monitor =>{
+        if(filters.locationId > 0 && monitor.location.id !=filters.locationId) return false
+        if(filters.manufacturerId > 0 && monitor.manufacturer.id !=filters.manufacturerId) return false
+        if(filters.modelId > 0 && monitor.model.id !=filters.modelId) return false
+        if(filters.stateId > 0 && monitor.status.id !=filters.stateId) return false
+        return true;
+    });
 
     return (
         <div>
@@ -136,7 +145,7 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <h2>Liste des moniteurs</h2>
-                {monitors.map( (monitor) => (
+                {filterdMonitors.map( (monitor) => (
                     <div key={monitor.id}>
                         <h4>{monitor.name}</h4>
                         <p>{monitor.manufacturer.name}</p>
