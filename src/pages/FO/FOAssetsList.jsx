@@ -45,12 +45,21 @@ export default function FOAssetsList() {
         loadElements();
     }, [])
 
-   const handleFilterChange = (key, value) => {
+    const handleFilterChange = (key, value) => {
         setFilters(prev => ({
             ...prev,
             [key]: value === '' ? '' : value,  
         }))
     }
+
+    const filterdComputers = computers.filter( computer =>{
+        if(filters.locationId > 0 && computer.location.id !=filters.locationId) return false
+        if(filters.manufacturerId > 0 && computer.manufacturer.id !=filters.manufacturerId) return false
+        if(filters.modelId > 0 && computer.model.id !=filters.modelId) return false
+        if(filters.stateId > 0 && computer.status.id !=filters.stateId) return false
+        return true;
+    })
+
     return (
         <div>
             <h1>Liste des elements</h1>
@@ -59,7 +68,7 @@ export default function FOAssetsList() {
                     value={filters.stateId}
                     onChange={(e) => handleFilterChange('stateId', e.target.value)}
                 >
-                    <option value="">State</option>
+                    <option value="0">State</option>
                     { states.map( (state) =>(
                         <option key={state.id} value={state.id}>{state.name}</option>
                         )
@@ -70,10 +79,10 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <select 
-                    value={filters.manufacturerId}
+                    value={filters.locationId}
                      onChange={(e) => handleFilterChange('locationId', e.target.value)}
                 >
-                    <option value="">Location</option>
+                    <option value="0">Location</option>
                     { locations.map( (location) =>(
                         <option key={location.id} value={location.id}>{location.name}</option>
                         )
@@ -87,7 +96,7 @@ export default function FOAssetsList() {
                     value={filters.manufacturerId}
                       onChange={(e) => handleFilterChange('manufacturerId', e.target.value)}
                 >
-                    <option value="">Fabriquant</option>
+                    <option value="0">Fabriquant</option>
                     { manufacturers.map( (manufacturer) =>(
                         <option key={manufacturer.id} value={manufacturer.id}>{manufacturer.name}</option>
                         )
@@ -101,7 +110,7 @@ export default function FOAssetsList() {
                     value={filters.modelId}
                       onChange={(e) => handleFilterChange('modelId', e.target.value)}
                 >
-                    <option value="">Model</option>
+                    <option value="0">Model</option>
                     { models.map( (model) =>(
                         <option key={model.id} value={model.id}>{model.name}</option>
                         )
@@ -112,7 +121,7 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <h2>Liste des ordinateurs</h2>
-                {computers.map( (computer) => (
+                {filterdComputers.map( (computer) => (
                     <div key={computer.id}>
                         <h4>{computer.name}</h4>
                         <p>{computer.status.name}</p>
