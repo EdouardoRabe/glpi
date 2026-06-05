@@ -13,9 +13,9 @@ class Ticket {
         this.content                         = data.content                         ?? "";
         this.type                            = data.type                            ?? 1;
         this.status                          = data.status                          ?? null;
-        this.priority                        = data.priority                        ?? 3;
-        this.urgency                         = data.urgency                         ?? 3;
-        this.impact                          = data.impact                          ?? 3;
+        this.priority                        = data.priority                        ?? 1;
+        this.urgency                         = data.urgency                         ?? 1;
+        this.impact                          = data.impact                          ?? 1;
         this.global_validation               = data.global_validation               ?? 1;
         this.is_deleted                      = data.is_deleted                      ?? false;
         this.external_id                     = data.external_id                     ?? null;
