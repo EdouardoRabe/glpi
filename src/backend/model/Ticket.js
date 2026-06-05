@@ -18,7 +18,7 @@ class Ticket {
         this.impact                          = data.impact                          ?? 1;
         this.global_validation               = data.global_validation               ?? 1;
         this.is_deleted                      = data.is_deleted                      ?? false;
-        this.external_id                     = data.external_id                     ?? null;
+        this.externalid                     = data.externalid                     ?? null;
 
         this.date                            = data.date                            ?? null;
         this.date_creation                   = data.date_creation                   ?? null;

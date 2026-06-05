@@ -1,13 +1,13 @@
 import {importFile1} from "./importFile1";
+import {importFile2} from "./importFile2";
 
-export const executeImport = async (file1) => {
+export const executeImport = async (file1, file2) => {
     try {
-        if (!file1) {
-            console.warn("Aucun fichier sélectionné pour l'import.");
-        }
-        else{
+        if (file1) {
             await importFile1(file1);
-            console.log("ImportFile1 terminé avec succès !");
+        }   
+        if (file2) {
+            await importFile2(file2);
         }
     } catch (error) {
         console.error("Erreur lors de l'import : ", error);
