@@ -5,6 +5,7 @@ import BOReset from "../pages/BO/BOReset.jsx";
 import BOImport from "../pages/BO/BOImport.jsx";
 import BOLogin from "../pages/BO/BOLogin.jsx";
 import FOAssetsList from "../pages/FO/FOAssetsList.jsx";
+import BODashboard from "../pages/BO/BODashboard.jsx";
 
 
 export const router = createBrowserRouter([
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
             {
                 path: "import",
                 element: <BOImport/>
+            },
+            {
+                path: "dashboard",
+                element: <BODashboard/>
             }
         ]
     },

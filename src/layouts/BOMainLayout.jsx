@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function BOMainLayout() {
     const navigate = useNavigate();
+    const isLoginRoute = location.pathname === "/";
 
     useEffect(() => {
         const checkLogin = () => {
@@ -34,18 +35,21 @@ function BOMainLayout() {
 
     return (
         <div>
-            <nav >
-                <div >
-                    <span  />
-                    <span>Back Office</span>
-                </div>
-                <div >
-                    <Link to={"/reset"}>Reset</Link>
-                    <Link to={"/import"}>Import</Link>
-                    <button onClick={handleRefresh}>Refresh Token</button>
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
-            </nav>
+            { !isLoginRoute && (
+                <nav >
+                    <div >
+                        <span  />
+                        <span>Back Office</span>
+                    </div>
+                    <div >
+                        <Link to={"/reset"}>Reset</Link>
+                        <Link to={"/import"}>Import</Link>
+                        <Link to={"/dashboard"}>Dashboard</Link>
+                        <button onClick={handleRefresh}>Refresh Token</button>
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                </nav>
+            )}
 
             <main>
                 <Outlet/>
