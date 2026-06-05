@@ -69,9 +69,21 @@ export default function FOAssetsList() {
         return true;
     });
 
+    const resetFilter = () =>{
+        setFilters(
+             {
+                modelId : 0,
+                locationId : 0,
+                stateId: 0,
+                manufacturerId: 0
+            }
+        )
+    }
+
     return (
         <div>
             <h1>Liste des elements</h1>
+            <button onClick={resetFilter}>Reset Filter</button>
             <div>
                 <select 
                     value={filters.stateId}
