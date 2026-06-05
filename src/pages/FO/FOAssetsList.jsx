@@ -29,7 +29,6 @@ export default function FOAssetsList() {
             const man = await Manufacturer.getAll();
             const modCom = await ComputerModel.getAll();
             const modMon = await MonitorModel.getAll();
-
             const mod = [...modCom, ...modMon];
 
             setComputers(com);
@@ -41,6 +40,10 @@ export default function FOAssetsList() {
         };
         loadElements();
     }, [])
+
+    useEffect(() =>{
+
+    },[selectedLocation, selectedManufacturer])
 
     return (
         <div>

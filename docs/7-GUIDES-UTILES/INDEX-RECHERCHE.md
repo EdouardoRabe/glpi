@@ -47,6 +47,17 @@
 
 ---
 
+### "Je dois faire une recherche / filtrage multicritères"
+→ [multi-criteria-filter.md](../8-PATTERNS-REELS/07-RECHERCHE-FILTRES/multi-criteria-filter.md)
+- Filtrage côté client (JavaScript)
+- Filtrage côté serveur (RSQL - API GLPI)
+- Combos complexes (AND, OR, NOT)
+- Hook custom réutilisable
+- Performance et debounce
+- Checkboxes, dates, recherche textuelle
+
+---
+
 ### "Je dois utiliser .map(), .filter(), .find()"
 → [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md) ou [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md)
 - .map() - transformer
