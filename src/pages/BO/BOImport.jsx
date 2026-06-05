@@ -1,21 +1,13 @@
 import { useState } from "react";
-import ticket from "../../backend/services/import/import";
-import Ticket from "../../backend/model/Ticket";
+import { executeImport} from "../../backend/services/import/executeImport";
 
 export default function BOImport() {
-    const [file, setFile] = useState(null);
-
-    const handleFileChange = (event) => {
-        setFile(event.target.files?.[0] ?? null);
-    };
+    const [file1, setFile1] = useState(null);
 
     const handleFileUpload = async () => {
         try {
-            await ticket(file);
-            
-            const tickets2 = await Ticket.getAll();
-            console.log("Fetched tickets:", tickets2);
-
+            await executeImport(file1);
+            console.log("Import terminé avec succès !");
         } catch (error) {
             console.log("Erreur lors de l'import: ", error);
         }
@@ -25,8 +17,12 @@ export default function BOImport() {
     return (
         <div>
             <h1>BOImport</h1>
-            <input type="file" onChange={handleFileChange} />
+
+            <label htmlFor="file1">Fichier 1</label>
+            <input id="file1" type="file" onChange={(event) => setFile1(event.target.files?.[0] ?? null)} />
+            
             <button onClick={handleFileUpload}>Upload</button>
+           
         </div>
     )
 }

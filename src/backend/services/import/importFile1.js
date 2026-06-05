@@ -13,10 +13,7 @@ const EXPECTED_HEADERS = [
     "item_type", "model", "inventory_number", "user"
 ];
 
-// ─── Cache global pour éviter les appels API redondants ───────────────────────
 const _cache = new Map();
-
-// ─── Helper getOrCreate générique ────────────────────────────────────────────
 
 async function getOrCreate(Model, name, extraFields = {}) {
     if (!name || name.trim() === "") return null;
@@ -57,7 +54,7 @@ async function getOrCreateUser(fullName) {
 }
 
 
-const importFile1 = async (file) => {
+export const importFile1 = async (file) => {
     const text = await file.text();
 
     checkCSVHeader(text, EXPECTED_HEADERS);
@@ -88,7 +85,7 @@ const importFile1 = async (file) => {
 
             const assetData = {
                 name:         row.name?.trim()              ?? "",
-                otherserial:  row.inventory_number?.trim()  ?? null,
+                serial:  row.inventory_number?.trim()  ?? null,
                 status:       state        ? { id: state.id }        : null,
                 location:     location     ? { id: location.id }     : null,
                 manufacturer: manufacturer ? { id: manufacturer.id } : null,
@@ -109,7 +106,7 @@ const importFile1 = async (file) => {
         }
     }
 
-    console.log(`\n✅ Import Feuille 1 terminé : ${results.created} créés, ${results.errors.length} erreurs`);
+    console.log(`\n Import Feuille 1 terminé : ${results.created} créés, ${results.errors.length} erreurs`);
     return results;
 };
 
