@@ -83,15 +83,15 @@ class Ticket {
             const payload = {
                 input: {
                     tickets_id: this.id,
-                    itemtype: item.type,
+                    itemtype: item.getItemType(),
                     items_id: item.id,
                 },
             };
             const result = await apiV1.postV1(`Ticket/${this.id}/Item_Ticket`, payload);
             if (result?.error) {
-                console.warn(`Association item #${item.id} (type ${item.type}) au ticket #${this.id} échouée : ${result.message || JSON.stringify(result)}`);
+                console.warn(`Association item #${item.id} (type ${item.getItemType()}) au ticket #${this.id} échouée : ${result.message || JSON.stringify(result)}`);
             } else {
-                console.log(`Association item #${item.id} (type ${item.type}) au ticket #${this.id} réussie`);
+                console.log(`Association item #${item.id} (type ${item.getItemType()}) au ticket #${this.id} réussie`);
             }
             results.push(result);
         }
