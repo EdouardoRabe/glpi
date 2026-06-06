@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
+import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 
 export default function BOTicketList() {
     const [tickets, setTickets]             = useState([]);
@@ -89,7 +90,8 @@ export default function BOTicketList() {
                         <strong>#{ticket.id}</strong> - {ticket.name} -{" "}
                         {getEnumNameById(TICKET_TYPE,     ticket.type)      || "-"} -{" "}
                         {getEnumNameById(TICKET_PRIORITY, ticket.priority)  || "-"} -{" "}
-                        {getEnumNameById(TICKET_STATUS,   ticket.status?.id) || "-"}
+                        {getEnumNameById(TICKET_STATUS,   ticket.status?.id) || "-"}-{" "}
+                        {formatToYYYYMMDD_HHmm(ticket.date)}
                     </p>
                     <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs })}>
                         Voir les détails
