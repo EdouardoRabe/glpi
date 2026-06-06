@@ -5,11 +5,11 @@ export const ITEM_TYPES = [
     "Printer",
     "NetworkEquipment",
     "Phone",
-    // "Software",
-    // "SoftwareLicense",
+    "Software",
+    "SoftwareLicense",
     "Certificate",
     "Peripheral",
-    // "Rack",
+    "Rack",
 ];
 
 export const MODEL_TYPES = [
