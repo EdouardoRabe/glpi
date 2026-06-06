@@ -33,9 +33,8 @@ export async function fetchAll(queryParams = {}, endpoint, limit) {
             });
 
             if (result?.error) {
-                throw new Error(
-                    result.message || `Erreur API (status ${result.status ?? "inconnu"})`
-                );
+                console.warn(`Erreur lors de la récupération des données depuis ${endpoint} (start=${start}, limit=${limit}) :`, result);
+                // Nataoko silencieux
             }
 
             const items = Array.isArray(result) ? result : result?.data ?? [];

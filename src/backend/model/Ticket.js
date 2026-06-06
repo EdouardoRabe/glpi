@@ -1,8 +1,7 @@
 import api from "../utils/api";
 import apiV1 from "../utils/apiV1"
 import { clause, and, or, fetchAll } from "../utils/query";
-import Computer from "./Computer";
-import Monitor from "./Monitor";
+import Asset from "./Asset";
 
 class Ticket {
 
@@ -67,16 +66,13 @@ class Ticket {
         return items;
     }
 
-    async getItemsAssets(){
+    async getItemsAssets() {
         const items = await this.getItems();
-        const assets = await Promise.all(items.map(item => {
-            return item.itemtype === "Computer"
-                ? Computer.getById(item.items_id)
-                : Monitor.getById(item.items_id);
-        }));
+        const assets = await Promise.all(
+            items.map(item => Asset.getByIdSimple(item.itemtype, item.items_id))
+        );
         return assets;
     }
-
     async getCosts(){
         const cost = await api.get( `Assistance/Ticket/${this.id}/Cost`);
         return cost;
@@ -115,15 +111,15 @@ class Ticket {
             const payload = {
                 input: {
                     tickets_id: this.id,
-                    itemtype: item.getItemType(),
+                    itemtype: item.itemType,
                     items_id: item.id,
                 },
             };
             const result = await apiV1.postV1(`Ticket/${this.id}/Item_Ticket`, payload);
             if (result?.error) {
-                console.warn(`Association item #${item.id} (type ${item.getItemType()}) au ticket #${this.id} échouée : ${result.message || JSON.stringify(result)}`);
+                console.warn(`Association item #${item.id} (type ${item.itemType}) au ticket #${this.id} échouée : ${result.message || JSON.stringify(result)}`);
             } else {
-                console.log(`Association item #${item.id} (type ${item.getItemType()}) au ticket #${this.id} réussie`);
+                console.log(`Association item #${item.id} (type ${item.itemType}) au ticket #${this.id} réussie`);
             }
             results.push(result);
         }
