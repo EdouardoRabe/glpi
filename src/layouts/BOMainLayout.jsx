@@ -3,6 +3,7 @@ import { refreshTokenManually } from "../backend/utils/api";
 import { initSessionV1 } from "../backend/utils/apiV1";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/layouts/BOMainLayout.css";
 
 function BOMainLayout() {
     const navigate = useNavigate();
@@ -34,14 +35,14 @@ function BOMainLayout() {
 
 
     return (
-        <div>
+        <div className="bo-layout">
             {!isLoginRoute && (
-                <nav >
-                    <div >
-                        <span  />
+                <nav className="bo-navbar">
+                    <div className="bo-navbar-brand">
+                        <span className="bo-navbar-brand-icon">BO</span>
                         <span>Back Office</span>
                     </div>
-                    <div >
+                    <div className="bo-navbar-menu">
                         <Link to={"/reset"}>Reset</Link>
                         <Link to={"/import"}>Import</Link>
                         <Link to={"/dashboard"}>Dashboard</Link>
@@ -52,7 +53,7 @@ function BOMainLayout() {
                 </nav>
             )}
 
-            <main>
+            <main className="bo-main">
                 <Outlet/>
             </main>
         </div>

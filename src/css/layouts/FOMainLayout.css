@@ -1,0 +1,103 @@
+/* ========================================
+   FO MAIN LAYOUT
+   ======================================== */
+
+.fo-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.fo-navbar {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #999;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.fo-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.fo-navbar-brand-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #000;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+}
+
+.fo-navbar-menu {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-left: auto;
+}
+
+.fo-navbar-menu a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.fo-navbar-menu a:hover {
+  border-bottom-color: #000;
+}
+
+.fo-navbar-menu button {
+  background-color: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.fo-navbar-menu button:hover {
+  background-color: #1a1a1a;
+}
+
+.fo-main {
+  flex: 1;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .fo-navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .fo-navbar-menu {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+    margin-left: 0;
+  }
+
+  .fo-navbar-menu a,
+  .fo-navbar-menu button {
+    width: 100%;
+    text-align: left;
+  }
+
+  .fo-main {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,274 @@
+/* ========================================
+   BO TICKET LIST PAGE
+   ======================================== */
+
+.bo-ticket-list {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bo-ticket-list h1 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 1rem;
+}
+
+.bo-ticket-filters {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border: 1px solid #999;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.bo-ticket-filters h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #000;
+}
+
+.bo-ticket-filter-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bo-ticket-filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.bo-ticket-filter-item label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #000;
+  font-size: 0.9rem;
+}
+
+.bo-ticket-filter-item select,
+.bo-ticket-filter-item input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #999;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #000;
+}
+
+.bo-ticket-filter-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bo-ticket-filter-actions button {
+  padding: 0.5rem 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bo-ticket-filter-actions button:hover {
+  background-color: #1a1a1a;
+}
+
+.bo-ticket-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.bo-ticket-stat {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #999;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.bo-ticket-stat h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.bo-ticket-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.bo-ticket-items {
+  display: grid;
+  gap: 1rem;
+}
+
+.bo-ticket-item {
+  padding: 1.5rem;
+  border: 1px solid #999;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.bo-ticket-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bo-ticket-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.bo-ticket-item-info {
+  flex: 1;
+}
+
+.bo-ticket-item-id {
+  font-weight: 700;
+  color: #000;
+  font-size: 1.05rem;
+  margin-bottom: 0.25rem;
+}
+
+.bo-ticket-item-meta {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.bo-ticket-item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bo-ticket-item-actions button {
+  padding: 0.5rem 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.bo-ticket-item-actions button:hover {
+  background-color: #1a1a1a;
+}
+
+.bo-ticket-list dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid #999;
+  border-radius: 8px;
+  padding: 0;
+  max-width: 90%;
+  max-height: 90vh;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: auto;
+}
+
+.bo-ticket-modal {
+  border: none;
+  border-radius: 0;
+  padding: 2rem;
+  max-width: none;
+  max-height: none;
+  box-shadow: none;
+}
+
+.bo-ticket-modal h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #000;
+  padding-bottom: 1rem;
+  color: #000;
+}
+
+.bo-ticket-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.bo-ticket-modal-header h2 {
+  margin: 0;
+  flex: 1;
+}
+
+.bo-ticket-modal-header button {
+  padding: 0.5rem 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.bo-ticket-modal-header button:hover {
+  background-color: #1a1a1a;
+}
+
+.bo-ticket-modal-section {
+  margin-bottom: 1.5rem;
+}
+
+.bo-ticket-modal-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #000;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.bo-ticket-modal-section p {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .bo-ticket-filter-group {
+    grid-template-columns: 1fr;
+  }
+
+  .bo-ticket-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .bo-ticket-item-header {
+    flex-direction: column;
+  }
+
+  .bo-ticket-item-actions {
+    margin-top: 1rem;
+  }
+
+  .bo-ticket-modal {
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+}

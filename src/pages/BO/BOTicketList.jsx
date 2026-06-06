@@ -3,6 +3,7 @@ import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
+import "../../css/pages/BO/BOTicketList.css";
 
 export default function BOTicketList() {
     const [tickets, setTickets]             = useState([]);
@@ -17,17 +18,16 @@ export default function BOTicketList() {
         loadTickets();
     }, []);
 
-    
     const resetFilter = () => {
         setFilters({ stateId:0, typeId:0, priorityId: 0, dateMin :"", dateMax :""});
     };
 
-     const handleFilterChange = (key, value) => {
+    const handleFilterChange = (key, value) => {
         if (key === "dateMin") {
             setFilters(prev => ({ ...prev, dateMin: value === "" ? null : value }));
         } else if (key === "dateMax") {
             setFilters(prev => ({ ...prev, dateMax: value === "" ? null : value }));
-        } 
+        }
         else {
             setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
         }
@@ -56,99 +56,142 @@ export default function BOTicketList() {
     }, 0);
 
     return (
-        <div style={{ padding: "16px" }}>
+        <div className="bo-ticket-list">
             <h1>Tickets</h1>
-            <button onClick={resetFilter}>Reset Filter</button>
-            <div>
-                <select value={filters.typeId} onChange={(e) => handleFilterChange("typeId", e.target.value)}>
-                    <option value="0">Type</option>
-                    {TICKET_TYPE.map((type) => (
-                        <option key={type.id} value={type.id}>
-                            {type.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                <select value={filters.priorityId} onChange={(e) => handleFilterChange("priorityId", e.target.value)}>
-                    <option value="0">Priorite</option>
-                    {TICKET_PRIORITY.map((priority) => (
-                        <option key={priority.id} value={priority.id}>
-                            {priority.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div>
-                <select value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
-                    <option value="0">Status</option>
-                    {TICKET_STATUS.map((state) => (
-                        <option key={state.id} value={state.id}>
-                            {state.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
 
-            <div>
-                <label htmlFor="date1">DateMin</label>
-                <input value={filters.dateMin} id="date1" type="date"  onChange={(e) => handleFilterChange("dateMin", e.target.value)} />
-            </div>
+            <div className="bo-ticket-filters">
+                <h3>Filters</h3>
+                <div className="bo-ticket-filter-group">
+                    <div className="bo-ticket-filter-item">
+                        <label htmlFor="filter-type">Type</label>
+                        <select id="filter-type" value={filters.typeId} onChange={(e) => handleFilterChange("typeId", e.target.value)}>
+                            <option value="0">All Types</option>
+                            {TICKET_TYPE.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-            <div>
-                <label htmlFor="date2">DateMax</label>
-                <input value={filters.dateMax} id="date2" type="date" onChange={(e) => handleFilterChange("dateMax", e.target.value)} />
-            </div>
+                    <div className="bo-ticket-filter-item">
+                        <label htmlFor="filter-priority">Priority</label>
+                        <select id="filter-priority" value={filters.priorityId} onChange={(e) => handleFilterChange("priorityId", e.target.value)}>
+                            <option value="0">All Priorities</option>
+                            {TICKET_PRIORITY.map((priority) => (
+                                <option key={priority.id} value={priority.id}>
+                                    {priority.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-            <h3>Total : {filteredTickets.length}</h3>
-            <h3>Tickets avec ordinateur : {ticketWithComputer}</h3>
-            <h3>Tickets avec moniteur : {ticketWithMonitor}</h3>
+                    <div className="bo-ticket-filter-item">
+                        <label htmlFor="filter-status">Status</label>
+                        <select id="filter-status" value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
+                            <option value="0">All Status</option>
+                            {TICKET_STATUS.map((state) => (
+                                <option key={state.id} value={state.id}>
+                                    {state.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-            {filteredTickets.map(({ ticket, assets, costs }) => (
-                <div key={ticket.id}>
-                    <p>
-                        <strong>#{ticket.id}</strong> - {ticket.name} -{" "}
-                        {getEnumNameById(TICKET_TYPE,     ticket.type)      || "-"} -{" "}
-                        {getEnumNameById(TICKET_PRIORITY, ticket.priority)  || "-"} -{" "}
-                        {getEnumNameById(TICKET_STATUS,   ticket.status?.id) || "-"}-{" "}
-                        {formatToYYYYMMDD_HHmm(ticket.date)}
-                    </p>
-                    <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs })}>
-                        Voir les détails
-                    </button>
+                    <div className="bo-ticket-filter-item">
+                        <label htmlFor="filter-date-min">Date Min</label>
+                        <input id="filter-date-min" type="date" value={filters.dateMin} onChange={(e) => handleFilterChange("dateMin", e.target.value)} />
+                    </div>
+
+                    <div className="bo-ticket-filter-item">
+                        <label htmlFor="filter-date-max">Date Max</label>
+                        <input id="filter-date-max" type="date" value={filters.dateMax} onChange={(e) => handleFilterChange("dateMax", e.target.value)} />
+                    </div>
                 </div>
-            ))}
+
+                <div className="bo-ticket-filter-actions">
+                    <button onClick={resetFilter}>Reset Filters</button>
+                </div>
+            </div>
+
+            <div className="bo-ticket-stats">
+                <div className="bo-ticket-stat">
+                    <h3>Total Tickets</h3>
+                    <p className="bo-ticket-stat-value">{filteredTickets.length}</p>
+                </div>
+                <div className="bo-ticket-stat">
+                    <h3>With Computers</h3>
+                    <p className="bo-ticket-stat-value">{ticketWithComputer}</p>
+                </div>
+                <div className="bo-ticket-stat">
+                    <h3>With Monitors</h3>
+                    <p className="bo-ticket-stat-value">{ticketWithMonitor}</p>
+                </div>
+            </div>
+
+            <div className="bo-ticket-items">
+                {filteredTickets.map(({ ticket, assets, costs }) => (
+                    <div key={ticket.id} className="bo-ticket-item">
+                        <div className="bo-ticket-item-header">
+                            <div className="bo-ticket-item-info">
+                                <div className="bo-ticket-item-id">#{ticket.id} - {ticket.name}</div>
+                                <div className="bo-ticket-item-meta">
+                                    <span>Type: {getEnumNameById(TICKET_TYPE, ticket.type) || "-"}</span>
+                                    <span> | Priority: {getEnumNameById(TICKET_PRIORITY, ticket.priority) || "-"}</span>
+                                    <span> | Status: {getEnumNameById(TICKET_STATUS, ticket.status?.id) || "-"}</span>
+                                    <span> | Date: {formatToYYYYMMDD_HHmm(ticket.date)}</span>
+                                </div>
+                            </div>
+                            <div className="bo-ticket-item-actions">
+                                <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs })}>
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
             {selectedTicket && (
                 <dialog open onCancel={closeTicketDetails}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <h2 style={{ margin: 0 }}>Détails ticket #{selectedTicket.ticket.id}</h2>
-                        <button type="button" onClick={closeTicketDetails}>Fermer</button>
-                    </div>
-
-                    <p><strong>Titre :</strong> {selectedTicket.ticket.name}</p>
-                    <p><strong>Description :</strong> {selectedTicket.ticket.content || "-"}</p>
-                    <p><strong>nb computer :</strong> {selectedTicket.assets.filter((a) => a.itemType === "Computer").length}</p>
-                    <p><strong>nb monitor :</strong>  {selectedTicket.assets.filter((a) => a.itemType === "Monitor").length}</p>
-
-                    <h3>Assets associés</h3>
-                    {selectedTicket.assets.length === 0 && <p>Aucun asset associé.</p>}
-                    {selectedTicket.assets.map((asset) => (
-                        <p key={`${asset.itemType}-${asset.id}`}>
-                            {asset.name} - type : {asset.itemType}
-                        </p>
-                    ))}
-
-                    {selectedTicket.costs.length > 0 && (
-                        <div>
-                            <h3>Coûts associés</h3>
-                            {selectedTicket.costs.map((cost) => (
-                                <p key={cost.id}>
-                                    Durée : {cost.duration}s, Coût temps : {cost.cost_time}, Coût fixe : {cost.cost_fixed}
-                                </p>
-                            ))}
+                    <div className="bo-ticket-modal">
+                        <div className="bo-ticket-modal-header">
+                            <h2>Ticket #{selectedTicket.ticket.id}</h2>
+                            <button type="button" onClick={closeTicketDetails}>Close</button>
                         </div>
-                    )}
+
+                        <div className="bo-ticket-modal-section">
+                            <p><strong>Title:</strong> {selectedTicket.ticket.name}</p>
+                            <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
+                        </div>
+
+                        <div className="bo-ticket-modal-section">
+                            <p><strong>Computers:</strong> {selectedTicket.assets.filter((a) => a.itemType === "Computer").length}</p>
+                            <p><strong>Monitors:</strong> {selectedTicket.assets.filter((a) => a.itemType === "Monitor").length}</p>
+                        </div>
+
+                        {selectedTicket.assets.length > 0 && (
+                            <div className="bo-ticket-modal-section">
+                                <h3>Associated Assets</h3>
+                                {selectedTicket.assets.map((asset) => (
+                                    <p key={`${asset.itemType}-${asset.id}`}>
+                                        {asset.name} ({asset.itemType})
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+
+                        {selectedTicket.costs.length > 0 && (
+                            <div className="bo-ticket-modal-section">
+                                <h3>Associated Costs</h3>
+                                {selectedTicket.costs.map((cost) => (
+                                    <p key={cost.id}>
+                                        Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Fixed Cost: {cost.cost_fixed}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </dialog>
             )}
         </div>

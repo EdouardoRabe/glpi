@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_TYPE, getEnumNameById } from "../../backend/utils/utils";
+import "../../css/pages/BO/BODashboard.css";
 
 export default function BODashboard() {
     const [assets, setAssets] = useState([]);
@@ -30,21 +31,39 @@ export default function BODashboard() {
     }, {});
 
     return (
-        <div>
+        <div className="bo-dashboard">
             <h1>Dashboard</h1>
-            <div>
-                <h2>Total Assets : {totalAssets}</h2>
-                <h4>Total ordinateurs : {totalComputers}</h4>
-                <h4>Total moniteurs : {totalMonitors}</h4>
+
+            <div className="bo-dashboard-stats">
+                <div className="bo-dashboard-stat-card">
+                    <h3>Total Assets</h3>
+                    <p className="bo-dashboard-stat-value">{totalAssets}</p>
+                </div>
+                <div className="bo-dashboard-stat-card">
+                    <h3>Ordinateurs</h3>
+                    <p className="bo-dashboard-stat-value">{totalComputers}</p>
+                </div>
+                <div className="bo-dashboard-stat-card">
+                    <h3>Moniteurs</h3>
+                    <p className="bo-dashboard-stat-value">{totalMonitors}</p>
+                </div>
+                <div className="bo-dashboard-stat-card">
+                    <h3>Tickets Total</h3>
+                    <p className="bo-dashboard-stat-value">{tickets.length}</p>
+                </div>
             </div>
-            <div>
-                <h2>Tickets</h2>
-                <p>Nombre de tickets : {tickets.length}</p>
-                <ul>
-                    {Object.entries(nbTicketType).map(([label, count]) => (
-                        <li key={label}>{label} : {count}</li>
-                    ))}
-                </ul>
+
+            <div className="bo-dashboard-section">
+                <h2>Tickets par type</h2>
+                {Object.entries(nbTicketType).length === 0 ? (
+                    <p>Aucun ticket</p>
+                ) : (
+                    <ul>
+                        {Object.entries(nbTicketType).map(([label, count]) => (
+                            <li key={label}><strong>{label}:</strong> {count}</li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </div>
     );

@@ -4,6 +4,7 @@ import State from "../../backend/model/State";
 import Location from "../../backend/model/Location";
 import Manufacturer from "../../backend/model/Manufacturer";
 import { ITEM_TYPES } from "../../backend/utils/type";
+import "../../css/pages/FO/FOAssetsList.css";
 
 export default function FOAssetsList() {
     const [assets, setAssets]             = useState([]);
@@ -62,72 +63,94 @@ export default function FOAssetsList() {
     });
 
     return (
-        <div>
-            <h1>Liste des éléments</h1>
-            <button onClick={resetFilter}>Reset Filter</button>
+        <div className="fo-assets-list">
+            <h1>Assets Catalog</h1>
 
-            <div>
-                <select value={filters.itemType} onChange={(e) => handleFilterChange("itemType", e.target.value)}>
-                    <option value="0">Type d'élément</option>
-                    {ITEM_TYPES.map((type) => (
-                        <option key={type} value={type}>
-                            {type}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <select value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
-                    <option value="0">State</option>
-                    {states.map((state) => (
-                        <option key={state.id} value={state.id}>{state.name}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <select value={filters.locationId} onChange={(e) => handleFilterChange("locationId", e.target.value)}>
-                    <option value="0">Location</option>
-                    {locations.map((location) => (
-                        <option key={location.id} value={location.id}>{location.name}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <select value={filters.manufacturerId} onChange={(e) => handleFilterChange("manufacturerId", e.target.value)}>
-                    <option value="0">Fabriquant</option>
-                    {manufacturers.map((manufacturer) => (
-                        <option key={manufacturer.id} value={manufacturer.id}>{manufacturer.name}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <select value={filters.modelId} onChange={(e) => handleFilterChange("modelId", e.target.value)}>
-                    <option value="0">Modèle</option>
-                    {models.map((model) => (
-                        <option key={model.id} value={model.id}>{model.name}</option>
-                    ))}
-                </select>
-            </div>
-
-            <div>
-                <h2>Liste des assets</h2>
-                {filteredAssets.map(({ asset, imageUrl }) => (
-                    <div key={`${asset.itemType}-${asset.id}`}>
-                        <h4>{asset.name}</h4>
-                        {imageUrl && <img src={imageUrl} alt={asset.name} />}
-                        <p>{asset.itemType}</p>
-                        <p>{asset.status?.name}</p>
-                        <p>{asset.manufacturer?.name}</p>
-                        <p>{asset.location?.name}</p>
-                        <p>{asset.model?.name}</p>
-                        <p>{asset.serial}</p>
-                        <p>{asset.user?.name}</p>
+            <div className="fo-assets-filters">
+                <h3>Filters</h3>
+                <div className="fo-assets-filter-group">
+                    <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-item-type">Item Type</label>
+                        <select id="filter-item-type" value={filters.itemType} onChange={(e) => handleFilterChange("itemType", e.target.value)}>
+                            <option value="">All Types</option>
+                            {ITEM_TYPES.map((type) => (
+                                <option key={type} value={type}>
+                                    {type}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                ))}
+
+                    <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-state">State</label>
+                        <select id="filter-state" value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
+                            <option value="0">All States</option>
+                            {states.map((state) => (
+                                <option key={state.id} value={state.id}>{state.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-location">Location</label>
+                        <select id="filter-location" value={filters.locationId} onChange={(e) => handleFilterChange("locationId", e.target.value)}>
+                            <option value="0">All Locations</option>
+                            {locations.map((location) => (
+                                <option key={location.id} value={location.id}>{location.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-manufacturer">Manufacturer</label>
+                        <select id="filter-manufacturer" value={filters.manufacturerId} onChange={(e) => handleFilterChange("manufacturerId", e.target.value)}>
+                            <option value="0">All Manufacturers</option>
+                            {manufacturers.map((manufacturer) => (
+                                <option key={manufacturer.id} value={manufacturer.id}>{manufacturer.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-model">Model</label>
+                        <select id="filter-model" value={filters.modelId} onChange={(e) => handleFilterChange("modelId", e.target.value)}>
+                            <option value="0">All Models</option>
+                            {models.map((model) => (
+                                <option key={model.id} value={model.id}>{model.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                <div className="fo-assets-filter-actions">
+                    <button onClick={resetFilter}>Reset Filters</button>
+                </div>
+            </div>
+
+            <div className="fo-assets-content">
+                <h2>Available Assets ({filteredAssets.length})</h2>
+
+                {filteredAssets.length === 0 ? (
+                    <div className="fo-assets-empty">
+                        <p>No assets match your filters.</p>
+                    </div>
+                ) : (
+                    <div className="fo-assets-grid">
+                        {filteredAssets.map(({ asset, imageUrl }) => (
+                            <div key={`${asset.itemType}-${asset.id}`} className="fo-assets-card">
+                                {imageUrl && <img src={imageUrl} alt={asset.name} className="fo-assets-card-image" />}
+                                <h4>{asset.name}</h4>
+                                <p><strong>Type:</strong> {asset.itemType}</p>
+                                {asset.manufacturer?.name && <p><strong>Manufacturer:</strong> {asset.manufacturer.name}</p>}
+                                {asset.model?.name && <p><strong>Model:</strong> {asset.model.name}</p>}
+                                {asset.serial && <p><strong>Serial:</strong> {asset.serial}</p>}
+                                {asset.status?.name && <p><strong>Status:</strong> {asset.status.name}</p>}
+                                {asset.location?.name && <p><strong>Location:</strong> {asset.location.name}</p>}
+                                {asset.user?.name && <p><strong>User:</strong> {asset.user.name}</p>}
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

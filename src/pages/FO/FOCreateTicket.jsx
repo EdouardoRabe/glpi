@@ -2,6 +2,7 @@ import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
 import { useState, useEffect} from "react";
+import "../../css/pages/FO/FOCreateTicket.css";
 
 export default function FOCreateTicket() {
     const [refTicket, setRefTicket] = useState("");
@@ -14,13 +15,12 @@ export default function FOCreateTicket() {
     const [description, setDescription] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
     const [items, setItems] = useState([]);
+    const [message, setMessage] = useState(null);
 
     useEffect(() =>{
         const loadElements = async () =>{
-            const items = await Asset.getAll(); 
-
+            const items = await Asset.getAll();
             setItems(items);
-           
         };
         loadElements();
     }, [])
@@ -44,48 +44,107 @@ export default function FOCreateTicket() {
             };
             const newTicket = new Ticket(payload);
             newTicket.saveWithItems(selectedObjects);
+            setMessage({ type: "success", text: "Ticket created successfully!" });
             console.log("Ticket créé avec succès :", newTicket, " — items associés :", selectedObjects);
+            // Reset form
+            setRefTicket("");
+            setDate("");
+            setHeure("");
+            setTitle("");
+            setDescription("");
+            setSelectedItems([]);
+            setTimeout(() => setMessage(null), 3000);
         } catch (error) {
+            setMessage({ type: "error", text: "Error creating ticket. Please try again." });
             console.error("Erreur lors de la création du ticket :", error);
+            setTimeout(() => setMessage(null), 3000);
         }
     }
-    
+
     return (
-        <div>
-            <h1>Créer un ticket</h1>
-            <input type="text" placeholder="Référence" value={refTicket} onChange={(e) => setRefTicket(e.target.value)} />
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-            <input type="time" value={heure} onChange={(e) => setHeure(e.target.value)} />
-            <input type="text" placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
-            <select value={type} onChange={(e) => setType(e.target.value)}>
-                {TICKET_TYPE.map((t) => (
-                    <option key={t.id} value={t.id}>{t.name}</option>
-                ))}
-            </select>
-            <select value={priority} onChange={(e) => setPriority(e.target.value)}>
-                {TICKET_PRIORITY.map((p) => (
-                    <option key={p.id} value={p.id}>{p.name}</option>
-                ))}
-            </select>
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                {TICKET_STATUS.map((s) => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
-                ))}
-            </select>
-            <select 
-                multiple 
-                value={selectedItems.map(String)} 
-                onChange={(e) => {
-                    const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
-                    setSelectedItems(ids);
-                }}
-            >
-                {items.map((item) => (
-                    <option key={item.id} value={String(item.id)}>{item.name}</option>
-                ))}
-            </select>
-            <button onClick={() => handleSubmit()}>Créer</button>
+        <div className="fo-create-ticket">
+            <h1>Create a Ticket</h1>
+
+            {message && (
+                <div className={message.type === "success" ? "fo-create-ticket-success" : "fo-create-ticket-error"}>
+                    {message.text}
+                </div>
+            )}
+
+            <div className="fo-create-ticket-form">
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="ref">Reference</label>
+                    <input id="ref" type="text" placeholder="Ticket reference" value={refTicket} onChange={(e) => setRefTicket(e.target.value)} />
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="title">Title</label>
+                    <input id="title" type="text" placeholder="Ticket title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="description">Description</label>
+                    <textarea id="description" placeholder="Ticket description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="date">Date</label>
+                    <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="time">Time</label>
+                    <input id="time" type="time" value={heure} onChange={(e) => setHeure(e.target.value)} />
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="type">Type</label>
+                    <select id="type" value={type} onChange={(e) => setType(e.target.value)}>
+                        {TICKET_TYPE.map((t) => (
+                            <option key={t.id} value={t.id}>{t.name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="priority">Priority</label>
+                    <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}>
+                        {TICKET_PRIORITY.map((p) => (
+                            <option key={p.id} value={p.id}>{p.name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="status">Status</label>
+                    <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                        {TICKET_STATUS.map((s) => (
+                            <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="items">Associated Assets (hold Ctrl to select multiple)</label>
+                    <select
+                        id="items"
+                        multiple
+                        value={selectedItems.map(String)}
+                        onChange={(e) => {
+                            const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
+                            setSelectedItems(ids);
+                        }}
+                    >
+                        {items.map((item) => (
+                            <option key={item.id} value={String(item.id)}>{item.name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-actions">
+                    <button onClick={() => handleSubmit()}>Create Ticket</button>
+                </div>
+            </div>
         </div>
     );
 }

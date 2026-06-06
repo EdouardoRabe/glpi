@@ -1,0 +1,101 @@
+/* ========================================
+   BO RESET PAGE
+   ======================================== */
+
+.bo-reset {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bo-reset h1 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 1rem;
+}
+
+.bo-reset-list {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border: 1px solid #999;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.bo-reset-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.bo-reset-item:last-child {
+  border-bottom: none;
+}
+
+.bo-reset-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.bo-reset-item label {
+  margin: 0;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  flex: 1;
+}
+
+.bo-reset-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.bo-reset-actions button {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.bo-reset-actions button:hover {
+  background-color: #1a1a1a;
+}
+
+.bo-reset-actions button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.bo-reset-warning {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  background-color: #fef5f5;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  color: #721c24;
+}
+
+@media (max-width: 768px) {
+  .bo-reset-list {
+    padding: 1.5rem;
+  }
+
+  .bo-reset h1 {
+    font-size: 1.75rem;
+  }
+
+  .bo-reset-actions {
+    flex-direction: column;
+  }
+}

@@ -1,27 +1,9 @@
 import {useEffect, useState} from "react"
 import { toDelete, reset } from "../../backend/services/reset/reset";
-// import { get, post, put, del } from "../../backend/utils/expressapi";
+import "../../css/pages/BO/BOReset.css";
 
 export default function BOReset() {
     const [selected, setSelected] = useState(new Set());
-
-//    useEffect(() => {
-//         const fetchConfig = async () => {
-//             try {
-//                 // const data = { name: "edouardo", value: "123" };
-//                 // await post('/config', data);
-
-//                 const data = { value: "edouardo" };
-//                 await put('/config/edouardo', data);
-
-//                 const config = await get('/config');
-//                 console.log('depuis express:', config);
-//             } catch (error) {
-//                 console.error('Erreur:', error);
-//             }
-//         };
-//         fetchConfig();
-//     }, []);
 
     const handleSelection = (item) => {
         setSelected(prev => {
@@ -31,7 +13,7 @@ export default function BOReset() {
             }
             else {
                 newSet.add(item);
-            }   
+            }
             return new Set(
                 [...newSet].sort((a, b) => a.order - b.order)
             );
@@ -47,25 +29,31 @@ export default function BOReset() {
     }
 
     return (
-        <div>
-            <h1>BOReset</h1>
-            {toDelete?.map(item => (
-                <div key={item.order}>
-                    <label htmlFor={`checkbox-${item.order}`}>{item.name}</label>
-                    <input 
-                        id={`checkbox-${item.order}`}
-                        key={item.order}
-                        type="checkbox" 
-                        checked={selected.has(item)} 
-                        onChange={() => {handleSelection(item)}} 
-                    />
-                    <br/>
-                </div>
-            ))}
+        <div className="bo-reset">
+            <h1>Reset Database</h1>
 
-            <button onClick={() => {handleReset()}}>Reset</button>
+            <div className="bo-reset-warning">
+                <strong>⚠️ Warning:</strong> Resetting will delete all selected data. This action cannot be undone.
+            </div>
 
-            <button onClick={() => {setSelected(new Set(toDelete))}}>Select All</button>
+            <div className="bo-reset-list">
+                {toDelete?.map(item => (
+                    <div key={item.order} className="bo-reset-item">
+                        <input
+                            id={`checkbox-${item.order}`}
+                            type="checkbox"
+                            checked={selected.has(item)}
+                            onChange={() => {handleSelection(item)}}
+                        />
+                        <label htmlFor={`checkbox-${item.order}`}>{item.name}</label>
+                    </div>
+                ))}
+            </div>
+
+            <div className="bo-reset-actions">
+                <button onClick={() => {setSelected(new Set(toDelete))}}>Select All</button>
+                <button onClick={() => {handleReset()}}>Reset Selected</button>
+            </div>
         </div>
     )
 }
