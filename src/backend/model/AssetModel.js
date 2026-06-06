@@ -1,16 +1,11 @@
 import api from "../utils/api";
 import { clause, and, or, fetchAll } from "../utils/query";
+import { MODEL_TYPES } from "../utils/type";
 
 const DEFAULT_LIMIT = 100;
 const PROTECTED_IDS = {};
 
-export const MODEL_TYPES = [
-    "ComputerModel",
-    "MonitorModel",
-    "PrinterModel",
-    "NetworkEquipmentModel",
-    "PhoneModel",
-];
+
 
 class AssetModel {
 

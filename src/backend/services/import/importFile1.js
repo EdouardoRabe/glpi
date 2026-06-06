@@ -5,17 +5,13 @@ import Location   from "../../model/Location.js";
 import Manufacturer from "../../model/Manufacturer.js";
 import State      from "../../model/State.js";
 import User       from "../../model/User.js";
+import { ITEM_TYPE_TO_MODEL_TYPE } from "../../utils/type.js";
 
 const EXPECTED_HEADERS = [
     "name", "status", "location", "manufacturer",
     "item_type", "model", "inventory_number", "user"
 ];
 
-const ITEM_TYPE_TO_MODEL_TYPE = {
-    computer: "ComputerModel",
-    monitor:  "MonitorModel",
-    printer:  "PrinterModel",
-};
 
 const _cache = new Map();
 

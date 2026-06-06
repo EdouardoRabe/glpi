@@ -1,19 +1,12 @@
 import api   from "../utils/api";
 import apiV1  from "../utils/apiV1";
 import { clause, and, or, fetchAll } from "../utils/query";
+import { ITEM_TYPES } from "../utils/type";
 
 const DEFAULT_LIMIT = 100;
 
 const PROTECTED_IDS = {};
 
-export const ITEM_TYPES = [
-    "Computer",
-    "Monitor",
-    "Printer",
-    "NetworkEquipment",
-    "Phone",
-    "Software",
-];
 
 class Asset {
 
@@ -71,7 +64,6 @@ class Asset {
         return results.flat();
     }
 
-    // ── Méthodes d'instance ─────────────────────────────────────────────────
 
     async getDocumentItem() {
         return apiV1.getV1(`${this.itemType}/${this.id}/Document_Item`);
