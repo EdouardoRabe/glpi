@@ -75,9 +75,7 @@ class Asset {
             console.warn(`Aucun document trouvé pour ${this.itemType} #${this.id}`);
             return null;
         }
-        const url = `http://localhost/front/document.send.php?docid=${items[0].documents_id}&itemtype=${this.itemType}&items_id=${this.id}`;
-        console.log(`URL de l'image pour ${this.itemType} #${this.id} :`, url);
-        return url;
+        return apiV1.getDocumentBlobV1(items[0].documents_id);
     }
 
     async getDocument() {

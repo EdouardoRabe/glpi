@@ -148,6 +148,26 @@ async function uploadMultipart(path, manifest, fileBlob, filename) {
     return res.text();
 }
 
+export async function getDocumentBlobV1(documentId) {
+    if (!_sessionToken) await initSession();
+
+    const headers = { "Session-Token": _sessionToken };
+    if (APP_TOKEN) headers["App-Token"] = APP_TOKEN;
+
+    const res = await fetch(`${BASE_URL}/apirest.php/Document/${documentId}?alt=media`, {
+        method: "GET",
+        headers,
+    });
+
+    if (!res.ok) throw new Error(`getDocumentBlob failed: ${res.status}`);
+
+    const blob = await res.blob();
+    console.log(`Blob du document #${documentId} récupéré :`, blob);
+    const url = URL.createObjectURL(blob);
+    console.log(`URL du blob pour document #${documentId} :`, url);
+    return url;
+}
+
 export const getV1  = (path)             => apiCall("GET",    path);
 export const postV1 = (path, body)       => apiCall("POST",   path, body);
 export const patchV1 = (path, body)      => apiCall("PATCH",  path, body);
@@ -156,4 +176,4 @@ export const killSessionV1 = killSession;
 export const initSessionV1 = initSession;
 export const uploadMultipartV1 = (path, manifest, fileBlob, filename) => uploadMultipart(path, manifest, fileBlob, filename);
 
-export default { getV1, postV1, patchV1, delV1, killSessionV1, initSessionV1, uploadMultipartV1 };
+export default { getV1, postV1, patchV1, delV1, killSessionV1, initSessionV1, uploadMultipartV1, getDocumentBlobV1 };
