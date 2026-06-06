@@ -28,11 +28,12 @@ export default function BOTicketList() {
     return (
         <div style={{ padding: "16px" }}>
             <h1>Tickets</h1>
+                <h3>Total : {tickets.length}</h3>
                 {
                     tickets.map(({ ticket, assets, costs }) => (
                             
                             <div key={ticket.id} >
-                                <p><strong>#{ticket.id}</strong> - {ticket.name}</p>
+                                <p><strong>#{ticket.id}</strong> - {ticket.name} - {getEnumNameById(TICKET_TYPE, ticket.type) || "-"} - {getEnumNameById(TICKET_PRIORITY, ticket.priority) || "-"} - {getEnumNameById(TICKET_STATUS, ticket.status.id) || "-"}</p>
                                 <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs })}>
                                     Voir les détails
                                 </button>
@@ -53,9 +54,6 @@ export default function BOTicketList() {
 
                         <p><strong>Titre:</strong> {selectedTicket.ticket.name}</p>
                         <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
-                        <p><strong>Type:</strong> {getEnumNameById(TICKET_TYPE, selectedTicket.ticket.type) || "-"}</p>
-                        <p><strong>Priorité:</strong> {getEnumNameById(TICKET_PRIORITY, selectedTicket.ticket.priority) || "-"}</p>
-                        <p><strong>Status:</strong> {getEnumNameById(TICKET_STATUS, selectedTicket.ticket.status.id) || "-"}</p>
                         <p><strong>nb computer:</strong> {selectedTicket.assets.filter((asset) => asset.getItemType() === "Computer").length}</p>
                         <p><strong>nb monitor:</strong> {selectedTicket.assets.filter((asset) => asset.getItemType() === "Monitor").length}</p>
 
