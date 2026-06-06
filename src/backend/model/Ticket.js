@@ -77,12 +77,18 @@ class Ticket {
         return assets;
     }
 
-    static async getAllWithAssets() {
+    async getCosts(){
+        const cost = await api.get( `Assistance/Ticket/${this.id}/Cost`);
+        return cost;
+    }
+
+    static async getAllComplete() {
         const tickets = await Ticket.getAll();
         const ticketsWithItems = await Promise.all(
             tickets.map(async (ticket) => ({
                 ticket,
                 assets: await ticket.getItemsAssets(),
+                costs: await ticket.getCosts(),
             }))
         );
         return ticketsWithItems;

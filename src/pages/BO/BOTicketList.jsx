@@ -6,7 +6,7 @@ export default function BOTicketList() {
 
     useEffect(() => {
         const loadTickets = async () => {
-            const tic = await Ticket.getAllWithAssets();
+            const tic = await Ticket.getAllComplete();
             setTickets(tic);
         };  
         loadTickets();
@@ -18,14 +18,24 @@ export default function BOTicketList() {
         <div>
             <h1>Tickets</h1>
                 {
-                    tickets.map(({ ticket, assets }) => (
+                    tickets.map(({ ticket, assets, costs }) => (
                             <div key={ticket.id}>
-                                <p>{ticket.name}</p>
+                                <h2>{ticket.name}</h2>
                                 <p>nb computer: {assets.filter((asset) => asset.getItemType() === "Computer").length}</p>
                                 <p>nb monitor: {assets.filter((asset) => asset.getItemType() === "Monitor").length}</p>
                                 {assets.map((asset) => (
                                         <p key={asset.id}>{asset.name} - type: {asset.getItemType()}</p>
                                     )
+                                )}
+                                {costs.length > 0 && (
+                                    <div>
+                                        <p>Coûts associés :</p>
+                                        {costs.map((cost) => (
+                                            <p key={cost.id}>
+                                                Durée : {cost.duration}s, Coût temps : {cost.cost_time}, Coût fixe : {cost.cost_fixed}
+                                            </p>
+                                        ))}
+                                    </div>
                                 )}
                             </div>
                         )
