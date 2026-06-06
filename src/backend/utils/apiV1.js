@@ -117,10 +117,6 @@ async function uploadMultipart(path, manifest, fileBlob, filename) {
     // le navigateur le génère avec le bon boundary
     const headers = { "Session-Token": _sessionToken };
     if (APP_TOKEN) headers["App-Token"] = APP_TOKEN;
- 
-    for(const pair of formData.entries()) {
-        console.log(`[DEBUG] uploadMultipart — formData entry: ${pair[0]} =`, pair[1]);
-    }
 
     let res = await fetch(`${BASE_URL}/apirest.php/${path}`, {
         method: "POST",
