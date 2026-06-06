@@ -5,6 +5,7 @@ import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "..
 export default function BOTicketList() {
     const [tickets, setTickets]             = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [filters, setFilters]  = useState({ stateId:0, typeId:0, priorityId: 0});
 
     useEffect(() => {
         const loadTickets = async () => {
@@ -14,15 +15,31 @@ export default function BOTicketList() {
         loadTickets();
     }, []);
 
+    
+    const resetFilter = () => {
+        setFilters({ stateId:0, typeId:0, priorityId: 0});
+    };
+
+    const handleFilterChange = (key, value) => {
+        setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
+    };
+
     const openTicketDetails  = (complete) => setSelectedTicket(complete ?? null);
     const closeTicketDetails = ()         => setSelectedTicket(null);
 
-    const ticketWithComputer = tickets.reduce((acc, ticket) => {
+    const filteredTickets = tickets.filter(({ ticket }) => {
+        if (filters.priorityId     > 0 && ticket.priority     !== filters.priorityId)     return false;
+        if (filters.stateId > 0 && ticket.status?.id !== filters.stateId) return false;
+        if (filters.typeId        > 0 && ticket.type       !== filters.typeId)        return false;
+        return true;
+    });
+
+    const ticketWithComputer = filteredTickets.reduce((acc, ticket) => {
         const hasComputer = ticket.assets.some((asset) => asset.itemType === "Computer");
         return hasComputer ? acc + 1 : acc;
     }, 0);
 
-    const ticketWithMonitor = tickets.reduce((acc, ticket) => {
+    const ticketWithMonitor = filteredTickets.reduce((acc, ticket) => {
         const hasMonitor = ticket.assets.some((asset) => asset.itemType === "Monitor");
         return hasMonitor ? acc + 1 : acc;
     }, 0);
@@ -30,11 +47,43 @@ export default function BOTicketList() {
     return (
         <div style={{ padding: "16px" }}>
             <h1>Tickets</h1>
-            <h3>Total : {tickets.length}</h3>
+            <button onClick={resetFilter}>Reset Filter</button>
+            <div>
+                <select value={filters.typeId} onChange={(e) => handleFilterChange("typeId", e.target.value)}>
+                    <option value="0">Type</option>
+                    {TICKET_TYPE.map((type) => (
+                        <option key={type.id} value={type.id}>
+                            {type.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <select value={filters.priorityId} onChange={(e) => handleFilterChange("priorityId", e.target.value)}>
+                    <option value="0">Priorite</option>
+                    {TICKET_PRIORITY.map((priority) => (
+                        <option key={priority.id} value={priority.id}>
+                            {priority.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <select value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
+                    <option value="0">Status</option>
+                    {TICKET_STATUS.map((state) => (
+                        <option key={state.id} value={state.id}>
+                            {state.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <h3>Total : {filteredTickets.length}</h3>
             <h3>Tickets avec ordinateur : {ticketWithComputer}</h3>
             <h3>Tickets avec moniteur : {ticketWithMonitor}</h3>
 
-            {tickets.map(({ ticket, assets, costs }) => (
+            {filteredTickets.map(({ ticket, assets, costs }) => (
                 <div key={ticket.id}>
                     <p>
                         <strong>#{ticket.id}</strong> - {ticket.name} -{" "}
