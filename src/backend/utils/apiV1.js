@@ -93,6 +93,64 @@ async function apiCall(method, path, body = null) {
     return res.text();
 }
 
+/**
+ * Upload multipart/form-data vers un endpoint GLPI V1.
+ * Utilisé pour les endpoints qui n'acceptent pas application/json,
+ * comme POST /Document (upload de fichier).
+ *
+ * @param {string} path          - Endpoint relatif, ex: "Document"
+ * @param {object} manifest      - Objet JSON placé dans le champ uploadManifest
+ * @param {Blob|File} fileBlob   - Le fichier binaire à envoyer
+ * @param {string} filename      - Nom du fichier (ex: "PC-ADM-001.png")
+ * @returns {Promise<object>}    - Réponse JSON de GLPI (ex: { id, message, upload_result })
+ */
+async function uploadMultipart(path, manifest, fileBlob, filename) {
+    if (!_sessionToken) await initSession();
+ 
+    const formData = new FormData();
+    // Le manifest doit être une string JSON, pas un objet
+    formData.append("uploadManifest", JSON.stringify(manifest));
+    // Le fichier — le navigateur génère automatiquement le boundary multipart
+    formData.append("filename[0]", fileBlob, filename);
+ 
+    // IMPORTANT : ne pas mettre Content-Type manuellement,
+    // le navigateur le génère avec le bon boundary
+    const headers = { "Session-Token": _sessionToken };
+    if (APP_TOKEN) headers["App-Token"] = APP_TOKEN;
+ 
+    for(const pair of formData.entries()) {
+        console.log(`[DEBUG] uploadMultipart — formData entry: ${pair[0]} =`, pair[1]);
+    }
+
+    let res = await fetch(`${BASE_URL}/apirest.php/${path}`, {
+        method: "POST",
+        headers,
+        body: formData,
+    });
+ 
+    if (res.status === 401) {
+        await initSession();
+        headers["Session-Token"] = _sessionToken;
+        res = await fetch(`${BASE_URL}/apirest.php/${path}`, {
+            method: "POST",
+            headers,
+            body: formData,
+        });
+    }
+ 
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(
+            `V1 Multipart Error ${res.status} on POST ${path} — ${JSON.stringify(err)}`
+        );
+    }
+ 
+    if (res.status === 204) return null;
+ 
+    const ct = res.headers.get("content-type") || "";
+    if (ct.includes("application/json")) return res.json();
+    return res.text();
+}
 
 export const getV1  = (path)             => apiCall("GET",    path);
 export const postV1 = (path, body)       => apiCall("POST",   path, body);
@@ -100,5 +158,6 @@ export const patchV1 = (path, body)      => apiCall("PATCH",  path, body);
 export const delV1  = (path)             => apiCall("DELETE", path);
 export const killSessionV1 = killSession;
 export const initSessionV1 = initSession;
+export const uploadMultipartV1 = (path, manifest, fileBlob, filename) => uploadMultipart(path, manifest, fileBlob, filename);
 
-export default { getV1, postV1, patchV1, delV1, killSessionV1, initSessionV1 };
+export default { getV1, postV1, patchV1, delV1, killSessionV1, initSessionV1, uploadMultipartV1 };

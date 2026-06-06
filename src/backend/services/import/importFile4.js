@@ -1,23 +1,36 @@
-import JSZip                         from "jszip";
-import { patchV1 }                   from "../../utils/apiV1.js";
-import Computer                      from "../../model/Computer.js";
-import Monitor                       from "../../model/Monitor.js";
-import { isImageFile, uint8ArrayToBase64DataURI } from "../../utils/utils.js";
+import JSZip        from "jszip";
+import { uploadMultipartV1, postV1 } from "../../utils/apiV1.js";
+import Computer    from "../../model/Computer.js";
+import Monitor     from "../../model/Monitor.js";
+import { isImageFile } from "../../utils/utils.js";
 
 const IGNORED_PREFIXES = ["__MACOSX/", "_MACOSX/", "__MACOSX\\", "_MACOSX\\"];
+
+const MIME_MAP = {
+    png:  "image/png",
+    jpg:  "image/jpeg",
+    jpeg: "image/jpeg",
+    gif:  "image/gif",
+    webp: "image/webp",
+    bmp:  "image/bmp",
+};
 
 
 function isIgnoredPath(path) {
     if (IGNORED_PREFIXES.some((prefix) => path.startsWith(prefix))) return true;
-    if (path.endsWith(".DS_Store"))  return true;
-    if (path.endsWith("/"))          return true;
+    if (path.endsWith(".DS_Store")) return true;
+    if (path.endsWith("/"))         return true;
     return false;
 }
-
 
 function assetNameFromPath(zipPath) {
     const filename = zipPath.split("/").pop().split("\\").pop();
     return filename.substring(0, filename.lastIndexOf("."));
+}
+
+function mimeFromFilename(filename) {
+    const ext = filename.split(".").pop()?.toLowerCase();
+    return MIME_MAP[ext] ?? "application/octet-stream";
 }
 
 async function findAssetByName(name) {
@@ -31,14 +44,52 @@ async function findAssetByName(name) {
     return null;
 }
 
+/**
+ * Étape 1 : Upload du fichier image comme Document GLPI.
+ * Retourne l'ID du document créé.
+ */
+async function uploadDocument(assetName, uint8Array, filename) {
+    const mimeType = mimeFromFilename(filename);
+    const fileBlob = new Blob([uint8Array], { type: mimeType });
 
-async function uploadPicture(itemtype, id, base64DataURI) {
-    return patchV1(`${itemtype}/${id}`, {
+    const manifest = {
         input: {
-            id,
-            picture: base64DataURI,
+            name:      assetName,
+            _filename: [filename],
+        },
+    };
+
+    const result = await uploadMultipartV1("Document", manifest, fileBlob, filename);
+    console.log(`[DEBUG] uploadDocument — result: ${JSON.stringify(result)}`);
+
+    if(result?.error) {
+        console.error(`[ERROR] uploadDocument — API error: ${JSON.stringify(result)}`);
+    }
+
+    if (!result?.id) {
+        console.error(`[ERROR] uploadDocument — API error: ${JSON.stringify(result)}`);
+    }
+
+    return result.id;
+}
+
+/**
+ * Étape 2 : Liaison du document à l'asset via Document_Item.
+ */
+async function linkDocumentToAsset(documentId, itemtype, itemId) {
+    const result = await postV1("Document_Item", {
+        input: {
+            documents_id: documentId,
+            itemtype:     itemtype,
+            items_id:     itemId,
         },
     });
+
+    if (!result?.id) {
+        console.error(`[ERROR] linkDocumentToAsset — API error: ${JSON.stringify(result)}`);
+    }
+
+    return result.id;
 }
 
 
@@ -66,28 +117,19 @@ export const importFile4 = async (file) => {
 
         try {
             const found = await findAssetByName(assetName);
-            if (!found) continue; 
+            if (!found) continue;
 
-            const uint8Array  = await zipEntry.async("uint8array");
-            const filename    = zipPath.split("/").pop().split("\\").pop();
-            const base64URI   = uint8ArrayToBase64DataURI(uint8Array, filename);
+            const uint8Array = await zipEntry.async("uint8array");
+            const filename   = zipPath.split("/").pop().split("\\").pop();
 
-            const patchResult = await uploadPicture(
-                found.itemtype,
-                found.asset.id,
-                base64URI
-            );
+            // Étape 1 — Upload de l'image comme document GLPI
+            const documentId = await uploadDocument(assetName, uint8Array, filename);
+            console.log(`[UPLOADED] Document #${documentId} créé pour "${assetName}"`);
 
-            if (!patchResult) {
-                console.warn(
-                    `[WARN] Photo "${assetName}" — PATCH échoué sur ${found.itemtype} #${found.asset.id}`
-                );
-                continue;
-            }
+            // Étape 2 — Liaison du document à l'asset
+            await linkDocumentToAsset(documentId, found.itemtype, found.asset.id);
+            console.log(`[LINKED] Document #${documentId} lié à ${found.itemtype} "${assetName}" (#${found.asset.id})`);
 
-            console.log(
-                `[UPDATED] Photo de ${found.itemtype} "${assetName}" (#${found.asset.id}) mise à jour.`
-            );
             results.updated++;
 
         } catch (err) {
@@ -97,7 +139,7 @@ export const importFile4 = async (file) => {
     }
 
     console.log(
-        `\nImport Feuille 4 terminé : ${results.updated} photo(s) mise(s) à jour, ${results.errors.length} erreur(s).`
+        `\nImport Feuille 4 terminé : ${results.updated} photo(s) importée(s), ${results.errors.length} erreur(s).`
     );
     return results;
 };

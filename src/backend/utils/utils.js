@@ -72,41 +72,12 @@ export function parseCSVNumber(value, fallback = 0) {
 }
 
 
-/**
- * Extensions d'images supportées pour l'import ZIP.
- */
+
 export const IMAGE_EXTENSIONS = ["png", "jpg", "jpeg", "gif", "webp", "bmp"];
  
-/**
- * Vérifie si un nom de fichier correspond à une image supportée.
- * @param {string} filename
- * @returns {boolean}
- */
+
 export function isImageFile(filename) {
     const ext = filename.split(".").pop()?.toLowerCase();
     return IMAGE_EXTENSIONS.includes(ext);
-}
- 
-/**
- * Convertit un Uint8Array en string base64 data-URI.
- * @param {Uint8Array} uint8Array
- * @param {string} filename - utilisé pour déduire le MIME type
- * @returns {string} - ex: "data:image/png;base64,iVBOR..."
- */
-export function uint8ArrayToBase64DataURI(uint8Array, filename) {
-    const ext  = filename.split(".").pop()?.toLowerCase();
-    const mime = ext === "jpg" || ext === "jpeg" ? "image/jpeg"
-               : ext === "png"  ? "image/png"
-               : ext === "gif"  ? "image/gif"
-               : ext === "webp" ? "image/webp"
-               : ext === "bmp"  ? "image/bmp"
-               : "image/octet-stream";
- 
-    let binary = "";
-    for (let i = 0; i < uint8Array.length; i++) {
-        binary += String.fromCharCode(uint8Array[i]);
-    }
-    const base64 = btoa(binary);
-    return `data:${mime};base64,${base64}`;
 }
  
