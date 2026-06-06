@@ -1,10 +1,20 @@
-import JSZip     from "jszip";
+import JSZip        from "jszip";
 import { uploadMultipartV1, postV1 } from "../../utils/apiV1.js";
-import Computer  from "../../model/Computer.js";
-import Monitor   from "../../model/Monitor.js";
+import Computer    from "../../model/Computer.js";
+import Monitor     from "../../model/Monitor.js";
 import { isImageFile } from "../../utils/utils.js";
 
 const IGNORED_PREFIXES = ["__MACOSX/", "_MACOSX/", "__MACOSX\\", "_MACOSX\\"];
+
+const MIME_MAP = {
+    png:  "image/png",
+    jpg:  "image/jpeg",
+    jpeg: "image/jpeg",
+    gif:  "image/gif",
+    webp: "image/webp",
+    bmp:  "image/bmp",
+};
+
 
 function isIgnoredPath(path) {
     if (IGNORED_PREFIXES.some((prefix) => path.startsWith(prefix))) return true;
@@ -18,6 +28,11 @@ function assetNameFromPath(zipPath) {
     return filename.substring(0, filename.lastIndexOf("."));
 }
 
+function mimeFromFilename(filename) {
+    const ext = filename.split(".").pop()?.toLowerCase();
+    return MIME_MAP[ext] ?? "application/octet-stream";
+}
+
 async function findAssetByName(name) {
     const computers = await Computer.getBy("name", name);
     if (computers.length > 0) return { asset: computers[0], itemtype: "Computer" };
@@ -29,53 +44,30 @@ async function findAssetByName(name) {
     return null;
 }
 
-
-async function convertToJpeg(uint8Array, filename) {
-    const ext = filename.split(".").pop().toLowerCase();
-    if (ext !== "png") return { blob: new Blob([uint8Array]), filename };
-
-    return new Promise((resolve, reject) => {
-        const blob = new Blob([uint8Array], { type: "image/png" });
-        const url  = URL.createObjectURL(blob);
-        const img  = new Image();
-
-        img.onload = () => {
-            const canvas  = document.createElement("canvas");
-            canvas.width  = img.width;
-            canvas.height = img.height;
-            canvas.getContext("2d").drawImage(img, 0, 0);
-
-            canvas.toBlob((jpegBlob) => {
-                URL.revokeObjectURL(url);
-                const jpegFilename = filename.replace(/\.png$/i, ".jpeg");
-                resolve({ blob: jpegBlob, filename: jpegFilename });
-            }, "image/jpeg", 0.92);
-        };
-
-        img.onerror = () => {
-            URL.revokeObjectURL(url);
-            reject(new Error(`Impossible de lire l'image PNG : ${filename}`));
-        };
-
-        img.src = url;
-    });
-}
-
-
+/**
+ * Étape 1 : Upload du fichier image comme Document GLPI.
+ * Retourne l'ID du document créé.
+ */
 async function uploadDocument(assetName, uint8Array, filename) {
-    const { blob: fileBlob, filename: finalFilename } = await convertToJpeg(uint8Array, filename);
+    const mimeType = mimeFromFilename(filename);
+    const fileBlob = new Blob([uint8Array], { type: mimeType });
 
     const manifest = {
         input: {
             name:      assetName,
-            _filename: [finalFilename],
+            _filename: [filename],
         },
     };
 
-    const result = await uploadMultipartV1("Document", manifest, fileBlob, finalFilename);
+    const result = await uploadMultipartV1("Document", manifest, fileBlob, filename);
+    console.log(`[DEBUG] uploadDocument — result: ${JSON.stringify(result)}`);
+
+    if(result?.error) {
+        console.error(`[ERROR] uploadDocument — API error: ${JSON.stringify(result)}`);
+    }
 
     if (!result?.id) {
-        throw new Error(`Upload document échoué — réponse inattendue : ${JSON.stringify(result)}`);
+        console.error(`[ERROR] uploadDocument — API error: ${JSON.stringify(result)}`);
     }
 
     return result.id;
@@ -94,7 +86,7 @@ async function linkDocumentToAsset(documentId, itemtype, itemId) {
     });
 
     if (!result?.id) {
-        throw new Error(`Liaison Document_Item échouée — réponse : ${JSON.stringify(result)}`);
+        console.error(`[ERROR] linkDocumentToAsset — API error: ${JSON.stringify(result)}`);
     }
 
     return result.id;
@@ -130,7 +122,7 @@ export const importFile4 = async (file) => {
             const uint8Array = await zipEntry.async("uint8array");
             const filename   = zipPath.split("/").pop().split("\\").pop();
 
-            // Étape 1 — Conversion PNG→JPEG si nécessaire + upload comme document GLPI
+            // Étape 1 — Upload de l'image comme document GLPI
             const documentId = await uploadDocument(assetName, uint8Array, filename);
             console.log(`[UPLOADED] Document #${documentId} créé pour "${assetName}"`);
 
