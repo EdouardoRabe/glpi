@@ -3,6 +3,7 @@ import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
+import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
 
 export default function BOTicketList() {
@@ -45,15 +46,6 @@ export default function BOTicketList() {
         return true;
     });
 
-    const ticketWithComputer = filteredTickets.reduce((acc, ticket) => {
-        const hasComputer = ticket.assets.some((asset) => asset.itemType === "Computer");
-        return hasComputer ? acc + 1 : acc;
-    }, 0);
-
-    const ticketWithMonitor = filteredTickets.reduce((acc, ticket) => {
-        const hasMonitor = ticket.assets.some((asset) => asset.itemType === "Monitor");
-        return hasMonitor ? acc + 1 : acc;
-    }, 0);
 
     return (
         <div className="bo-ticket-list">
@@ -119,14 +111,20 @@ export default function BOTicketList() {
                     <h3>Total Tickets</h3>
                     <p className="bo-ticket-stat-value">{filteredTickets.length}</p>
                 </div>
-                <div className="bo-ticket-stat">
-                    <h3>With Computers</h3>
-                    <p className="bo-ticket-stat-value">{ticketWithComputer}</p>
-                </div>
-                <div className="bo-ticket-stat">
-                    <h3>With Monitors</h3>
-                    <p className="bo-ticket-stat-value">{ticketWithMonitor}</p>
-                </div>
+                {
+                    ITEM_TYPES.map((type) => {
+                        const count = filteredTickets.reduce((acc, ticket) => {
+                            const hasType = ticket.assets.some((asset) => asset.itemType === type);
+                            return hasType ? acc + 1 : acc;
+                        }, 0);
+                        return (
+                            <div className="bo-ticket-stat" key={type}>
+                                <h3>With {type}s</h3>
+                                <p className="bo-ticket-stat-value">{count}</p>
+                            </div>
+                        );
+                    })
+                }
             </div>
 
             <div className="bo-ticket-items">
@@ -165,10 +163,15 @@ export default function BOTicketList() {
                             <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
                         </div>
 
-                        <div className="bo-ticket-modal-section">
-                            <p><strong>Computers:</strong> {selectedTicket.assets.filter((a) => a.itemType === "Computer").length}</p>
-                            <p><strong>Monitors:</strong> {selectedTicket.assets.filter((a) => a.itemType === "Monitor").length}</p>
-                        </div>
+                        {   ITEM_TYPES.map((type) => {
+                                const count = selectedTicket.assets.filter((a) => a.itemType === type).length;
+                                return count > 0 ? (    
+                                        <div className="bo-ticket-modal-section">
+                                            <p><strong>{type}:</strong> {count}</p>
+                                        </div>
+                                ) : null;
+                            })
+                        }
 
                         {selectedTicket.assets.length > 0 && (
                             <div className="bo-ticket-modal-section">
