@@ -1,7 +1,8 @@
 import Computer from "../../backend/model/Computer";
 import Monitor from "../../backend/model/Monitor";
+import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export default function FOCreateTicket() {
     const [refTicket, setRefTicket] = useState("");
@@ -28,6 +29,10 @@ export default function FOCreateTicket() {
 
     const handleSubmit = async () => {
         try {
+            const selectedObjects = selectedItems
+                .map(id => items.find(it => it.id === id))
+                .filter(Boolean);
+
             const daty    = parseDDMMYYYY(date, heure);
             const dateStr = toGLPIDateTime(daty);
             const payload = {
@@ -37,9 +42,11 @@ export default function FOCreateTicket() {
                 priority: priority,
                 status: status,
                 date: dateStr,
-                ref: refTicket,
+                external_id: refTicket,
             };
-            console.log("Payload à envoyer :", payload);
+            const newTicket = new Ticket(payload);
+            newTicket.saveWithItems(selectedObjects);
+            console.log("Ticket créé avec succès :", newTicket, " — items associés :", selectedObjects);
         } catch (error) {
             console.error("Erreur lors de la création du ticket :", error);
         }
@@ -68,12 +75,19 @@ export default function FOCreateTicket() {
                     <option key={s.id} value={s.id}>{s.name}</option>
                 ))}
             </select>
-            <select multiple value={selectedItems} onChange={(e) => setSelectedItems(Array.from(e.target.selectedOptions, option => option.value))}>
+            <select 
+                multiple 
+                value={selectedItems.map(String)} 
+                onChange={(e) => {
+                    const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
+                    setSelectedItems(ids);
+                }}
+            >
                 {items.map((item) => (
-                    <option key={item.id} value={item}>{item.name}</option>
+                    <option key={item.id} value={String(item.id)}>{item.name}</option>
                 ))}
             </select>
-            <button onClick={handleSubmit()}>Créer</button>
+            <button onClick={() => handleSubmit()}>Créer</button>
         </div>
     );
 }
