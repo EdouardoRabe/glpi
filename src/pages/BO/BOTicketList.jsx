@@ -23,12 +23,22 @@ export default function BOTicketList() {
         setSelectedTicket(null);
     };
 
+    const ticketWithComputter = tickets.reduce ((acc, ticket) => {
+        const hasComputer = ticket.assets.some((asset) => asset.getItemType() === "Computer");
+        return hasComputer ? acc + 1 : acc;
+    }, 0);
 
+    const ticketWithMonitor = tickets.reduce ((acc, ticket) => {
+        const hasMonitor = ticket.assets.some((asset) => asset.getItemType() === "Monitor");
+        return hasMonitor ? acc + 1 : acc;
+    }, 0);
 
     return (
         <div style={{ padding: "16px" }}>
             <h1>Tickets</h1>
                 <h3>Total : {tickets.length}</h3>
+                <h3>Tickets avec ordinateur : {ticketWithComputter}</h3>
+                <h3>Tickets avec moniteur : {ticketWithMonitor}</h3>
                 {
                     tickets.map(({ ticket, assets, costs }) => (
                             
