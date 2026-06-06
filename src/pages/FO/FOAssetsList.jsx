@@ -3,6 +3,7 @@ import Asset from "../../backend/model/Asset";
 import State from "../../backend/model/State";
 import Location from "../../backend/model/Location";
 import Manufacturer from "../../backend/model/Manufacturer";
+import { ITEM_TYPES } from "../../backend/utils/type";
 
 export default function FOAssetsList() {
     const [assets, setAssets]             = useState([]);
@@ -15,6 +16,7 @@ export default function FOAssetsList() {
         locationId:     0,
         stateId:        0,
         manufacturerId: 0,
+        itemType:      "",
     });
 
     useEffect(() => {
@@ -39,11 +41,15 @@ export default function FOAssetsList() {
     }, []);
 
     const handleFilterChange = (key, value) => {
-        setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
+        if (key === "itemType") {
+            setFilters(prev => ({ ...prev, itemType: value === "" ? "" : value }));
+        } else {
+            setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
+        }
     };
 
     const resetFilter = () => {
-        setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0 });
+        setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0, itemType: "" });
     };
 
     const filteredAssets = assets.filter(({ asset }) => {
@@ -51,6 +57,7 @@ export default function FOAssetsList() {
         if (filters.manufacturerId > 0 && asset.manufacturer?.id !== filters.manufacturerId) return false;
         if (filters.modelId        > 0 && asset.model?.id        !== filters.modelId)        return false;
         if (filters.stateId        > 0 && asset.status?.id       !== filters.stateId)        return false;
+        if (filters.itemType        !== ""  && asset.itemType         !== filters.itemType)         return false;
         return true;
     });
 
@@ -58,6 +65,17 @@ export default function FOAssetsList() {
         <div>
             <h1>Liste des éléments</h1>
             <button onClick={resetFilter}>Reset Filter</button>
+
+            <div>
+                <select value={filters.itemType} onChange={(e) => handleFilterChange("itemType", e.target.value)}>
+                    <option value="0">Type d'élément</option>
+                    {ITEM_TYPES.map((type) => (
+                        <option key={type} value={type}>
+                            {type}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             <div>
                 <select value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
