@@ -24,7 +24,7 @@ export default function BODashboard() {
     const totalAssets    = totalComputers + totalMonitors;
 
     const nbTicketType = tickets.reduce((acc, t) => {
-        const id    = String(t.type);
+        const id    = Number(t.type);
         const label = getEnumNameById(TICKET_TYPE, id);
         acc[label]  = (acc[label] ?? 0) + 1;
         return acc;
