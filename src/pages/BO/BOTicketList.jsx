@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
+import { compareDates } from "../../backend/utils/comparisonUtils";
 
 export default function BOTicketList() {
     const [tickets, setTickets]             = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
-    const [filters, setFilters]  = useState({ stateId:0, typeId:0, priorityId: 0});
+    const [filters, setFilters]  = useState({ stateId:0, typeId:0, priorityId: 0, dateMin :"", dateMax :""});
 
     useEffect(() => {
         const loadTickets = async () => {
@@ -18,11 +19,18 @@ export default function BOTicketList() {
 
     
     const resetFilter = () => {
-        setFilters({ stateId:0, typeId:0, priorityId: 0});
+        setFilters({ stateId:0, typeId:0, priorityId: 0, dateMin :"", dateMax :""});
     };
 
-    const handleFilterChange = (key, value) => {
-        setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
+     const handleFilterChange = (key, value) => {
+        if (key === "dateMin") {
+            setFilters(prev => ({ ...prev, dateMin: value === "" ? null : value }));
+        } else if (key === "dateMax") {
+            setFilters(prev => ({ ...prev, dateMax: value === "" ? null : value }));
+        } 
+        else {
+            setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
+        }
     };
 
     const openTicketDetails  = (complete) => setSelectedTicket(complete ?? null);
@@ -32,6 +40,8 @@ export default function BOTicketList() {
         if (filters.priorityId     > 0 && ticket.priority     !== filters.priorityId)     return false;
         if (filters.stateId > 0 && ticket.status?.id !== filters.stateId) return false;
         if (filters.typeId        > 0 && ticket.type       !== filters.typeId)        return false;
+        if (filters.dateMin !== ""      &&       compareDates(ticket.date, filters.dateMin) === -1 )        return false;
+        if (filters.dateMax !== ""      &&       compareDates(ticket.date, filters.dateMax) === 1 )        return false;
         return true;
     });
 
@@ -78,6 +88,16 @@ export default function BOTicketList() {
                         </option>
                     ))}
                 </select>
+            </div>
+
+            <div>
+                <label htmlFor="date1">DateMin</label>
+                <input value={filters.dateMin} id="date1" type="date"  onChange={(e) => handleFilterChange("dateMin", e.target.value)} />
+            </div>
+
+            <div>
+                <label htmlFor="date2">DateMax</label>
+                <input value={filters.dateMax} id="date2" type="date" onChange={(e) => handleFilterChange("dateMax", e.target.value)} />
             </div>
 
             <h3>Total : {filteredTickets.length}</h3>

@@ -76,6 +76,8 @@ export const compareDates = (date1, date2) => {
   const d1 = date1 instanceof Date ? date1 : new Date(date1);
   const d2 = date2 instanceof Date ? date2 : new Date(date2);
 
+  console.log("date ticket ", d1, "date ", d2);
+
   if (Number.isNaN(d1.getTime()) || Number.isNaN(d2.getTime())) {
     return 0;
   }
