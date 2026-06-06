@@ -13,6 +13,7 @@ export default function BOTicketList() {
     }, []);
 
 
+
     return (
         <div>
             <h1>Tickets</h1>
@@ -20,6 +21,8 @@ export default function BOTicketList() {
                     tickets.map(({ ticket, assets }) => (
                             <div key={ticket.id}>
                                 <p>{ticket.name}</p>
+                                <p>nb computer: {assets.filter((asset) => asset.getItemType() === "Computer").length}</p>
+                                <p>nb monitor: {assets.filter((asset) => asset.getItemType() === "Monitor").length}</p>
                                 {assets.map((asset) => (
                                         <p key={asset.id}>{asset.name} - type: {asset.getItemType()}</p>
                                     )
