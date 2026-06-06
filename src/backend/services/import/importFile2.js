@@ -5,7 +5,7 @@ import Monitor                                 from "../../model/Monitor.js";
 import {
     parseDDMMYYYY,
     toGLPIDateTime,
-    resolveEnum,
+    getEnumIdByName,
     TICKET_TYPE,
     TICKET_STATUS,
     TICKET_PRIORITY,
@@ -72,9 +72,9 @@ export const importFile2 = async (file) => {
             const date    = parseDDMMYYYY(row.date, row.heure);
             const dateStr = toGLPIDateTime(date);
 
-            const type     = resolveEnum(TICKET_TYPE,     row.type,     1); // défaut: Incident
-            const status   = resolveEnum(TICKET_STATUS,   row.status,   1); // défaut: New
-            const priority = resolveEnum(TICKET_PRIORITY, row.priority, 3); // défaut: Medium
+            const type     = getEnumIdByName(TICKET_TYPE,     row.type,     1); // défaut: Incident
+            const status   = getEnumIdByName(TICKET_STATUS,   row.status,   1); // défaut: New
+            const priority = getEnumIdByName(TICKET_PRIORITY, row.priority, 3); // défaut: Medium
 
 
             const ticketPayload = {

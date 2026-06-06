@@ -32,47 +32,39 @@ export function toGLPIDateTime(date) {
     );
 }
 
+export const TICKET_TYPE = [
+    { id: 1, name: "Incident" },
+    { id: 2, name: "Request" },
+];
 
-export const TICKET_TYPE = {
-    incident: 1,
-    request:  2,
-};
+export const TICKET_STATUS = [
+    { id: 1, name: "New" },
+    { id: 2, name: "Processing (Assigned)" },
+    { id: 3, name: "Processing (Planned)" },
+    { id: 4, name: "Pending" },
+    { id: 5, name: "Solved" },
+    { id: 6, name: "Closed" },
+];
 
-export const TYPE_LABEL_BY_ID = Object.fromEntries(
-  Object.entries(TICKET_TYPE).map(([label, id]) => [String(id), label])
-);
+export const TICKET_PRIORITY = [
+    { id: 1, name: "Very Low" },
+    { id: 2, name: "Low" },
+    { id: 3, name: "Medium" },
+    { id: 4, name: "High" },
+    { id: 5, name: "Very High" },
+    { id: 6, name: "Major" },
+];
 
-export const TICKET_STATUS = {
-    new:                1,
-    processing_assigned: 2,
-    processing_planned:  3,
-    pending:            4,
-    solved:             5,
-    closed:             6,
-};
-
-export const TICKET_PRIORITY = {
-    "very low": 1,
-    low:        2,
-    medium:     3,
-    high:       4,
-    "very high": 5,
-    major:      6,
-};
-
-/**
- * Résout une valeur texte vers son entier GLPI.
- * @param {Object} map   - un des maps ci-dessus
- * @param {string} value - valeur brute du CSV
- * @param {number} fallback - valeur par défaut si non trouvée
- * @returns {number}
- */
-export function resolveEnum(map, value, fallback) {
+export function getEnumIdByName(arr, value, fallback) {
     if (!value) return fallback;
     const key = value.trim().toLowerCase();
-    return map[key] ?? fallback;
+    const found = arr.find(item => item.name.toLowerCase() === key);
+    return found?.id ?? fallback;
 }
 
+export function getEnumNameById(arr, id) {
+    return arr.find(item => item.id === id)?.name ?? null;
+}
 export function parseCSVNumber(value, fallback = 0) {
     if (value === null || value === undefined || String(value).trim() === "") {
         return fallback;

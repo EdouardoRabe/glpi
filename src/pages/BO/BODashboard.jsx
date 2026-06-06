@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Computer from "../../backend/model/Computer";
 import Monitor from "../../backend/model/Monitor";
 import Ticket from "../../backend/model/Ticket";
-import { TYPE_LABEL_BY_ID } from "../../backend/utils/utils";
+import { TICKET_TYPE, getEnumNameById } from "../../backend/utils/utils";
 
 export default function BODashboard (){
     const [computers, setComputers] = useState([]);
@@ -28,7 +28,7 @@ export default function BODashboard (){
     const totalAssets = totalComputers + totalMonitors;
     const nbTicketType = tickets.reduce((acc, t) => {
                 const id = String(t.type);
-                const label = TYPE_LABEL_BY_ID[id];
+                const label = getEnumNameById(TICKET_TYPE, id);
                 acc[label] = (acc[label] ?? 0) + 1;
                 return acc;
     }, {});
