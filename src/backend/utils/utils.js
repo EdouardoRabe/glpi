@@ -1,21 +1,18 @@
-/**
- * Parse une date au format DD/MM/YYYY et une heure HH:MM
- * en utilisant le fuseau local du navigateur (pas UTC).
- * @param {string} dateStr - ex: "03/06/2026"
- * @param {string} timeStr - ex: "13:45"
- * @returns {Date}
- */
+
 export function parseDDMMYYYY(dateStr, timeStr = "00:00") {
-    const [day, month, year] = dateStr.trim().split("/");
-    const [hours, minutes]   = timeStr.trim().split(":");
-    return new Date(
-        Number(year),
-        Number(month) - 1,
-        Number(day),
-        Number(hours),
-        Number(minutes),
-        0
-    );
+    const parts = dateStr.trim().split(/[-\/]/);
+    let day, month, year;
+
+    if (parts[0].length === 4) {
+        // Format YYYY-MM-DD (input HTML)
+        [year, month, day] = parts;
+    } else {
+        // Format DD/MM/YYYY (CSV)
+        [day, month, year] = parts;
+    }
+
+    const [hours, minutes] = timeStr.trim().split(":");
+    return new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), 0);
 }
 
 /**
