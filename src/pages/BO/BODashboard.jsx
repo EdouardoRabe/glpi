@@ -39,12 +39,15 @@ export default function BODashboard() {
                     <p className="bo-dashboard-stat-value">{totalAssets}</p>
                 </div>
                 {
-                    ITEM_TYPES.map((type) => (
-                        <div className="bo-dashboard-stat-card" key={type}>
-                            <h3>{type}</h3>
-                            <p className="bo-dashboard-stat-value">{assets.filter((a) => a.itemType === type).length}</p>
-                        </div>
-                    ))
+                    ITEM_TYPES.map((type) => {
+                        const count = assets.filter((a) => a.itemType === type).length;
+                        return count > 0 && (
+                            <div className="bo-dashboard-stat-card" key={type}>
+                                <h3>{type}</h3>
+                                <p className="bo-dashboard-stat-value">{count}</p>
+                            </div>
+                        );
+                    })
                 }
                 <div className="bo-dashboard-stat-card">
                     <h3>Tickets Total</h3>

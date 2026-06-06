@@ -1,4 +1,5 @@
 import { deleteAll } from "../../utils/api";
+import { or } from "../../utils/query";
 
 export const toDelete = [
     // ── ITIL ──────────────────────────────────────────────────────────────────
@@ -16,25 +17,34 @@ export const toDelete = [
     { order: 10, name: 'Software',         endpoint: 'Assets/Software' },
     { order: 11, name: 'SoftwareLicense',  endpoint: 'Assets/SoftwareLicense' },
     { order: 12, name: 'Certificates',     endpoint: 'Assets/Certificate' },
+    { order: 13, name: 'Racks',            endpoint: 'Assets/Rack' },
 
     // ── Gestion ───────────────────────────────────────────────────────────────
-    { order: 13, name: 'Contracts',        endpoint: 'Management/Contract' },
-    { order: 14, name: 'Documents',        endpoint: 'Management/Document' },
-    { order: 15, name: 'Budgets',          endpoint: 'Management/Budget' },
-    { order: 16, name: 'Suppliers',        endpoint: 'Management/Supplier' },
-    { order: 17, name: 'Contacts',         endpoint: 'Management/Contact' },
-    { order: 18, name: 'Projects',         endpoint: 'Project' },
+    { order: 14, name: 'Contracts',        endpoint: 'Management/Contract' },
+    { order: 15, name: 'Documents',        endpoint: 'Management/Document' },
+    { order: 16, name: 'Budgets',          endpoint: 'Management/Budget' },
+    { order: 17, name: 'Suppliers',        endpoint: 'Management/Supplier' },
+    { order: 18, name: 'Contacts',         endpoint: 'Management/Contact' },
+    { order: 19, name: 'Projects',         endpoint: 'Project' },
 
     // ── Dropdowns créés par l'import ──────────────────────────────────────────
     // À supprimer APRÈS les assets qui les référencent
-    { order: 19, name: 'ComputerModels',   endpoint: 'Dropdowns/ComputerModel' },
-    { order: 20, name: 'MonitorModels',    endpoint: 'Dropdowns/MonitorModel' },
-    { order: 21, name: 'Manufacturers',    endpoint: 'Dropdowns/Manufacturer' },
-    { order: 22, name: 'Locations',        endpoint: 'Dropdowns/Location' },
-    { order: 23, name: 'States',           endpoint: 'Dropdowns/State' },
+    { order: 20, name: 'ComputerModels',   endpoint: 'Dropdowns/ComputerModel' },
+    { order: 21, name: 'MonitorModels',    endpoint: 'Dropdowns/MonitorModel' },
+    { order: 22, name: 'NetworkEquipmentModels', endpoint: 'Dropdowns/NetworkEquipmentModel' },
+    { order: 23, name: 'PrinterModels',    endpoint: 'Dropdowns/PrinterModel' },
+    { order: 24, name: 'PhoneModels',      endpoint: 'Dropdowns/PhoneModel' },
+    { order: 25, name: 'SoftwareModels',   endpoint: 'Dropdowns/SoftwareModel' },
+    { order: 26, name: 'SoftwareLicenseModels', endpoint: 'Dropdowns/SoftwareLicenseModel' },
+    { order: 27, name: 'CertificateModels', endpoint: 'Dropdowns/CertificateModel' },
+    { order: 28, name: 'PeripheralModels', endpoint: 'Dropdowns/PeripheralModel' },
+    { order: 29, name: 'RackModels',       endpoint: 'Dropdowns/RackModel' },
+    { order: 30, name: 'Manufacturers',    endpoint: 'Dropdowns/Manufacturer' },
+    { order: 31, name: 'Locations',        endpoint: 'Dropdowns/Location' },
+    { order: 32, name: 'States',           endpoint: 'Dropdowns/State' },
 
     // ── Users en dernier (dépendance des assets et tickets) ───────────────────
-    { order: 24, name: 'Users',            endpoint: 'Administration/User' },
+    { order: 33, name: 'Users',            endpoint: 'Administration/User' },
 ];
 
 export const protectedIds = [

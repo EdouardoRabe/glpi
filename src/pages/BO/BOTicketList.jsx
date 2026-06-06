@@ -117,7 +117,7 @@ export default function BOTicketList() {
                             const hasType = ticket.assets.some((asset) => asset.itemType === type);
                             return hasType ? acc + 1 : acc;
                         }, 0);
-                        return (
+                        return count > 0 && (
                             <div className="bo-ticket-stat" key={type}>
                                 <h3>With {type}s</h3>
                                 <p className="bo-ticket-stat-value">{count}</p>
