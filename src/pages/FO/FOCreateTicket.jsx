@@ -2,7 +2,7 @@ import Computer from "../../backend/model/Computer";
 import Monitor from "../../backend/model/Monitor";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect} from "react";
 
 export default function FOCreateTicket() {
     const [refTicket, setRefTicket] = useState("");

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Ticket from "../../backend/model/Ticket";
+import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
+
 
 export default function BOTicketList() {
     const [tickets, setTickets] = useState([]);
@@ -51,6 +53,9 @@ export default function BOTicketList() {
 
                         <p><strong>Titre:</strong> {selectedTicket.ticket.name}</p>
                         <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
+                        <p><strong>Type:</strong> {getEnumNameById(TICKET_TYPE, selectedTicket.ticket.type) || "-"}</p>
+                        <p><strong>Priorité:</strong> {getEnumNameById(TICKET_PRIORITY, selectedTicket.ticket.priority) || "-"}</p>
+                        <p><strong>Status:</strong> {getEnumNameById(TICKET_STATUS, selectedTicket.ticket.status.id) || "-"}</p>
                         <p><strong>nb computer:</strong> {selectedTicket.assets.filter((asset) => asset.getItemType() === "Computer").length}</p>
                         <p><strong>nb monitor:</strong> {selectedTicket.assets.filter((asset) => asset.getItemType() === "Monitor").length}</p>
 
