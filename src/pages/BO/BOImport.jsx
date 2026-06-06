@@ -4,10 +4,11 @@ import { executeImport} from "../../backend/services/import/executeImport";
 export default function BOImport() {
     const [file1, setFile1] = useState(null);
     const [file2, setFile2] = useState(null);
+    const [file3, setFile3] = useState(null);
 
     const handleFileUpload = async () => {
         try {
-            await executeImport(file1, file2);
+            await executeImport(file1, file2, file3);
             console.log("Import terminé avec succès !");
         } catch (error) {
             console.log("Erreur lors de l'import: ", error);
@@ -24,6 +25,9 @@ export default function BOImport() {
 
             <label htmlFor="file2">Fichier 2</label>
             <input id="file2" type="file" onChange={(event) => setFile2(event.target.files?.[0] ?? null)} />
+
+            <label htmlFor="file3">Fichier 3</label>
+            <input id="file3" type="file" onChange={(event) => setFile3(event.target.files?.[0] ?? null)} />
 
             <button onClick={handleFileUpload}>Upload</button>
            

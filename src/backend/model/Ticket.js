@@ -62,6 +62,32 @@ class Ticket {
         this.costs                           = data.costs                           ?? [];
     }
 
+    async getItems(){
+        const items = await apiV1.getV1(`Ticket/${this.id}/Item_Ticket`);
+        return items;
+    }
+
+    async getItemsAssets(){
+        const items = await this.getItems();
+        const assets = await Promise.all(items.map(item => {
+            return item.itemtype === "Computer"
+                ? Computer.getById(item.items_id)
+                : Monitor.getById(item.items_id);
+        }));
+        return assets;
+    }
+
+    static async getAllWithAssets() {
+        const tickets = await Ticket.getAll();
+        const ticketsWithItems = await Promise.all(
+            tickets.map(async (ticket) => ({
+                ticket,
+                assets: await ticket.getItemsAssets(),
+            }))
+        );
+        return ticketsWithItems;
+    }
+
     async save() {
         if (this.id !== null) {
             throw new Error("save() : ce ticket a déjà un ID, utilisez update()");
@@ -221,45 +247,7 @@ class Ticket {
         return await Ticket.#fetchAll({ filter });
     }
 
-    static async getItems(id){
-        const items = await apiV1.getV1(`Ticket/${id}/Item_Ticket`);
-        return items;
-    }
-
-    static async getItemAssets(itemType, itemId){
-        return itemType === "Computer"
-            ? Computer.getById(itemId)
-            : Monitor.getById(itemId);
-    }
-
-    static async getTicketsWithItems(){
-        const tic = await Ticket.getAll();
-        const ticketMap = new Map();
-
-        const entries = await Promise.all(
-            tic.map(async ticket => {
-                const items = await Ticket.getItems(ticket.id);
-                let nbCom = 0;
-                let nbMon = 0;
-                const full = await Promise.all(
-                    items.map(item => {
-                        if(item.itemtype === "Computer") nbCom++;
-                        else if(item.itemtype === "Monitor") nbMon++;
-                        return Ticket.getItemAssets(item.itemtype, item.items_id);
-                    })
-                );
-                console.log(`Ticket #${ticket.id} — "${ticket.name}" : ${nbCom} ordinateurs, ${nbMon} moniteurs`);
-                console.log(ticket);
-                return [ticket.id, { ticket, items: full, nbCom, nbMon }];
-            })
-        );
-
-        entries.forEach(([ticketId, data]) => {
-            ticketMap.set(ticketId, data);
-        });
-
-        return ticketMap;
-    }
+    
 }
 
 export default Ticket;
