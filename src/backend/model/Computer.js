@@ -1,4 +1,5 @@
 import api from "../utils/api";
+import apiV1 from "../utils/apiV1";
 import { clause, and, or, fetchAll } from "../utils/query";
 
 class Computer {
@@ -31,6 +32,45 @@ class Computer {
     getItemType() {
         return "Computer";
     }
+
+    async getDocumentItem(){
+        const item = await apiV1.getV1(`Computer/${this.id}/Document_Item`);
+        return item;
+    }
+
+    async getImageUrl(){
+        const item = await this.getDocumentItem();
+        if (item.length === 0) {
+            console.warn(`Aucun document trouvé pour Computer #${this.id}`);
+            return null;
+        }
+        const document = `http://localhost/front/document.send.php?docid=${item[0].documents_id}&itemtype=Computer&items_id=${this.id}`;
+        return document;
+    }
+
+      static async getAllComplete() {
+        const computers = await Computer.getAll();
+        const computersWithImages = await Promise.all(
+            computers.map(async (computer) => ({
+                computer,
+                imageUrl: await computer.getImageUrl(),
+            }))
+        );
+        return computersWithImages;
+    }
+
+    async getDocument(){
+        const item = await this.getDocumentItem();
+        if (item.length === 0) {
+            console.warn(`Aucun document trouvé pour Computer #${this.id}`);
+            return null;
+        }
+        const document = await apiV1.getV1(`Document/${item[0].documents_id}`);
+        console.log(`Détails du Document lié à Computer #${this.id} :`, document);
+        return document;
+    }
+
+ 
 
     async save() {
         if (this.id !== null) {

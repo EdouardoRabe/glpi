@@ -26,8 +26,8 @@ export default function FOAssetsList() {
 
     useEffect(() =>{
         const loadElements = async () =>{
-            const com = await Computer.getAll();
-            const mon = await Monitor.getAll();
+            const com = await Computer.getAllComplete();
+            const mon = await Monitor.getAllComplete();
             const sta = await State.getAll();
             const loc = await Location.getAll();
             const man = await Manufacturer.getAll();
@@ -35,6 +35,7 @@ export default function FOAssetsList() {
             const modMon = await MonitorModel.getAll();
             const mod = [...modCom, ...modMon];
 
+          
             setComputers(com);
             setMonitors(mon);
             setStates(sta);
@@ -52,7 +53,7 @@ export default function FOAssetsList() {
         }))
     }
 
-    const filterdComputers = computers.filter( computer =>{
+    const filterdComputers = computers.filter( ({computer}) =>{
         if(filters.locationId > 0 && computer.location.id !=filters.locationId) return false
         if(filters.manufacturerId > 0 && computer.manufacturer.id !=filters.manufacturerId) return false
         if(filters.modelId > 0 && computer.model.id !=filters.modelId) return false
@@ -61,7 +62,7 @@ export default function FOAssetsList() {
     });
 
     
-    const filterdMonitors = monitors.filter( monitor =>{
+    const filterdMonitors = monitors.filter( ({monitor}) =>{
         if(filters.locationId > 0 && monitor.location.id !=filters.locationId) return false
         if(filters.manufacturerId > 0 && monitor.manufacturer.id !=filters.manufacturerId) return false
         if(filters.modelId > 0 && monitor.model.id !=filters.modelId) return false
@@ -142,9 +143,10 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <h2>Liste des ordinateurs</h2>
-                {filterdComputers.map( (computer) => (
+                {filterdComputers.map( ({ computer, imageUrl }) => (
                     <div key={computer.id}>
                         <h4>{computer.name}</h4>
+                        <img src={imageUrl} alt="images"  />
                         <p>{computer.status.name}</p>
                         <p>{computer.manufacturer.name}</p>
                         <p>{computer.location.name}</p>
@@ -157,9 +159,10 @@ export default function FOAssetsList() {
             </div>
             <div>
                 <h2>Liste des moniteurs</h2>
-                {filterdMonitors.map( (monitor) => (
+                {filterdMonitors.map( ({ monitor, imageUrl }) => (
                     <div key={monitor.id}>
                         <h4>{monitor.name}</h4>
+                        <img src={imageUrl} alt="images"  />
                         <p>{monitor.manufacturer.name}</p>
                         <p>{monitor.location.name}</p>
                         <p>{monitor.model.name}</p>

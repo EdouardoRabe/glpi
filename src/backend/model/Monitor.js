@@ -1,4 +1,5 @@
 import api from "../utils/api";
+import apiV1 from "../utils/apiV1";
 import { clause, and, or, fetchAll } from "../utils/query";
 
 class Monitor {
@@ -30,6 +31,44 @@ class Monitor {
 
     getItemType() {
         return "Monitor";
+    }
+
+
+    async getDocumentItem(){
+        const item = await apiV1.getV1(`Monitor/${this.id}/Document_Item`);
+        return item;
+    }
+
+    async getDocument(){
+        const item = await this.getDocumentItem();
+        if (item.length === 0) {
+            console.warn(`Aucun document trouvé pour Monitor #${this.id}`);
+            return null;
+        }
+        const document = await apiV1.getV1(`Document/${item[0].documents_id}`);
+        console.log(`Détails du Document lié à Monitor #${this.id} :`, document);
+        return document;
+    }
+
+    async getImageUrl(){
+            const item = await this.getDocumentItem();
+            if (item.length === 0) {
+                console.warn(`Aucun document trouvé pour Monitor #${this.id}`);
+                return null;
+            }
+            const document = `http://localhost/front/document.send.php?docid=${item[0].documents_id}&itemtype=Monitor&items_id=${this.id}`;
+            return document;
+        }
+
+    static async getAllComplete() {
+        const monitors = await Monitor.getAll();
+        const monitorsWithImages = await Promise.all(
+            monitors.map(async (monitor) => ({
+                monitor,
+                imageUrl: await monitor.getImageUrl(),
+            }))
+        );
+        return monitorsWithImages;
     }
 
     async save() {
