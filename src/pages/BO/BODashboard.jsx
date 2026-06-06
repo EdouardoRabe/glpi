@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_TYPE, getEnumNameById } from "../../backend/utils/utils";
+import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BODashboard.css";
 
 export default function BODashboard() {
@@ -19,9 +20,7 @@ export default function BODashboard() {
         loadElements();
     }, []);
 
-    const totalComputers = assets.filter((a) => a.itemType === "Computer").length;
-    const totalMonitors  = assets.filter((a) => a.itemType === "Monitor").length;
-    const totalAssets    = totalComputers + totalMonitors;
+    const totalAssets    = tickets.length;
 
     const nbTicketType = tickets.reduce((acc, t) => {
         const id    = Number(t.type);
@@ -39,14 +38,14 @@ export default function BODashboard() {
                     <h3>Total Assets</h3>
                     <p className="bo-dashboard-stat-value">{totalAssets}</p>
                 </div>
-                <div className="bo-dashboard-stat-card">
-                    <h3>Ordinateurs</h3>
-                    <p className="bo-dashboard-stat-value">{totalComputers}</p>
-                </div>
-                <div className="bo-dashboard-stat-card">
-                    <h3>Moniteurs</h3>
-                    <p className="bo-dashboard-stat-value">{totalMonitors}</p>
-                </div>
+                {
+                    ITEM_TYPES.map((type) => (
+                        <div className="bo-dashboard-stat-card" key={type}>
+                            <h3>{type}</h3>
+                            <p className="bo-dashboard-stat-value">{assets.filter((a) => a.itemType === type).length}</p>
+                        </div>
+                    ))
+                }
                 <div className="bo-dashboard-stat-card">
                     <h3>Tickets Total</h3>
                     <p className="bo-dashboard-stat-value">{tickets.length}</p>
