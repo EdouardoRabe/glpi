@@ -74,6 +74,36 @@ class Ticket {
         return this;
     }
 
+    async saveItems(items = []) {
+        if (this.id === null) {
+            throw new Error("saveItems() : ce ticket n'a pas d'ID");
+        }
+        const results = [];
+        for (const item of items) {
+            const payload = {
+                input: {
+                    tickets_id: this.id,
+                    itemtype: item.type,
+                    items_id: item.id,
+                },
+            };
+            const result = await apiV1.postV1(`Ticket/${this.id}/Item_Ticket`, payload);
+            if (result?.error) {
+                console.warn(`Association item #${item.id} (type ${item.type}) au ticket #${this.id} échouée : ${result.message || JSON.stringify(result)}`);
+            } else {
+                console.log(`Association item #${item.id} (type ${item.type}) au ticket #${this.id} réussie`);
+            }
+            results.push(result);
+        }
+        return results;
+    }
+
+    async saveWithItems(items = []) {
+        await this.save();
+        await this.saveItems(items);
+    }
+
+
     async update(fields = {}) {
         if (this.id === null) {
             throw new Error("update() : ce ticket n'a pas d'ID, utilisez save()");
@@ -220,7 +250,7 @@ class Ticket {
                 );
                 console.log(`Ticket #${ticket.id} — "${ticket.name}" : ${nbCom} ordinateurs, ${nbMon} moniteurs`);
                 console.log(ticket);
-                return [ticket.id, { ticket, items: full, nbCom, nbMon }];
+                return [ticket.id, { ticket, full: full, items: items, nbCom, nbMon }];
             })
         );
 
