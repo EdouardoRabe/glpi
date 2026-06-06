@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Asset from "../../backend/model/Asset";
+import User from "../../backend/model/User";
 import State from "../../backend/model/State";
 import Location from "../../backend/model/Location";
 import Manufacturer from "../../backend/model/Manufacturer";
@@ -12,12 +13,14 @@ export default function FOAssetsList() {
     const [locations, setLocations]       = useState([]);
     const [manufacturers, setManufacturers] = useState([]);
     const [models, setModels]             = useState([]);
+    const [users, setUsers]               = useState([]);
     const [filters, setFilters]           = useState({
         modelId:        0,
         locationId:     0,
         stateId:        0,
         manufacturerId: 0,
         itemType:      "",
+        userId:          0,
     });
 
     useEffect(() => {
@@ -26,6 +29,7 @@ export default function FOAssetsList() {
             const sta  = await State.getAll();
             const loc  = await Location.getAll();
             const man  = await Manufacturer.getAll();
+            const usr  = await User.getExcl([2, 3, 4, 5, 6]);
 
             const modMap = new Map();
             all.forEach(({ asset }) => {
@@ -37,6 +41,7 @@ export default function FOAssetsList() {
             setLocations(loc);
             setManufacturers(man);
             setModels([...modMap.values()]);
+            setUsers(usr);
         };
         loadElements();
     }, []);
@@ -50,7 +55,7 @@ export default function FOAssetsList() {
     };
 
     const resetFilter = () => {
-        setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0, itemType: "" });
+        setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0, itemType: "", userId: 0 });
     };
 
     const filteredAssets = assets.filter(({ asset }) => {
@@ -59,6 +64,7 @@ export default function FOAssetsList() {
         if (filters.modelId        > 0 && asset.model?.id        !== filters.modelId)        return false;
         if (filters.stateId        > 0 && asset.status?.id       !== filters.stateId)        return false;
         if (filters.itemType        !== ""  && asset.itemType         !== filters.itemType)         return false;
+        if (filters.userId           > 0 && asset.user?.id          !== filters.userId)           return false;
         return true;
     });
 
@@ -117,6 +123,15 @@ export default function FOAssetsList() {
                             <option value="0">All Models</option>
                             {models.map((model) => (
                                 <option key={model.id} value={model.id}>{model.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-user">User</label>
+                        <select id="filter-user" value={filters.userId} onChange={(e) => handleFilterChange("userId", e.target.value)}>
+                            <option value="0">All Users</option>
+                            {users.map((user) => (
+                                <option key={user.id} value={user.id}>{user.username}</option>
                             ))}
                         </select>
                     </div>
