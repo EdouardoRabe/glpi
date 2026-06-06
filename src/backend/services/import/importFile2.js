@@ -1,7 +1,6 @@
-import { parseCSV, checkCSVHeader }           from "../../utils/csv.js";
-import { postV1 }                              from "../../utils/apiV1.js";
-import Computer                                from "../../model/Computer.js";
-import Monitor                                 from "../../model/Monitor.js";
+import { parseCSV, checkCSVHeader } from "../../utils/csv.js";
+import { postV1 }                   from "../../utils/apiV1.js";
+import Asset                        from "../../model/Asset.js";
 import {
     parseDDMMYYYY,
     toGLPIDateTime,
@@ -18,22 +17,17 @@ const EXPECTED_HEADERS = [
 
 const _cache = new Map();
 
+
 async function findAssetByName(name) {
-    const trimmed = name.trim();
+    const trimmed  = name.trim();
     const cacheKey = `asset::${trimmed.toLowerCase()}`;
 
     if (_cache.has(cacheKey)) return _cache.get(cacheKey);
 
-    const computers = await Computer.getBy("name", trimmed);
-    if (computers.length > 0) {
-        const found = { asset: computers[0], itemtype: "Computer" };
-        _cache.set(cacheKey, found);
-        return found;
-    }
+    const results = await Asset.getBy("name", trimmed);
 
-    const monitors = await Monitor.getBy("name", trimmed);
-    if (monitors.length > 0) {
-        const found = { asset: monitors[0], itemtype: "Monitor" };
+    if (results.length > 0) {
+        const found = { asset: results[0], itemtype: results[0].itemType };
         _cache.set(cacheKey, found);
         return found;
     }
@@ -43,18 +37,14 @@ async function findAssetByName(name) {
     return null;
 }
 
-/**
- * Parse la colonne Items du CSV.
- * Accepte : ["PC-ADM-001","MN-FORM-002"] ou PC-ADM-001
- * @returns {string[]}
- */
+
 function parseItems(raw) {
     if (!raw || raw.trim() === "") return [];
     try {
         const parsed = JSON.parse(raw.trim());
         if (Array.isArray(parsed)) return parsed;
     } catch {
-        // pas du JSON → on traite comme une valeur simple
+        // pas du JSON → valeur simple
     }
     return [raw.trim()];
 }
@@ -72,17 +62,16 @@ export const importFile2 = async (file) => {
             const date    = parseDDMMYYYY(row.date, row.heure);
             const dateStr = toGLPIDateTime(date);
 
-            const type     = getEnumIdByName(TICKET_TYPE,     row.type,     1); // défaut: Incident
-            const status   = getEnumIdByName(TICKET_STATUS,   row.status,   1); // défaut: New
-            const priority = getEnumIdByName(TICKET_PRIORITY, row.priority, 3); // défaut: Medium
-
+            const type     = getEnumIdByName(TICKET_TYPE,     row.type,     1);
+            const status   = getEnumIdByName(TICKET_STATUS,   row.status,   1);
+            const priority = getEnumIdByName(TICKET_PRIORITY, row.priority, 3);
 
             const ticketPayload = {
                 input: {
-                    name:     row.titre?.trim()       ?? "",
-                    content:  row.description?.trim() ?? "",
-                    externalid: row.ref_ticket?.trim() ?? "",
-                    date:     dateStr,
+                    name:       row.titre?.trim()       ?? "",
+                    content:    row.description?.trim() ?? "",
+                    externalid: row.ref_ticket?.trim()  ?? "",
+                    date:       dateStr,
                     type,
                     status,
                     priority,
@@ -108,9 +97,8 @@ export const importFile2 = async (file) => {
                 const found = await findAssetByName(itemName);
 
                 if (!found) {
-                    console.warn(
-                        `[WARN] Ticket #${ticketId} — item ignoré : "${itemName}" introuvable`
-                    );
+                    // Echec silencieux — remplacer par throw si besoin
+                    console.warn(`[WARN] Ticket #${ticketId} — item ignoré : "${itemName}" introuvable`);
                     continue;
                 }
 
@@ -122,19 +110,15 @@ export const importFile2 = async (file) => {
                     },
                 };
 
-                const assocResult = await postV1(
-                    `Ticket/${ticketId}/Item_Ticket`,
-                    assocPayload
-                );
+                const assocResult = await postV1(`Ticket/${ticketId}/Item_Ticket`, assocPayload);
 
                 if (!assocResult?.id) {
+                    // Echec silencieux — remplacer par throw si besoin
                     console.warn(
                         `[WARN] Ticket #${ticketId} — association "${itemName}" (${found.itemtype}) échouée : ${JSON.stringify(assocResult)}`
                     );
                 } else {
-                    console.log(
-                        `[LINKED] Ticket #${ticketId} ← ${found.itemtype} "${itemName}" (#${found.asset.id})`
-                    );
+                    console.log(`[LINKED] Ticket #${ticketId} ← ${found.itemtype} "${itemName}" (#${found.asset.id})`);
                 }
             }
 
@@ -146,9 +130,7 @@ export const importFile2 = async (file) => {
         }
     }
 
-    console.log(
-        `\nImport Feuille 2 terminé : ${results.created} tickets créés, ${results.errors.length} erreurs`
-    );
+    console.log(`\nImport Feuille 2 terminé : ${results.created} tickets créés, ${results.errors.length} erreurs`);
     return results;
 };
 

@@ -1,36 +1,32 @@
-import { useEffect, useState } from "react"
-import Computer from "../../backend/model/Computer";
-import Monitor from "../../backend/model/Monitor";
+import { useEffect, useState } from "react";
+import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_TYPE, getEnumNameById } from "../../backend/utils/utils";
 
-export default function BODashboard (){
-    const [computers, setComputers] = useState([]);
-    const [monitors, setMonitors] = useState([]);
+export default function BODashboard() {
+    const [assets, setAssets] = useState([]);
     const [tickets, setTickets] = useState([]);
-        
-    useEffect(() =>{
-        const loadElements = async () =>{
-            const com = await Computer.getAll();
-            const mon = await Monitor.getAll();
+
+    useEffect(() => {
+        const loadElements = async () => {
+            const ass = await Asset.getAll();
             const tic = await Ticket.getAll();
 
-            setComputers(com);
-            setMonitors(mon);
+            setAssets(ass);
             setTickets(tic);
-           
         };
         loadElements();
-    }, [])
+    }, []);
 
-    const totalComputers = computers.length;
-    const totalMonitors = monitors.length;
-    const totalAssets = totalComputers + totalMonitors;
+    const totalComputers = assets.filter((a) => a.itemType === "Computer").length;
+    const totalMonitors  = assets.filter((a) => a.itemType === "Monitor").length;
+    const totalAssets    = totalComputers + totalMonitors;
+
     const nbTicketType = tickets.reduce((acc, t) => {
-                const id = String(t.type);
-                const label = getEnumNameById(TICKET_TYPE, id);
-                acc[label] = (acc[label] ?? 0) + 1;
-                return acc;
+        const id    = String(t.type);
+        const label = getEnumNameById(TICKET_TYPE, id);
+        acc[label]  = (acc[label] ?? 0) + 1;
+        return acc;
     }, {});
 
     return (
@@ -51,5 +47,5 @@ export default function BODashboard (){
                 </ul>
             </div>
         </div>
-    )
+    );
 }
