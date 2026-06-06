@@ -37,6 +37,15 @@
 
 ---
 
+### "Je dois ouvrir une popup (modal) avec un objet ou un id"
+→ [README-POPUP-OBJET-ID.md](./README-POPUP-OBJET-ID.md)
+- Ouvrir une modal avec l'objet complet
+- Ouvrir une modal avec un id
+- Quand choisir objet vs id
+- Erreurs frequentes et checklist
+
+---
+
 ### "Je dois charger des données avec une API"
 → [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md)
 - Pattern standard useEffect + fetch
@@ -218,6 +227,7 @@
 | [GUIDE-ERREURS-MESSAGES.md](./GUIDE-ERREURS-MESSAGES.md) | 10+ erreurs courantes + fixes | Debug erreurs |
 | [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) | 30+ ❌ BAD vs ✅ GOOD | Apprendre patterns |
 | [GUIDE-CLOSURES-STALE-STATE.md](./GUIDE-CLOSURES-STALE-STATE.md) | Closures, async, setState | Comprendre async |
+| [README-POPUP-OBJET-ID.md](./README-POPUP-OBJET-ID.md) | Ouvrir une modal avec objet ou id | Detailler un ticket dans une popup |
 
 ---
 
