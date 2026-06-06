@@ -138,15 +138,23 @@ export default function FOAssetsList() {
                     <div className="fo-assets-grid">
                         {filteredAssets.map(({ asset, imageUrl }) => (
                             <div key={`${asset.itemType}-${asset.id}`} className="fo-assets-card">
-                                {imageUrl && <img src={imageUrl} alt={asset.name} className="fo-assets-card-image" />}
-                                <h4>{asset.name}</h4>
-                                <p><strong>Type:</strong> {asset.itemType}</p>
-                                {asset.manufacturer?.name && <p><strong>Manufacturer:</strong> {asset.manufacturer.name}</p>}
-                                {asset.model?.name && <p><strong>Model:</strong> {asset.model.name}</p>}
-                                {asset.serial && <p><strong>Serial:</strong> {asset.serial}</p>}
-                                {asset.status?.name && <p><strong>Status:</strong> {asset.status.name}</p>}
-                                {asset.location?.name && <p><strong>Location:</strong> {asset.location.name}</p>}
-                                {asset.user?.name && <p><strong>User:</strong> {asset.user.name}</p>}
+                                <div className="fo-assets-card-image-container">
+                                    {imageUrl ? (
+                                        <img src={imageUrl} alt={asset.name} className="fo-assets-card-image" />
+                                    ) : (
+                                        <div className="fo-assets-card-image-placeholder"></div>
+                                    )}
+                                </div>
+                                <div className="fo-assets-card-content">
+                                    <h4>{asset.name}</h4>
+                                    <p><strong>Type:</strong> {asset.itemType}</p>
+                                    {asset.manufacturer?.name && <p><strong>Manufacturer:</strong> {asset.manufacturer.name}</p>}
+                                    {asset.model?.name && <p><strong>Model:</strong> {asset.model.name}</p>}
+                                    {asset.serial && <p><strong>Serial:</strong> {asset.serial}</p>}
+                                    {asset.status?.name && <p><strong>Status:</strong> {asset.status.name}</p>}
+                                    {asset.location?.name && <p><strong>Location:</strong> {asset.location.name}</p>}
+                                    {asset.user?.name && <p><strong>User:</strong> {asset.user.name}</p>}
+                                </div>
                             </div>
                         ))}
                     </div>
