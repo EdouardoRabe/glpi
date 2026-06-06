@@ -250,7 +250,7 @@ class Ticket {
                 );
                 console.log(`Ticket #${ticket.id} — "${ticket.name}" : ${nbCom} ordinateurs, ${nbMon} moniteurs`);
                 console.log(ticket);
-                return [ticket.id, { ticket, full: full, items: items, nbCom, nbMon }];
+                return [ticket.id, { ticket, items: full, nbCom, nbMon }];
             })
         );
 

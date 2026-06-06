@@ -28,6 +28,10 @@ class Monitor {
         this.user_tech    = data.user_tech    ?? null;
     }
 
+    getItemType() {
+        return "Monitor";
+    }
+
     async save() {
         if (this.id !== null) {
             throw new Error("save() : ce monitor a déjà un ID, utilisez update()");

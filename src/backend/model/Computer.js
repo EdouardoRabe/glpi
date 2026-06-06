@@ -28,6 +28,10 @@ class Computer {
         this.user_tech    = data.user_tech    ?? null;
     }
 
+    getItemType() {
+        return "Computer";
+    }
+
     async save() {
         if (this.id !== null) {
             throw new Error("save() : ce computer a déjà un ID, utilisez update()");

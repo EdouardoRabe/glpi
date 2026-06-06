@@ -17,13 +17,13 @@ export default function BOTicketList() {
         <div>
             <h1>Tickets</h1>
                 {
-                    Array.from(tickets.entries()).map( ([ ticketId, {ticket, full, nbCom, nbMon} ]) =>(
+                    Array.from(tickets.entries()).map( ([ ticketId, {ticket,items, nbCom, nbMon} ]) =>(
                             <div key={ticketId}>
                                 <p>{ticket.name}</p>
                                 <p>Ordinateurs : {nbCom}</p>
                                 <p>Moniteurs : {nbMon}</p>
-                                {full.map( (asset) => (
-                                        <p key={asset.id}>{asset.name}</p>
+                                {items.map( (asset) => (
+                                        <p key={asset.id}>{asset.name}- type: {asset.getItemType()}</p>
                                     )
                                 )}
                             </div>
