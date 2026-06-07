@@ -22,17 +22,16 @@ export default function BOImport() {
     return (
         <div className="bo-import">
             <h1>Import Data</h1>
-
+             {message && (
+                    <div className={message.type === "success" ? "fo-create-ticket-success" : "fo-create-ticket-error"}>
+                        {message.text}
+                    </div>
+            )}
             <div className="bo-import-form">
                 <div className="bo-import-form-group">
                     <label htmlFor="file1">Fichier 1 (CSV)</label>
                     <input id="file1" type="file" onChange={(event) => setFile1(event.target.files?.[0] ?? null)} accept=".csv" />
                 </div>
-                {message && (
-                    <div className={message.type === "success" ? "fo-create-ticket-success" : "fo-create-ticket-error"}>
-                        {message.text}
-                    </div>
-                )}
                 <div className="bo-import-form-group">
                     <label htmlFor="file2">Fichier 2 (CSV)</label>
                     <input id="file2" type="file" onChange={(event) => setFile2(event.target.files?.[0] ?? null)} accept=".csv" />
