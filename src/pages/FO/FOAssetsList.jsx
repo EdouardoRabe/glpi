@@ -24,6 +24,10 @@ export default function FOAssetsList() {
         searchName:     "",
     });
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(6);
+    const nbItemsPerPage = [3,6,9];
+
     useEffect(() => {
         const loadElements = async () => {
             const all  = await Asset.getAllComplete();
@@ -59,7 +63,7 @@ export default function FOAssetsList() {
         setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0, itemType: "", userId: 0, searchName: "" });
     };
 
-    const filteredAssets = assets.filter(({ asset }) => {
+    const filteredAssetsAvantPagination = assets.filter(({ asset }) => {
         if (filters.locationId     > 0 && asset.location?.id     !== filters.locationId)     return false;
         if (filters.manufacturerId > 0 && asset.manufacturer?.id !== filters.manufacturerId) return false;
         if (filters.modelId        > 0 && asset.model?.id        !== filters.modelId)        return false;
@@ -69,6 +73,28 @@ export default function FOAssetsList() {
         if (filters.searchName      !== ""  && !asset.name?.toLowerCase().includes(filters.searchName.toLowerCase())) return false;
         return true;
     });
+
+
+    const totalPages = Math.ceil(filteredAssetsAvantPagination.length / itemsPerPage);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const filteredAssets = filteredAssetsAvantPagination.slice(startIndex, endIndex);
+
+    const goToPage = (pageNumber) => {
+        const pageNum = Math.max(1, Math.min(pageNumber, totalPages));
+        setCurrentPage(pageNum);
+    };
+
+    const nextPage = () => {
+        goToPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+        goToPage(currentPage - 1);
+    };
+
 
     return (
         <div className="fo-assets-list">
@@ -149,6 +175,15 @@ export default function FOAssetsList() {
                             ))}
                         </select>
                     </div>
+                     <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-user">Pagination</label>
+                        <select id="filter-user" value={itemsPerPage} onChange={(e) => setItemsPerPage( Number(e.target.value))}>
+                            <option value="6">Par Defaut</option>
+                            {nbItemsPerPage.map((nb) => (
+                                <option key={nb} value={nb}>{nb}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div className="fo-assets-filter-actions">
@@ -189,6 +224,33 @@ export default function FOAssetsList() {
                     </div>
                 )}
             </div>
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button 
+                        onClick={prevPage} 
+                        disabled={currentPage === 1}
+                        className="pagination-btn"
+                    >
+                        ← Précédent
+                    </button>
+
+                    <div className="pagination-info">
+                        <span>Page {currentPage} sur {totalPages}</span>
+                        <span className="pagination-items">
+                        Affichant {startIndex + 1} à {Math.min(endIndex, assets.length)} 
+                        sur {assets.length} items
+                        </span>
+                    </div>
+
+                    <button 
+                        onClick={nextPage} 
+                        disabled={currentPage === totalPages}
+                        className="pagination-btn"
+                    >
+                        Suivant →
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
