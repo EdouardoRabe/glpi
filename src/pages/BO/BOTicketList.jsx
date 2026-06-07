@@ -192,6 +192,10 @@ export default function BOTicketList() {
                                         Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Fixed Cost: {cost.cost_fixed}
                                     </p>
                                 ))}
+                                <p><strong>Duration: { selectedTicket.costs.reduce((acc, cost ) => {return acc + cost.duration ;}, 0)}
+                                |  Time Cost: { selectedTicket.costs.reduce((acc, cost ) => {return acc + cost.cost_time ;}, 0)}
+                                |  Fixed Cost: { selectedTicket.costs.reduce((acc, cost ) => {return acc + cost.cost_fixed ;}, 0)}
+                                </strong></p>
                             </div>
                         )}
                     </div>
