@@ -313,7 +313,7 @@ exportRowsToPDF({ rows, columns, filename?, title?, orientation? })
 
 ```javascript
 exportRowsToPDF({
-    rows: tickets,
+    rows: tickets, //Objet simple
     columns: [
         { key: "id",     label: "ID" },
         { key: "name",   label: "Titre" },
@@ -323,6 +323,25 @@ exportRowsToPDF({
     title: "Liste des tickets",
     orientation: "landscape", // "portrait" ou "landscape"
 });
+
+const exportPDF = () => {
+    exportRowsToPDF({
+        rows: filteredTickets.map(({ ticket }) => ticket), // Objet complexe
+        columns: [
+            { key: "id",     label: "ID" },
+            { key: "name",   label: "Titre" },
+            { key: "status", label: "Statut", value: (row) => row.status?.name },
+        ],
+        filename: "tickets_export",
+        title: `Liste des tickets ${filteredTickets.length}`,
+        orientation: "landscape",
+    });
+    console.log("Fichier pdf exporter");
+}
+
+<div>
+    <button onClick={() => exportPDF()}>EXPORT PDF</button>
+</div>
 ```
 
 ---
