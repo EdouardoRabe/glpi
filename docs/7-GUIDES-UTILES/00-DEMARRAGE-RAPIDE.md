@@ -4,6 +4,13 @@ Chaque guide est **copy-paste ready** - change juste les noms et c'est fini!
 
 ---
 
+## 🔥 Guides Fondamentaux (À lire en PREMIER)
+
+| Guide | Utilité | Pages concernées |
+|-------|---------|-----------------|
+| **[GUIDE-API-CALLS](GUIDE-API-CALLS.md)** | Charger données, gérer loading/error | **TOUS les composants** (Ticket.getAll, Asset.getAll, etc) |
+| **[GUIDE-USEEFFECT-PATTERNS](GUIDE-USEEFFECT-PATTERNS.md)** | Quand/comment utiliser useEffect, dépendances | **TOUS les composants** (BOTicketList, FOAssetsList) |
+
 ## 📋 Guides par cas d'usage
 
 ### 🎨 Formulaires & Inputs
@@ -57,10 +64,11 @@ Chaque guide est **copy-paste ready** - change juste les noms et c'est fini!
 
 ## ✨ Guides supplémentaires (pour approfondir)
 
-- **[GUIDE-ARRAY-MAP-SET.md](GUIDE-ARRAY-MAP-SET.md)** — Manipuler les arrays/sets
-- **[GUIDE-ASYNC-USEEFFECT.md](GUIDE-ASYNC-USEEFFECT.md)** — Charger les données
-- **[GUIDE-PROMISE-ALL.md](GUIDE-PROMISE-ALL.md)** — Charger plusieurs APIs
-- **[GUIDE-ERREURS-MESSAGES.md](GUIDE-ERREURS-MESSAGES.md)** — Gérer les erreurs
+À ajouter plus tard si besoin:
+- **GUIDE-ERROR-HANDLING** — Cas avancés de gestion d'erreurs
+- **GUIDE-USECONTEXT** — State management global (si plusieurs pages partagent données)
+- **GUIDE-COMPOSANTS-REUTILISABLES** — Extraire et réutiliser des composants
+- **GUIDE-PERFORMANCE** — useMemo, useCallback, lazy loading
 
 ---
 
@@ -104,13 +112,17 @@ Chaque guide suit ce pattern:
 
 ## 🔗 Navigation rapide
 
+- **Commencer par (obligatoire):**
+  - [GUIDE-API-CALLS](GUIDE-API-CALLS.md) — Comment charger les données
+  - [GUIDE-USEEFFECT-PATTERNS](GUIDE-USEEFFECT-PATTERNS.md) — Quand et comment utiliser useEffect
+
 - **Par page du projet:**
   - [BOLogin.jsx](VALIDATION-FORMULAIRES.md)
   - [BOImport.jsx](FILE-UPLOAD.md) → [MULTI-STEP-FORMS](MULTI-STEP-FORMS.md)
   - [BOReset.jsx](RADIO-BUTTONS-TOGGLES.md)
   - [BODashboard.jsx](PAGINATION.md)
-  - [BOTicketList.jsx](MATERIAL-REACT-TABLE-DETAILS.md) → [TABS-ACCORDION-COLLAPSE](TABS-ACCORDION-COLLAPSE.md)
-  - [FOAssetsList.jsx](RADIO-BUTTONS-TOGGLES.md) → [PAGINATION](PAGINATION.md)
+  - [BOTicketList.jsx](GUIDE-API-CALLS.md) → [GUIDE-USEEFFECT-PATTERNS](GUIDE-USEEFFECT-PATTERNS.md) → [MATERIAL-REACT-TABLE-DETAILS](MATERIAL-REACT-TABLE-DETAILS.md) → [TABS-ACCORDION-COLLAPSE](TABS-ACCORDION-COLLAPSE.md)
+  - [FOAssetsList.jsx](GUIDE-API-CALLS.md) → [GUIDE-USEEFFECT-PATTERNS](GUIDE-USEEFFECT-PATTERNS.md) → [PAGINATION](PAGINATION.md)
   - [FOCreateTicket.jsx](VALIDATION-FORMULAIRES.md) → [DATE-TIME-PICKERS](DATE-TIME-PICKERS.md) → [MULTI-STEP-FORMS](MULTI-STEP-FORMS.md)
 
 ---
