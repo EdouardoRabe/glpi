@@ -4,6 +4,7 @@ import "../../css/pages/BO/BOReset.css";
 
 export default function BOReset() {
     const [selected, setSelected] = useState(new Set());
+    const [message, setMessage] = useState("");
 
     const handleSelection = (item) => {
         setSelected(prev => {
@@ -26,16 +27,21 @@ export default function BOReset() {
             return;
         }
         await reset(Array.from(selected));
+        setMessage({ type: "success", text: "Réinitialisation terminée avec succès !" });
     }
 
     return (
         <div className="bo-reset">
             <h1>Reset Database</h1>
+            {message && (
+                <div className={message.type === "success" ? "fo-create-ticket-success" : "fo-create-ticket-error"}>
+                    {message.text}
+                </div>
+            )}
             <div className="bo-reset-actions">
                 <button onClick={() => {setSelected(new Set(toDelete))}}>Select All</button>
                 <button onClick={() => {handleReset()}}>Reset Selected</button>
             </div>
-            
             <div className="bo-reset-list">
                 {toDelete?.map(item => (
                     <div key={item.order} className="bo-reset-item">
