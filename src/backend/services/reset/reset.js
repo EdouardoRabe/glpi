@@ -24,8 +24,8 @@ export const toDelete = [
     { order: 18, name: 'Cables',           endpoint: 'Assets/Cable' },
     { order: 19, name: 'Sockets',          endpoint: 'Assets/Socket' },
     { order: 20, name: 'Unmanaged',        endpoint: 'Assets/Unmanaged' },
-    { order: 21, name: 'Consumables',      endpoint: 'Assets/Consumable' },
-    { order: 22, name: 'Cartridges',       endpoint: 'Assets/Cartridge' },
+    // { order: 21, name: 'Consumables',      endpoint: 'Assets/Consumable' },
+    // { order: 22, name: 'Cartridges',       endpoint: 'Assets/Cartridge' },
 
     // ── Gestion ───────────────────────────────────────────────────────────────
     { order: 21, name: 'Contracts',        endpoint: 'Management/Contract' },

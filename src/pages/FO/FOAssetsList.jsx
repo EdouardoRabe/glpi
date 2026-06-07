@@ -6,6 +6,7 @@ import Location from "../../backend/model/Location";
 import Manufacturer from "../../backend/model/Manufacturer";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/FO/FOAssetsList.css";
+import { Link } from "react-router-dom";
 
 export default function FOAssetsList() {
     const [assets, setAssets]             = useState([]);
@@ -218,6 +219,7 @@ export default function FOAssetsList() {
                                     {asset.status?.name && <p><strong>Status:</strong> {asset.status.name}</p>}
                                     {asset.location?.name && <p><strong>Location:</strong> {asset.location.name}</p>}
                                     {asset.user?.name && <p><strong>User:</strong> {asset.user.name}</p>}
+                                    {/* <Link to={`${asset.id}/${asset.itemType}`} >Details</Link> */}
                                 </div>
                             </div>
                         ))}
