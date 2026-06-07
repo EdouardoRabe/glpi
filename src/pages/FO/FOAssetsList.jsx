@@ -25,7 +25,7 @@ export default function FOAssetsList() {
     });
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(6);
+    const [itemsPerPage, setItemsPerPage] = useState(3);
     const nbItemsPerPage = [3,6,9];
 
     useEffect(() => {
@@ -178,7 +178,7 @@ export default function FOAssetsList() {
                      <div className="fo-assets-filter-item">
                         <label htmlFor="filter-user">Pagination</label>
                         <select id="filter-user" value={itemsPerPage} onChange={(e) => setItemsPerPage( Number(e.target.value))}>
-                            <option value="6">Par Defaut</option>
+                            <option value="3">Par Defaut</option>
                             {nbItemsPerPage.map((nb) => (
                                 <option key={nb} value={nb}>{nb}</option>
                             ))}
@@ -237,8 +237,7 @@ export default function FOAssetsList() {
                     <div className="pagination-info">
                         <span>Page {currentPage} sur {totalPages}</span>
                         <span className="pagination-items">
-                        Affichant {startIndex + 1} à {Math.min(endIndex, assets.length)} 
-                        sur {assets.length} items
+                        Affichant {startIndex + 1} à {Math.min(endIndex, assets.length) } sur {assets.length} items
                         </span>
                     </div>
 
