@@ -5,7 +5,7 @@ import Location   from "../../model/Location.js";
 import Manufacturer from "../../model/Manufacturer.js";
 import State      from "../../model/State.js";
 import User       from "../../model/User.js";
-import { ITEM_TYPE_TO_MODEL_TYPE, ITEM_TYPE_NORMALIZE } from "../../utils/type.js";
+import { ASSET_TYPES_CONFIG } from "../../utils/type.js";
 
 const EXPECTED_HEADERS = [
     "name", "status", "location", "manufacturer",
@@ -88,13 +88,13 @@ export const importFile1 = async (file) => {
                 throw new Error("Colonne item_type manquante");
             }
 
-            const glpiItemType = ITEM_TYPE_NORMALIZE[itemTypeLower];
-            if (!glpiItemType) {
-                // throw new Error(`Type d'asset invalide : "${row.item_type}"`);
+            const assetConfig = ASSET_TYPES_CONFIG[itemTypeLower];
+            if (!assetConfig) {
                 console.warn(`[WARNING] Type d'asset invalide : "${row.item_type}", la ligne sera importée sans modèle associé`);
             }
 
-            const modelType = ITEM_TYPE_TO_MODEL_TYPE[itemTypeLower];
+            const glpiItemType = assetConfig?.name;
+            const modelType = assetConfig?.model;
 
             const [location, manufacturer, state, user] = await Promise.all([
                 getOrCreate(Location,     row.location),

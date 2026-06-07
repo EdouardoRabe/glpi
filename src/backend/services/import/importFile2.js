@@ -1,6 +1,7 @@
 import { parseCSV, checkCSVHeader } from "../../utils/csv.js";
 import { postV1 }                   from "../../utils/apiV1.js";
 import Asset                        from "../../model/Asset.js";
+import { ASSET_TYPES_CONFIG }       from "../../utils/type.js";
 import {
     parseDDMMYYYY,
     toGLPIDateTime,
@@ -97,8 +98,13 @@ export const importFile2 = async (file) => {
                 const found = await findAssetByName(itemName);
 
                 if (!found) {
-                    // Echec silencieux — remplacer par throw si besoin
                     console.warn(`[WARN] Ticket #${ticketId} — item ignoré : "${itemName}" introuvable`);
+                    continue;
+                }
+
+                const assetConfig = ASSET_TYPES_CONFIG[found.itemtype.toLowerCase()];
+                if (!assetConfig?.linkWithTicket) {
+                    console.warn(`[SKIP] Ticket #${ticketId} — ${found.itemtype} "${itemName}" n'est pas linkable aux tickets`);
                     continue;
                 }
 
@@ -113,7 +119,6 @@ export const importFile2 = async (file) => {
                 const assocResult = await postV1(`Ticket/${ticketId}/Item_Ticket`, assocPayload);
 
                 if (!assocResult?.id) {
-                    // Echec silencieux — remplacer par throw si besoin
                     console.warn(
                         `[WARN] Ticket #${ticketId} — association "${itemName}" (${found.itemtype}) échouée : ${JSON.stringify(assocResult)}`
                     );
