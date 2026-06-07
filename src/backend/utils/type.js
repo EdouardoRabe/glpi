@@ -20,7 +20,7 @@ export const MODEL_TYPES = [
     "PhoneModel",
     // "SoftwareModel",
     // "SoftwareLicenseModel",
-    "CertificateModel",
+    // "CertificateModel",
     "PeripheralModel",
     // "RackModel",
 ];
@@ -33,7 +33,7 @@ export const ITEM_TYPE_TO_MODEL_TYPE = {
     phone:    "PhoneModel",
     // software: "SoftwareModel",
     // softwarelicense: "SoftwareLicenseModel",
-    certificate: "CertificateModel",
+    // certificate: "CertificateModel",
     peripheral: "PeripheralModel",
     // rack: "RackModel",
 };
