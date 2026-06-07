@@ -10,6 +10,13 @@ export const ITEM_TYPES = [
     "Certificate",
     "Peripheral",
     "Rack",
+    "Appliance",
+    "Enclosure",
+    "PDU",
+    "PassiveDCEquipment",
+    "Cable",
+    "Socket",
+    "Unmanaged",
 ];
 
 export const MODEL_TYPES = [
@@ -23,6 +30,13 @@ export const MODEL_TYPES = [
     // "CertificateModel",
     "PeripheralModel",
     // "RackModel",
+    // "ApplianceModel",
+    // "EnclosureModel",
+    // "PDUModel",
+    // "PassiveDCEquipmentModel",
+    // "CableModel",
+    // "SocketModel",
+    // "UnmanagedModel",
 ];
 
 export const ITEM_TYPE_TO_MODEL_TYPE = {
@@ -36,4 +50,16 @@ export const ITEM_TYPE_TO_MODEL_TYPE = {
     // certificate: "CertificateModel",
     peripheral: "PeripheralModel",
     // rack: "RackModel",
+    // appliance: "ApplianceModel",
+    // enclosure: "EnclosureModel",
+    // pdu: "PDUModel",
+    // passivedcequipment: "PassiveDCEquipmentModel",
+    // cable: "CableModel",
+    // socket: "SocketModel",
+    // unmanaged: "UnmanagedModel",
 };
+
+// Mapping lowercase → PascalCase (normaliser les types du CSV)
+export const ITEM_TYPE_NORMALIZE = Object.fromEntries(
+    ITEM_TYPES.map(type => [type.toLowerCase(), type])
+);
