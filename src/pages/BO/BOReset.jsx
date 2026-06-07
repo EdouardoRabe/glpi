@@ -31,7 +31,11 @@ export default function BOReset() {
     return (
         <div className="bo-reset">
             <h1>Reset Database</h1>
-
+            <div className="bo-reset-actions">
+                <button onClick={() => {setSelected(new Set(toDelete))}}>Select All</button>
+                <button onClick={() => {handleReset()}}>Reset Selected</button>
+            </div>
+            
             <div className="bo-reset-list">
                 {toDelete?.map(item => (
                     <div key={item.order} className="bo-reset-item">
@@ -44,11 +48,6 @@ export default function BOReset() {
                         <label htmlFor={`checkbox-${item.order}`}>{item.name}</label>
                     </div>
                 ))}
-            </div>
-
-            <div className="bo-reset-actions">
-                <button onClick={() => {setSelected(new Set(toDelete))}}>Select All</button>
-                <button onClick={() => {handleReset()}}>Reset Selected</button>
             </div>
         </div>
     )
