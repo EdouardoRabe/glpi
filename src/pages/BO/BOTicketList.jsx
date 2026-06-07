@@ -145,7 +145,7 @@ export default function BOTicketList() {
                     <div key={ticket.id} className="bo-ticket-item">
                         <div className="bo-ticket-item-header">
                             <div className="bo-ticket-item-info">
-                                <div className="bo-ticket-item-id">#{ticket.id} - {ticket.name}</div>
+                                <div className="bo-ticket-item-id">#{ticket.external_id} - {ticket.name}</div>
                                 <div className="bo-ticket-item-meta">
                                     <span>Type: {getEnumNameById(TICKET_TYPE, ticket.type) || "-"}</span>
                                     <span> | Priority: {getEnumNameById(TICKET_PRIORITY, ticket.priority) || "-"}</span>
@@ -167,7 +167,7 @@ export default function BOTicketList() {
                 <dialog open onCancel={closeTicketDetails}>
                     <div className="bo-ticket-modal">
                         <div className="bo-ticket-modal-header">
-                            <h2>Ticket #{selectedTicket.ticket.id}</h2>
+                            <h2>Ticket #{selectedTicket.ticket.external_id}</h2>
                             <button type="button" onClick={closeTicketDetails}>Close</button>
                         </div>
 
