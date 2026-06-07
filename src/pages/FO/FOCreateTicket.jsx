@@ -46,13 +46,14 @@ export default function FOCreateTicket() {
             newTicket.saveWithItems(selectedObjects);
             setMessage({ type: "success", text: "Ticket created successfully!" });
             console.log("Ticket créé avec succès :", newTicket, " — items associés :", selectedObjects);
-            // Reset form
+
             setRefTicket("");
             setDate("");
             setHeure("");
             setTitle("");
             setDescription("");
             setSelectedItems([]);
+            
             setTimeout(() => setMessage(null), 3000);
         } catch (error) {
             setMessage({ type: "error", text: "Error creating ticket. Please try again." });
