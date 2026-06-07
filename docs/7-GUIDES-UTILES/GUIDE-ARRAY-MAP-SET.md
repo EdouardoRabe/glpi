@@ -403,6 +403,103 @@ const sortedById = [...users].sort((a, b) => a.id - b.id)
 
 ---
 
+---
+
+## 🔟 LIMITER LE NOMBRE DE RÉSULTATS
+
+### `.slice()` - L'équivalent du LIMIT SQL
+
+```javascript
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// Les 3 premiers
+const first3 = arr.slice(0, 3)
+// [1, 2, 3]
+
+// Les 5 premiers
+const first5 = arr.slice(0, 5)
+// [1, 2, 3, 4, 5]
+
+// Les 3 derniers
+const last3 = arr.slice(-3)
+// [8, 9, 10]
+```
+
+### Cas pratique : Top 10 après un tri
+
+```javascript
+const users = [
+  { id: 1, name: 'Alice', score: 85 },
+  { id: 2, name: 'Bob', score: 95 },
+  { id: 3, name: 'Charlie', score: 70 },
+  // ...
+]
+
+// Top 10 des meilleurs scores
+const top10 = [...users]
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 10)
+```
+
+### Explication
+
+```javascript
+.sort((a, b) => b.score - a.score)
+```
+
+Trie les scores du plus grand au plus petit.
+
+```javascript
+.slice(0, 10)
+```
+
+Garde uniquement les 10 premiers éléments.
+
+### Exemple complet : Top 3
+
+```javascript
+const users = [
+  { name: 'Alice', score: 85 },
+  { name: 'Bob', score: 95 },
+  { name: 'Charlie', score: 70 },
+  { name: 'David', score: 90 },
+]
+
+const top3 = [...users]
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+
+console.log(top3)
+```
+
+Résultat :
+
+```javascript
+[
+  { name: 'Bob', score: 95 },
+  { name: 'David', score: 90 },
+  { name: 'Alice', score: 85 }
+]
+```
+
+### Attention
+
+```javascript
+users.sort(...)
+```
+
+modifie le tableau original.
+
+Pour éviter cela :
+
+```javascript
+const top10 = [...users]
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 10)
+```
+
+Le `...users` crée une copie avant le tri.
+
 ## 🟢 PARTIE 2 : LES MAP
 
 ### Créer et initialiser
