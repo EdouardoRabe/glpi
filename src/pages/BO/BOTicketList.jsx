@@ -7,9 +7,18 @@ import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
 
 export default function BOTicketList() {
-    const [tickets, setTickets]             = useState([]);
+    // État initial des filtres
+    const INITIAL_FILTERS = {
+        stateId: 0,
+        typeId: 0,
+        priorityId: 0,
+        dateMin: "",
+        dateMax: "",
+    };
+
+    const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
-    const [filters, setFilters]  = useState({ stateId:0, typeId:0, priorityId: 0, dateMin :"", dateMax :""});
+    const [filters, setFilters] = useState(INITIAL_FILTERS);
 
     useEffect(() => {
         const loadTickets = async () => {
@@ -20,18 +29,16 @@ export default function BOTicketList() {
     }, []);
 
     const resetFilter = () => {
-        setFilters({ stateId:0, typeId:0, priorityId: 0, dateMin :"", dateMax :""});
+        setFilters(INITIAL_FILTERS);
     };
 
     const handleFilterChange = (key, value) => {
-        if (key === "dateMin") {
-            setFilters(prev => ({ ...prev, dateMin: value === "" ? null : value }));
-        } else if (key === "dateMax") {
-            setFilters(prev => ({ ...prev, dateMax: value === "" ? null : value }));
-        }
-        else {
-            setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
-        }
+        const dateFields = ["dateMin", "dateMax"];
+        const newValue = dateFields.includes(key)
+            ? (value === "" ? "" : value)
+            : (value === "" ? 0 : Number(value));
+
+        setFilters(prev => ({ ...prev, [key]: newValue }));
     };
 
     const openTicketDetails  = (complete) => setSelectedTicket(complete ?? null);

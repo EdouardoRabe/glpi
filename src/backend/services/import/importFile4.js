@@ -15,20 +15,31 @@ const MIME_MAP = {
 };
 
 // ─── Magic bytes ──────────────────────────────────────────────────────────────
+// File signature detection: supports multi-part signatures with offsets
+// This prevents false positives (e.g., RIFF for WAV vs WEBP)
 
 const MAGIC_BYTES = [
-    { mime: "image/png",  bytes: [0x89, 0x50, 0x4E, 0x47] },
-    { mime: "image/jpeg", bytes: [0xFF, 0xD8, 0xFF] },
-    { mime: "image/gif",  bytes: [0x47, 0x49, 0x46] },
-    { mime: "image/webp", bytes: [0x52, 0x49, 0x46, 0x46] },
-    { mime: "image/bmp",  bytes: [0x42, 0x4D] },
+    { ext: "png",  mime: "image/png",  parts: [{ offset: 0, bytes: [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A] }] },
+    { ext: "jpg",  mime: "image/jpeg", parts: [{ offset: 0, bytes: [0xFF, 0xD8, 0xFF] }] },
+    { ext: "gif",  mime: "image/gif",  parts: [{ offset: 0, bytes: [0x47, 0x49, 0x46, 0x38] }] },
+    { ext: "bmp",  mime: "image/bmp",  parts: [{ offset: 0, bytes: [0x42, 0x4D] }] },
+    { ext: "webp", mime: "image/webp", parts: [
+        { offset: 0, bytes: [0x52, 0x49, 0x46, 0x46] },     // RIFF header
+        { offset: 8, bytes: [0x57, 0x45, 0x42, 0x50] }      // WEBP at offset 8 (avoids WAV false positives)
+    ]},
 ];
 
+function matchesPart(uint8Array, part) {
+    return part.bytes.every((byte, i) => uint8Array[part.offset + i] === byte);
+}
+
+function matchesSignature(uint8Array, sig) {
+    return sig.parts.every(part => matchesPart(uint8Array, part));
+}
+
 function detectRealMime(uint8Array) {
-    for (const { mime, bytes } of MAGIC_BYTES) {
-        if (bytes.every((byte, i) => uint8Array[i] === byte)) return mime;
-    }
-    return null;
+    const sig = MAGIC_BYTES.find(s => matchesSignature(uint8Array, s));
+    return sig ? sig.mime : null;
 }
 
 function mimeFromFilename(filename) {
