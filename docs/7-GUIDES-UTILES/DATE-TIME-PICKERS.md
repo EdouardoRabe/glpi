@@ -2,6 +2,18 @@
 
 Explique comment gérer les dates et heures en React, créer des date/time pickers, et valider les entrées de date.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Date input** | FOCreateTicket.jsx | Sélectionner date du ticket |
+| **Time input** | FOCreateTicket.jsx | Heure du ticket (09:00 à 17:00) |
+| **Validation date** | FOCreateTicket.jsx | Date pas dans le futur |
+| **Format date** | BOTicketList.jsx | Afficher dates au format lisible (7 juin 2024) |
+| **Date range** | Recherche (futur) | Filtrer tickets entre deux dates |
+
+**Exemple adapté FOCreateTicket:** Tu as déjà `date` et `heure` inputs! Ajoute juste `toDateInputFormat()` et `fromDateString()` helper - utilise les utilitaires du guide, remplace variables et c'est fini!
+
 ## Table des matières
 
 1. [Input date native](#input-date-native)

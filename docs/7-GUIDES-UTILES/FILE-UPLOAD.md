@@ -2,6 +2,18 @@
 
 Explique comment implémenter l'upload de fichiers, l'aperçu avant envoi, et la gestion des fichiers en React.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Upload CSV** | BOImport.jsx | Charger 3 fichiers CSV + 1 ZIP |
+| **Validation fichiers** | BOImport.jsx | Vérifier format .csv/.zip avant upload |
+| **Multiple files** | BOImport.jsx | Upload simultané de 4 fichiers différents |
+| **Drag & drop** | BOImport.jsx | Glisser les fichiers au lieu de cliquer |
+| **Preview** | Asset upload (futur) | Aperçu de l'image avant envoi |
+
+**Exemple adapté BOImport:** Tu as déjà la structure! Ajoute juste la validation (taille, format) et le drag & drop. Remplace `files` par `[file1, file2, file3, file4]` - c'est la même logique!
+
 ## Table des matières
 
 1. [Upload simple](#upload-simple)

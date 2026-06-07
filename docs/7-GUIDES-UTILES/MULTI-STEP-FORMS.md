@@ -2,6 +2,18 @@
 
 Explique comment créer des formulaires en plusieurs étapes, gérer la navigation, et valider les étapes.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Multi-step** | BOImport.jsx (futur) | Étape 1: Sélectionner fichiers → Étape 2: Valider → Étape 3: Importer |
+| **Wizard** | FOCreateTicket.jsx (futur) | Infos → Assets → Confirmation → Soumettre |
+| **Validation étape** | BOImport.jsx | Vérifier fichiers avant de continuer |
+| **Progress bar** | BODashboard.jsx (futur) | Montrer avancement de l'import |
+| **Persistence** | FOCreateTicket.jsx | Garde les données en changeant d'étape |
+
+**Exemple adapté pour toi:** BOImport est déjà un bon candidat! Divise en: Étape 1 (sélectionner fichiers), Étape 2 (aperçu), Étape 3 (upload). Utilise juste `currentStep` state et les fichiers comme `formData` - c'est exactement le pattern du guide!
+
 ## Table des matières
 
 1. [Structure basique](#structure-basique)

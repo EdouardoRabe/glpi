@@ -2,6 +2,18 @@
 
 Ce guide explique comment implémenter une pagination simple et efficace pour les listes d'objets (Assets, Tickets, etc.) dans votre application React.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Pagination simple** | FOAssetsList.jsx | Afficher 10 assets par page |
+| **Avec filtres** | FOAssetsList.jsx | Combiner filtres + pagination ensemble |
+| **Boutons précédent/suivant** | BOTicketList.jsx | Naviguer entre pages de tickets |
+| **Info items** | BOTicketList.jsx | Affichant 1-10 sur 47 items |
+| **Désactiver boutons** | BOTicketList.jsx | Première/dernière page non cliquables |
+
+**Exemple adapté pour FOAssetsList:** Tu utilises déjà les filtres! Ajoute juste `currentPage` state et `slice(startIndex, endIndex)` - remplace `assets` par `filteredAssets` et c'est identique au guide!
+
 ## Table des matières
 
 1. [Logique de base](#logique-de-base)

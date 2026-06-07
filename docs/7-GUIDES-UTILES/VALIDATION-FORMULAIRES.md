@@ -2,6 +2,18 @@
 
 Explique comment valider les formulaires en React, afficher les messages d'erreur, et gérer l'état de validation.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Validation email** | BOLogin.jsx | Vérifier format email avant connexion |
+| **Validation longueur** | FOCreateTicket.jsx | Titre requis, description min X caractères |
+| **Validation type** | FOCreateTicket.jsx | Type/Priorité/Status sélectionnés (required) |
+| **Validation date** | FOCreateTicket.jsx | Date pas dans le passé, heure correcte |
+| **Validation dépendante** | BODashboard.jsx | Affichage basé sur données chargées |
+
+**Exemple adapté FOCreateTicket:** Valider tous les champs avant `handleSubmit()`. Remplace `email/password` par `title/description/date` et les patterns de validation - c'est plug-and-play!
+
 ## Table des matières
 
 1. [Validation simple](#validation-simple)

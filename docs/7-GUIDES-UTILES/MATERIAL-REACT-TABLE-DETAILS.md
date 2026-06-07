@@ -2,6 +2,18 @@
 
 Ce guide explique comment utiliser **Material React Table** avec des **row details** (expansion de lignes) pour afficher des informations détaillées, des sous-listes, des formulaires, etc.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Row details** | BOTicketList.jsx | Afficher détails complets du ticket quand on clique |
+| **Sous-liste** | FOOderRow.jsx | Afficher les articles d'une commande |
+| **Checkboxes** | FOOderRow.jsx | Sélectionner plusieurs articles dans les détails |
+| **Multiplicateurs** | FOOderRow.jsx | Ajouter un champ "quantité" dans les détails |
+| **Boutons actions** | FOOderRow.jsx | Dupliquer, modifier, supprimer dans le panel |
+
+**Exemple adapté BOTicketList:** Tu as déjà le dialog! Convertis-le en `renderDetailPanel` Material React Table. Utilise `row.original.ticket` au lieu d'accéder à `selectedTicket` - c'est une substitution directe, rien de plus!
+
 ## Table des matières
 
 1. [Installation & Setup](#installation--setup)

@@ -2,6 +2,18 @@
 
 Explique comment implémenter les éléments de formulaire essentiels: radio buttons, checkboxes avancées, toggles/switches, et select avancés.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Radio buttons** | BOReset.jsx | Sélectionner les catégories à réinitialiser (une seule) |
+| **Checkboxes** | BOTicketList.jsx | Sélectionner plusieurs articles dans les détails |
+| **Toggle/Switch** | FOCreateTicket.jsx | Activer/désactiver les notifications |
+| **Select** | FOAssetsList.jsx | Filtrer par type, localisation, utilisateur |
+| **Multi-select** | FOCreateTicket.jsx | Sélectionner plusieurs assets associés au ticket |
+
+**Exemple adapté BOTicketList:** remplace `interests` par `selectedArticles` et `options.map` par `details.map` - c'est tout!
+
 ## Table des matières
 
 1. [Radio Buttons](#radio-buttons)

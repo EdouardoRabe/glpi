@@ -2,6 +2,18 @@
 
 Explique comment créer des composants d'organisation du contenu: onglets, accordéons, et sections repliables.
 
+## 🎯 Cas d'usage réels dans ton projet
+
+| Cas | Où | Exemple |
+|-----|-----|---------|
+| **Accordion** | BOTicketList.jsx | Détails du ticket (affichage/masquage) |
+| **Collapse** | BODashboard.jsx | Affichages conditionnels des statistiques |
+| **Tabs** | FOAssetsList.jsx (futur) | Onglets: Tous / Ordinateurs / Moniteurs |
+| **Accordion avancé** | BOReset.jsx | Groupes de catégories à réinitialiser |
+| **Multi-ouverture** | BOImport.jsx (futur) | Plusieurs étapes visibles simultanément |
+
+**Exemple adapté BOTicketList:** Tu utilises déjà un dialog! Convertis-le en accordion avec `openIndex` state. Remplace `ticket` par `detail` et `openIndex === index` - identique au guide!
+
 ## Table des matières
 
 1. [Tabs (Onglets)](#tabs-onglets)
