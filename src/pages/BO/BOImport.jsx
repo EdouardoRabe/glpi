@@ -8,10 +8,11 @@ export default function BOImport() {
     const [file3, setFile3] = useState(null);
     const [file4, setFile4] = useState(null);
     const [message, setMessage] = useState("");
+    const [importImage, setImportImage] = useState(false);
 
     const handleFileUpload = async () => {
         try {
-            await executeImport(file1, file2, file3, file4);
+            await executeImport(file1, file2, file3, file4, !importImage);
             setMessage({ type: "success", text: "Import terminé avec succès !" });
         } catch (error) {
             console.log("Erreur lors de l'import: ", error);
@@ -44,6 +45,7 @@ export default function BOImport() {
 
                 <div className="bo-import-form-group">
                     <label htmlFor="file4">Fichier 4 (ZIP)</label>
+                    <input type="checkbox" checked={importImage} onChange={(e) => {setImportImage(e.target.checked)}}/>
                     <input id="file4" type="file" onChange={(event) => setFile4(event.target.files?.[0] ?? null)} accept=".zip" />
                 </div>
 

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import {useState} from "react"
 import { toDelete, reset } from "../../backend/services/reset/reset";
 import "../../css/pages/BO/BOReset.css";
 

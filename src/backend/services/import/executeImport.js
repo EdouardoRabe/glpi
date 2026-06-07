@@ -3,7 +3,7 @@ import {importFile2} from "./importFile2";
 import {importFile3} from "./importFile3";
 import {importFile4} from "./importFile4";
 
-export const executeImport = async (file1, file2, file3, file4) => {
+export const executeImport = async (file1, file2, file3, file4, importImage) => {
     try {
         if (file1) {
             await importFile1(file1);
@@ -14,7 +14,8 @@ export const executeImport = async (file1, file2, file3, file4) => {
         if (file3) {
             await importFile3(file3);
         }
-        if (file4) {
+        console.log(importImage ? "Importing images..." : "Skipping image import...");
+        if (file4 && importImage) {
             await importFile4(file4);
         }
     } catch (error) {
