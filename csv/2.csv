@@ -15,4 +15,3 @@ TK-013,09/06/2026,11:30,Incident,Logiciels,Installation Office,New,High,"[""TEST
 TK-014,09/06/2026,13:00,Request,Licenses logicielles,Renouvellement licenses,New,Medium,"[""TEST-LIC-001"",""TEST-LIC-002""]"
 TK-015,09/06/2026,14:15,Incident,Certificats SSL,Renouvellement certs,New,Low,"[""TEST-CRT-001"",""TEST-CRT-002""]"
 TK-016,10/06/2026,09:00,Request,Racks serveur,Maintenance racks,New,Medium,"[""TEST-RCK-001"",""TEST-RCK-002""]"
-TK-017,10/06/2026,10:30,Incident,Devices non gérés,Devices à cataloguer,New,Low,"[""TEST-UNM-001"",""TEST-UNM-002""]"
