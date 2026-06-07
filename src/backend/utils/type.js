@@ -17,6 +17,8 @@ export const ITEM_TYPES = [
     "Cable",
     "Socket",
     "Unmanaged",
+    "Consumable",
+    "Cartridge",
 ];
 
 export const MODEL_TYPES = [
