@@ -37,7 +37,13 @@ export default function BOTicketList() {
     const openTicketDetails  = (complete) => setSelectedTicket(complete ?? null);
     const closeTicketDetails = ()         => setSelectedTicket(null);
 
-    const filteredTickets = tickets.filter(({ ticket }) => {
+    //Teste anah sort
+    const orderTickets = tickets.toSorted((t1, t2) =>{
+        const result = compareDates(t2.ticket.date, t1.ticket.date);
+        return result;
+    });
+
+    const filteredTickets = orderTickets.filter(({ ticket }) => {
         if (filters.priorityId     > 0 && ticket.priority     !== filters.priorityId)     return false;
         if (filters.stateId > 0 && ticket.status?.id !== filters.stateId) return false;
         if (filters.typeId        > 0 && ticket.type       !== filters.typeId)        return false;
