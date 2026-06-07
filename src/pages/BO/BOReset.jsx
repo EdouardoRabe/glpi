@@ -32,10 +32,6 @@ export default function BOReset() {
         <div className="bo-reset">
             <h1>Reset Database</h1>
 
-            <div className="bo-reset-warning">
-                <strong>⚠️ Warning:</strong> Resetting will delete all selected data. This action cannot be undone.
-            </div>
-
             <div className="bo-reset-list">
                 {toDelete?.map(item => (
                     <div key={item.order} className="bo-reset-item">
