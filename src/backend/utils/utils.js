@@ -15,12 +15,7 @@ export function parseDDMMYYYY(dateStr, timeStr = "00:00") {
     return new Date(Number(year), Number(month) - 1, Number(day), Number(hours), Number(minutes), 0);
 }
 
-/**
- * Formate un objet Date en "YYYY-MM-DD HH:MM:SS" (format attendu par GLPI V1).
- * Utilise les méthodes locales pour respecter le fuseau du PC.
- * @param {Date} date
- * @returns {string}
- */
+
 export function toGLPIDateTime(date) {
     const pad = (n) => String(n).padStart(2, "0");
     return (
