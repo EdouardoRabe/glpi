@@ -7,13 +7,15 @@ export default function BOImport() {
     const [file2, setFile2] = useState(null);
     const [file3, setFile3] = useState(null);
     const [file4, setFile4] = useState(null);
+    const [message, setMessage] = useState("");
 
     const handleFileUpload = async () => {
         try {
             await executeImport(file1, file2, file3, file4);
-            console.log("Import terminé avec succès !");
+            setMessage({ type: "success", text: "Import terminé avec succès !" });
         } catch (error) {
             console.log("Erreur lors de l'import: ", error);
+            setMessage({ type: "error", text: "Erreur lors de l'import." });
         }
     };
 
@@ -26,7 +28,11 @@ export default function BOImport() {
                     <label htmlFor="file1">Fichier 1 (CSV)</label>
                     <input id="file1" type="file" onChange={(event) => setFile1(event.target.files?.[0] ?? null)} accept=".csv" />
                 </div>
-
+                {message && (
+                    <div className={message.type === "success" ? "fo-create-ticket-success" : "fo-create-ticket-error"}>
+                        {message.text}
+                    </div>
+                )}
                 <div className="bo-import-form-group">
                     <label htmlFor="file2">Fichier 2 (CSV)</label>
                     <input id="file2" type="file" onChange={(event) => setFile2(event.target.files?.[0] ?? null)} accept=".csv" />

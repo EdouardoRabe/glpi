@@ -1,7 +1,7 @@
 import api   from "../utils/api";
 import apiV1  from "../utils/apiV1";
 import { clause, and, or, fetchAll } from "../utils/query";
-import { ITEM_TYPES } from "../utils/type";
+import { ASSET_TYPES_CONFIG, ITEM_TYPES } from "../utils/type";
 
 const DEFAULT_LIMIT = 100;
 
@@ -66,6 +66,9 @@ class Asset {
 
 
     async getDocumentItem() {
+        if(!ASSET_TYPES_CONFIG[this.itemType.toLowerCase()]?.linkable) {
+            return null;
+        }
         return apiV1.getV1(`${this.itemType}/${this.id}/Document_Item`);
     }
 

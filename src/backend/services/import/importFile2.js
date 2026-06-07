@@ -103,7 +103,7 @@ export const importFile2 = async (file) => {
                 }
 
                 const assetConfig = ASSET_TYPES_CONFIG[found.itemtype.toLowerCase()];
-                if (!assetConfig?.linkWithTicket) {
+                if (!assetConfig?.linkable) {
                     console.warn(`[SKIP] Ticket #${ticketId} — ${found.itemtype} "${itemName}" n'est pas linkable aux tickets`);
                     continue;
                 }

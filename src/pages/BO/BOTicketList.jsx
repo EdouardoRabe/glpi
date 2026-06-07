@@ -46,7 +46,7 @@ export default function BOTicketList() {
 
     //Teste anah sort
     const orderTickets = tickets.toSorted((t1, t2) =>{
-        const result = compareDates(t2.ticket.date, t1.ticket.date);
+        const result = compareDates(t1.ticket.date, t2.ticket.date);
         return result;
     });
 
