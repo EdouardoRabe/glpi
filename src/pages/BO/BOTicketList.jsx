@@ -172,7 +172,7 @@ export default function BOTicketList() {
                         {   ITEM_TYPES.map((type) => {
                                 const count = selectedTicket.assets.filter((a) => a.itemType === type).length;
                                 return count > 0 ? (    
-                                        <div className="bo-ticket-modal-section">
+                                        <div key={type} className="bo-ticket-modal-section">
                                             <p><strong>{type}:</strong> {count}</p>
                                         </div>
                                 ) : null;

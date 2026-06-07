@@ -21,6 +21,7 @@ export default function FOAssetsList() {
         manufacturerId: 0,
         itemType:      "",
         userId:          0,
+        searchName:     "",
     });
 
     useEffect(() => {
@@ -47,15 +48,15 @@ export default function FOAssetsList() {
     }, []);
 
     const handleFilterChange = (key, value) => {
-        if (key === "itemType") {
-            setFilters(prev => ({ ...prev, itemType: value === "" ? "" : value }));
+        if (key === "itemType" || key === "searchName") {
+            setFilters(prev => ({ ...prev, [key]: value }));
         } else {
             setFilters(prev => ({ ...prev, [key]: value === "" ? 0 : Number(value) }));
         }
     };
 
     const resetFilter = () => {
-        setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0, itemType: "", userId: 0 });
+        setFilters({ modelId: 0, locationId: 0, stateId: 0, manufacturerId: 0, itemType: "", userId: 0, searchName: "" });
     };
 
     const filteredAssets = assets.filter(({ asset }) => {
@@ -65,6 +66,7 @@ export default function FOAssetsList() {
         if (filters.stateId        > 0 && asset.status?.id       !== filters.stateId)        return false;
         if (filters.itemType        !== ""  && asset.itemType         !== filters.itemType)         return false;
         if (filters.userId           > 0 && asset.user?.id          !== filters.userId)           return false;
+        if (filters.searchName      !== ""  && !asset.name?.toLowerCase().includes(filters.searchName.toLowerCase())) return false;
         return true;
     });
 
@@ -74,6 +76,18 @@ export default function FOAssetsList() {
 
             <div className="fo-assets-filters">
                 <h3>Filters</h3>
+
+                <div className="fo-assets-filter-item">
+                    <label htmlFor="filter-search-name">Search by Name</label>
+                    <input
+                        id="filter-search-name"
+                        type="text"
+                        placeholder="Search assets by name..."
+                        value={filters.searchName}
+                        onChange={(e) => handleFilterChange("searchName", e.target.value)}
+                    />
+                </div>
+
                 <div className="fo-assets-filter-group">
                     <div className="fo-assets-filter-item">
                         <label htmlFor="filter-item-type">Item Type</label>

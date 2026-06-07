@@ -89,11 +89,6 @@ export const importFile1 = async (file) => {
             }
 
             const modelType = ITEM_TYPE_TO_MODEL_TYPE[itemTypeLower];
-            if (!modelType) {
-                throw new Error(
-                    `item_type inconnu : "${itemTypeLower}" (attendu: ${Object.keys(ITEM_TYPE_TO_MODEL_TYPE).join(", ")})`
-                );
-            }
 
             const [location, manufacturer, state, user] = await Promise.all([
                 getOrCreate(Location,     row.location),
@@ -102,17 +97,24 @@ export const importFile1 = async (file) => {
                 getOrCreateUser(row.user),
             ]);
 
-            const model = await getOrCreateModel(modelType, row.model);
+            const model = modelType ? await getOrCreateModel(modelType, row.model) : null;
 
             const glpiItemType = itemTypeLower.charAt(0).toUpperCase() + itemTypeLower.slice(1);
 
-            const assetData = {
+            const assetData = modelType ? {
                 name:         row.name?.trim()             ?? "",
                 serial:       row.inventory_number?.trim() ?? null,
                 status:       state        ? { id: state.id }        : null,
                 location:     location     ? { id: location.id }     : null,
                 manufacturer: manufacturer ? { id: manufacturer.id } : null,
                 model:        model        ? { id: model.id }        : null,
+                user:         user         ? { id: user.id }         : null,
+            } : {
+                name:         row.name?.trim()             ?? "",
+                serial:       row.inventory_number?.trim() ?? null,
+                status:       state        ? { id: state.id }        : null,
+                location:     location     ? { id: location.id }     : null,
+                manufacturer: manufacturer ? { id: manufacturer.id } : null,
                 user:         user         ? { id: user.id }         : null,
             };
 
