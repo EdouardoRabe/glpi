@@ -20,8 +20,6 @@ export default function BODashboard() {
         loadElements();
     }, []);
 
-    const totalAssets    = tickets.length;
-
     const nbTicketType = tickets.reduce((acc, t) => {
         const id    = Number(t.type);
         const label = getEnumNameById(TICKET_TYPE, id);
@@ -36,37 +34,43 @@ export default function BODashboard() {
             <div className="bo-dashboard-stats">
                 <div className="bo-dashboard-stat-card">
                     <h3>Total Assets</h3>
-                    <p className="bo-dashboard-stat-value">{totalAssets}</p>
+                    <p className="bo-dashboard-stat-value">{assets.length}</p>
                 </div>
-                {
-                    ITEM_TYPES.map((type) => {
-                        const count = assets.filter((a) => a.itemType === type).length;
-                        return count > 0 && (
-                            <div className="bo-dashboard-stat-card" key={type}>
-                                <h3>{type}</h3>
-                                <p className="bo-dashboard-stat-value">{count}</p>
-                            </div>
-                        );
-                    })
-                }
                 <div className="bo-dashboard-stat-card">
                     <h3>Tickets Total</h3>
                     <p className="bo-dashboard-stat-value">{tickets.length}</p>
                 </div>
             </div>
-
-            <div className="bo-dashboard-section">
-                <h2>Tickets par type</h2>
-                {Object.entries(nbTicketType).length === 0 ? (
-                    <p>Aucun ticket</p>
-                ) : (
+            <div className="bo-dashboard-stats">
+                <div className="bo-dashboard-section">
+                    <h2>Assets par type</h2>
                     <ul>
-                        {Object.entries(nbTicketType).map(([label, count]) => (
-                            <li key={label}><strong>{label}:</strong> {count}</li>
-                        ))}
+                        {   
+                            ITEM_TYPES.map((type) => {
+                                const count = assets.filter((a) => a.itemType === type).length;
+                                return count > 0 && (
+                                        <li key={type}><strong>{type}:</strong> {count}</li>
+                                );
+                            })
+                        }
                     </ul>
-                )}
+                
+                </div>
+
+                <div className="bo-dashboard-section">
+                    <h2>Tickets par type</h2>
+                    {Object.entries(nbTicketType).length === 0 ? (
+                        <p>Aucun ticket</p>
+                    ) : (
+                        <ul>
+                            {Object.entries(nbTicketType).map(([label, count]) => (
+                                <li key={label}><strong>{label}:</strong> {count}</li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </div>
+            
         </div>
     );
 }
