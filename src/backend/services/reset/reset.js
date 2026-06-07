@@ -34,17 +34,13 @@ export const toDelete = [
     { order: 22, name: 'NetworkEquipmentModels', endpoint: 'Dropdowns/NetworkEquipmentModel' },
     { order: 23, name: 'PrinterModels',    endpoint: 'Dropdowns/PrinterModel' },
     { order: 24, name: 'PhoneModels',      endpoint: 'Dropdowns/PhoneModel' },
-    { order: 25, name: 'SoftwareModels',   endpoint: 'Dropdowns/SoftwareModel' },
-    { order: 26, name: 'SoftwareLicenseModels', endpoint: 'Dropdowns/SoftwareLicenseModel' },
-    { order: 27, name: 'CertificateModels', endpoint: 'Dropdowns/CertificateModel' },
-    { order: 28, name: 'PeripheralModels', endpoint: 'Dropdowns/PeripheralModel' },
-    { order: 29, name: 'RackModels',       endpoint: 'Dropdowns/RackModel' },
-    { order: 30, name: 'Manufacturers',    endpoint: 'Dropdowns/Manufacturer' },
-    { order: 31, name: 'Locations',        endpoint: 'Dropdowns/Location' },
-    { order: 32, name: 'States',           endpoint: 'Dropdowns/State' },
+    { order: 25, name: 'PeripheralModels', endpoint: 'Dropdowns/PeripheralModel' },
+    { order: 26, name: 'Manufacturers',    endpoint: 'Dropdowns/Manufacturer' },
+    { order: 27, name: 'Locations',        endpoint: 'Dropdowns/Location' },
+    { order: 28, name: 'States',           endpoint: 'Dropdowns/State' },
 
     // ── Users en dernier (dépendance des assets et tickets) ───────────────────
-    { order: 33, name: 'Users',            endpoint: 'Administration/User' },
+    { order: 29, name: 'Users',            endpoint: 'Administration/User' },
 ];
 
 export const protectedIds = [
