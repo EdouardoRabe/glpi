@@ -59,9 +59,6 @@ export default function BOTicketList() {
         return true;
     });
 
-    const nbTicketAsset = nbTicketsWithAsset(filteredTickets);
-
-
     const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
 
 
