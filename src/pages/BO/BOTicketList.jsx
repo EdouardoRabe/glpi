@@ -5,6 +5,7 @@ import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
+import { getSommeCost, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/utils/cost";
 
 export default function BOTicketList() {
     // État initial des filtres
@@ -216,11 +217,11 @@ export default function BOTicketList() {
                                         Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Fixed Cost: {cost.cost_fixed}
                                     </p>
                                 ))}
-                                <p><strong>Duration: { selectedTicket.costs.reduce((acc, cost ) => {return acc + cost.duration ;}, 0)}
-                                |  Time Cost: { selectedTicket.costs.reduce((acc, cost ) => {return acc + cost.cost_time ;}, 0)}
-                                |  Fixed Cost: { selectedTicket.costs.reduce((acc, cost ) => {return acc + cost.cost_fixed ;}, 0)}
+                                <p><strong>Duration: { getSommeDuration(selectedTicket.costs) }
+                                |  Time Cost: { getSommeTimeCost(selectedTicket.costs) }
+                                |  Fixed Cost: { getSommeFixedCost(selectedTicket.costs) }
                                 </strong></p>
-                                <strong> Total : { selectedTicket.costs.reduce((acc, cost ) => {return acc + ((cost.duration * cost.cost_time/3600) + cost.cost_fixed)  ;}, 0) }</strong>
+                                <strong> Total : { getSommeCost(selectedTicket.costs) }</strong>
                             </div>
                         )}
                     </div>
