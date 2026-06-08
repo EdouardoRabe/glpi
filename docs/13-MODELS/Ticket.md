@@ -168,3 +168,11 @@
     {}
   ]
 }
+
+Ticket/{ticket_id}/Ticket_User  //apiV1
+TeamMember // apiV2
+
+Valeur    Rôle
+1         Demandeur (Requester) 
+2         Technicien assigné (Assigned)
+3         Observateur (Observer)
