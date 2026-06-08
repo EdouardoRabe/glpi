@@ -8,7 +8,6 @@ import "../../css/pages/BO/BOTicketList.css";
 import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
 
 export default function BOTicketList() {
-    // État initial des filtres
     const INITIAL_FILTERS = {
         stateId: 0,
         typeId: 0,
