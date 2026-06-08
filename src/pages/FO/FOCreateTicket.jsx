@@ -185,7 +185,7 @@ export default function FOCreateTicket() {
                         }}
                     >
                         {users.map((user) => (
-                            <option value={String(user.id)}>{user.username}</option>
+                            <option key={`${user.id}-${user.name}`} value={String(user.id)}>{user.username}</option>
                         ))}
                     </select>
                 </div>
@@ -202,7 +202,7 @@ export default function FOCreateTicket() {
                         }}
                     >
                         {users.map((user) => (
-                            <option value={String(user.id)}>{user.username}</option>
+                            <option key={`${user.id}-${user.name}`} value={String(user.id)}>{user.username}</option>
                         ))}
                     </select>
                 </div>
