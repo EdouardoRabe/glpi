@@ -14,7 +14,7 @@ export const ASSET_TYPES_CONFIG = {
     appliance: { name: "Appliance", model: null, linkable: true },
     passivedcequipment: { name: "PassiveDCEquipment", model: null, linkable: true },
     cable: { name: "Cable", model: null, linkable: true },
-    socket: { name: "Socket", model: null, linkable: false },
+    socket: { name: "Socket", model: null, linkable: true },
     // unmanaged: { name: "Unmanaged", model: null, linkable: true },
 };
 

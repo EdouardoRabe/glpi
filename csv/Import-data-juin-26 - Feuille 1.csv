@@ -10,3 +10,5 @@ PC-BIB-001,En production,Bibliothèque,HP,Computer,ProDesk 600 G6,ITU-2026-0008,
 PC-FORM-001,En stock,Magasin Informatique,Lenovo,Computer,ThinkCentre Neo 50,ITU-2026-0009,
 MN-FORM-002,En panne,Salle 301,Dell,Monitor,AC1000,ITU-2026-0010,Rakoto Michel
 RC-FORM-002,En panne,Salle 301,Dell,Rack,AC1000,ITU-2026-0010,Rakoto Michel
+TEST-SCK-001,En panne,Salle 301,Panduit,Socket,RJ45,TEST-021,
+TEST-SCK-002,En production,Laboratoire IA,Leviton,Socket,eXtreme Cat6,TEST-022,

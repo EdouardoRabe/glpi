@@ -108,11 +108,13 @@ export const importFile2 = async (file) => {
                     continue;
                 }
 
+                const itemtype = found.itemtype.toLowerCase() === "socket" ? "Glpi\\Socket" : found.itemtype;
+
                 const assocPayload = {
                     input: {
                         tickets_id: ticketId,
-                        itemtype:   found.itemtype,
-                        items_id:   found.asset.id,
+                        itemtype: itemtype,
+                        items_id: found.asset.id,
                     },
                 };
 

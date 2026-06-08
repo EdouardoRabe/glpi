@@ -66,9 +66,15 @@ class Asset {
 
 
     async getDocumentItem() {
+        // Socket n'a pas d'endpoint Document_Item dans GLPI V1
+        if (this.itemType === "Socket" || this.itemType === "Glpi\\Socket") {
+            return null;
+        }
+
         if(!ASSET_TYPES_CONFIG[this.itemType.toLowerCase()]?.linkable) {
             return null;
         }
+
         return apiV1.getV1(`${this.itemType}/${this.id}/Document_Item`);
     }
 

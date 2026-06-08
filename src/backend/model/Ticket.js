@@ -69,7 +69,10 @@ class Ticket {
     async getItemsAssets() {
         const items = await this.getItems();
         const assets = await Promise.all(
-            items.map(item => Asset.getByIdSimple(item.itemtype, item.items_id))
+            items.map(item => {
+                const itemtype = item.itemtype === "Glpi\\Socket" ? "Socket" : item.itemtype;
+                return Asset.getByIdSimple(itemtype, item.items_id);
+            })
         );
         return assets;
     }
