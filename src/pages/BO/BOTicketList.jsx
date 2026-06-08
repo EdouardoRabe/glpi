@@ -129,16 +129,6 @@ export default function BOTicketList() {
                     <h3>Total Tickets</h3>
                     <p className="bo-ticket-stat-value">{filteredTickets.length}</p>
                 </div>
-                {
-                    nbTicketAsset.map(({ label, count }) => {
-                        return count > 0 && (
-                            <div className="bo-ticket-stat" key={label}>
-                                <h3>With {label}s</h3>
-                                <p className="bo-ticket-stat-value">{count}</p>
-                            </div>
-                        );
-                    })
-                }
             </div>
 
             <div className="bo-ticket-items">
