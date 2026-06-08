@@ -43,12 +43,13 @@ export const toDelete = [
     { order: 30, name: 'PrinterModels',    endpoint: 'Dropdowns/PrinterModel' },
     { order: 31, name: 'PhoneModels',      endpoint: 'Dropdowns/PhoneModel' },
     { order: 32, name: 'PeripheralModels', endpoint: 'Dropdowns/PeripheralModel' },
-    { order: 33, name: 'Manufacturers',    endpoint: 'Dropdowns/Manufacturer' },
-    { order: 34, name: 'Locations',        endpoint: 'Dropdowns/Location' },
-    { order: 35, name: 'States',           endpoint: 'Dropdowns/State' },
+    { order: 33, name: 'EnclosureModels',  endpoint: 'Dropdowns/EnclosureModel' },
+    { order: 34, name: 'Manufacturers',    endpoint: 'Dropdowns/Manufacturer' },
+    { order: 35, name: 'Locations',        endpoint: 'Dropdowns/Location' },
+    { order: 36, name: 'States',           endpoint: 'Dropdowns/State' },
 
     // ── Users en dernier (dépendance des assets et tickets) ───────────────────
-    { order: 36, name: 'Users',            endpoint: 'Administration/User' },
+    { order: 37, name: 'Users',            endpoint: 'Administration/User' },
 ];
 
 export const protectedIds = [
