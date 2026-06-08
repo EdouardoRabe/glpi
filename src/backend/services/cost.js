@@ -4,6 +4,11 @@ export const getSommeCost = (costs) => {
     }, 0).toFixed(2);
 };
 
+export const getCostTotal = (tickets) => {
+    return getSommeCost(tickets.flatMap((t) => t.costs));
+};
+
+
 export const getSommeCostByTime = (cost) => {
     return (cost.duration * cost.cost_time / 3600).toFixed(2);
 };

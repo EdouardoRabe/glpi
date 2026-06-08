@@ -5,7 +5,7 @@ import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
-import { getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/utils/cost";
+import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
 
 export default function BOTicketList() {
     // État initial des filtres
@@ -127,7 +127,7 @@ export default function BOTicketList() {
                 </div>
                 <div className="bo-ticket-stat">
                     <h3>Total Cost</h3>
-                    <p className="bo-ticket-stat-value">{getSommeCost(filteredTickets.flatMap((t) => t.costs))}</p>
+                    <p className="bo-ticket-stat-value">{getCostTotal(filteredTickets)}</p>
                 </div>
                 {
                     ITEM_TYPES.map((type) => {
