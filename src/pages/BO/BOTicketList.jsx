@@ -6,7 +6,7 @@ import { compareDates } from "../../backend/utils/comparisonUtils";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
 import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
-import { nbTicketWithAsset } from "../../backend/services/ticket";
+import { nbTicketsWithAsset } from "../../backend/services/ticket";
 
 export default function BOTicketList() {
     const INITIAL_FILTERS = {
@@ -60,7 +60,7 @@ export default function BOTicketList() {
         return true;
     });
 
-    const nbTicketAsset = nbTicketWithAsset(filteredTickets);
+    const nbTicketAsset = nbTicketsWithAsset(filteredTickets);
 
 
     return (
@@ -129,7 +129,6 @@ export default function BOTicketList() {
                 </div>
                 {
                     nbTicketAsset.map(({ label, count }) => {
-                       
                         return count > 0 && (
                             <div className="bo-ticket-stat" key={label}>
                                 <h3>With {label}s</h3>

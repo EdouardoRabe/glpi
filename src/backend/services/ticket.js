@@ -13,12 +13,21 @@ export function nbTicketsByTypes(tickets) {
     });
 }
 
-export function nbTicketWithAsset(tickets) {
+export function nbTicketWithAsset(tickets, type) {
+    return tickets.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
+}
+
+
+export function nbTicketsWithAsset(tickets) {
     return ITEM_TYPES.map((type) => {
-        const count = tickets.reduce((acc, ticket) => {
-            const hasType = ticket.assets.some((asset) => asset.itemType === type);
-            return hasType ? acc + 1 : acc;
-        }, 0);
-        return count > 0 && { label: type, count };
+        const count = nbTicketWithAsset(tickets, type);
+        return { label: type, count };
+    });
+}
+
+export function getNbAssetInTickets(ticket) {
+    return ITEM_TYPES.map((type) => {
+        const count = ticket.assets.filter((a) => a.itemType === type).length;
+        return { label: type, count };
     });
 }
