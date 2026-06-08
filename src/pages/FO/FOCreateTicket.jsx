@@ -37,7 +37,10 @@ export default function FOCreateTicket() {
     const handleSubmit = async () => {
         try {
             const selectedObjects = selectedItems
-                .map(id => items.find(it => it.id === id))
+                .map(compositeKey => {
+                    const [itemType, id] = compositeKey.split('-');
+                    return items.find(it => it.itemType === itemType && it.id === Number(id));
+                })
                 .filter(Boolean);
 
             const selectedUsers = [
@@ -200,14 +203,16 @@ export default function FOCreateTicket() {
                     <select
                         id="items"
                         multiple
-                        value={selectedItems.map(String)}
+                        value={selectedItems}
                         onChange={(e) => {
-                            const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
-                            setSelectedItems(ids);
+                            const keys = Array.from(e.target.selectedOptions, option => option.value);
+                            setSelectedItems(keys);
                         }}
                     >
                         {items.map((item) => (
-                            <option value={String(item.id)}>{item.name}</option>
+                            <option key={`${item.itemType}-${item.id}`} value={`${item.itemType}-${item.id}`}>
+                                {item.name} ({item.itemType})
+                            </option>
                         ))}
                     </select>
                 </div>
