@@ -55,11 +55,11 @@ export default function BODashboard() {
 
                 <div className="bo-dashboard-section">
                     <h2>Tickets par type</h2>
-                    {Object.entries(nbTicketType).length === 0 ? (
+                    {nbTicketType.length === 0 ? (
                         <p>Aucun ticket</p>
                     ) : (
                         <ul>
-                            {Object.entries(nbTicketType).map(([label, count]) => (
+                            {nbTicketType.map(({ label, count }) => (
                                 <li key={label}><strong>{label}:</strong> {count}</li>
                             ))}
                         </ul>
