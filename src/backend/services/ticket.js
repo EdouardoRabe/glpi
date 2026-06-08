@@ -1,5 +1,6 @@
 import { TICKET_TYPE } from "../utils/utils"; 
 import { ITEM_TYPES } from "../utils/type";
+import { getCostTotal } from "./cost";
 
 export function nbTicketsByType(tickets, typeId) {
     return tickets.filter((t) => Number(t.type) === Number(typeId)).length;
@@ -17,6 +18,22 @@ export function nbTicketWithAsset(ticketsCompletes, type) {
     return ticketsCompletes.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
 }
 
+export function ticketWithAsset(ticketsCompletes, type) {
+    return ticketsCompletes.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type));
+}
+
+export function getCostTicketAsset(ticketsCompletes, type){
+    const filtered = ticketWithAsset(ticketsCompletes, type);
+    return getCostTotal(filtered);
+}
+
+export function nbCostTicketAssets(ticketsCompletes) {
+    return ITEM_TYPES.map((type) => {
+        const count =  getCostTicketAsset(ticketsCompletes, type);
+        return { label: type, count };
+    });
+}
+
 export function nbTicketsWithAsset(ticketsCompletes) {
     return ITEM_TYPES.map((type) => {
         const count = nbTicketWithAsset(ticketsCompletes, type);
@@ -30,3 +47,4 @@ export function getNbAssetInTicket(ticketComplete) {
         return { label: type, count };
     });
 }
+
