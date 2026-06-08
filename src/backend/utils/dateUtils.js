@@ -129,6 +129,29 @@ export const formatToLocale = (value, locale = 'fr-FR', options = {}) => {
   return new Intl.DateTimeFormat(locale, options).format(d);
 };
 
+// Initialize dates to NOW (for form inputs)
+export const getNowDate = () => {
+  const now = new Date();
+  return now.toISOString().split('T')[0];
+};
+
+export const getNowTime = () => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
+export const getNowDateTime = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 export default {
   formatPrestaShopDate,
   parsePrestaShopDate,
@@ -146,4 +169,7 @@ export default {
   formatToYYYYMMDD_HHmmss,
   formatToISO,
   formatToLocale,
+  getNowDate,
+  getNowTime,
+  getNowDateTime,
 };

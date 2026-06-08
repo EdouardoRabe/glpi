@@ -1,13 +1,14 @@
 import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
+import { getNowDate, getNowTime } from "../../backend/utils/dateUtils";
 import { useState, useEffect} from "react";
 import "../../css/pages/FO/FOCreateTicket.css";
 
 export default function FOCreateTicket() {
     const [refTicket, setRefTicket] = useState("");
-    const [date, setDate] = useState("");
-    const [heure, setHeure] = useState("");
+    const [date, setDate] = useState(getNowDate());
+    const [heure, setHeure] = useState(getNowTime());
     const [type, setType] = useState(TICKET_TYPE[0].id);
     const [priority, setPriority] = useState(TICKET_PRIORITY[0].id);
     const [status, setStatus] = useState(TICKET_STATUS[0].id);
