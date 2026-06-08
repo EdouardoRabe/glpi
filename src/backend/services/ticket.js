@@ -13,20 +13,20 @@ export function nbTicketsByTypes(tickets) {
     });
 }
 
-export function nbTicketWithAsset(tickets, type) {
-    return tickets.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
+export function nbTicketWithAsset(ticketsCompletes, type) {
+    return ticketsCompletes.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
 }
 
-export function nbTicketsWithAsset(tickets) {
+export function nbTicketsWithAsset(ticketsCompletes) {
     return ITEM_TYPES.map((type) => {
-        const count = nbTicketWithAsset(tickets, type);
+        const count = nbTicketWithAsset(ticketsCompletes, type);
         return { label: type, count };
     });
 }
 
-export function getNbAssetInTickets(ticket) {
+export function getNbAssetInTicket(ticketComplete) {
     return ITEM_TYPES.map((type) => {
-        const count = ticket.assets.filter((a) => a.itemType === type).length;
+        const count = ticketComplete.assets.filter((a) => a.itemType === type).length;
         return { label: type, count };
     });
 }

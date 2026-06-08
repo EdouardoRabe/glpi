@@ -5,8 +5,10 @@ export function nbAssetsByType(assets, type) {
 }
 
 export function nbAssetsByTypes(assets) {
-    return ITEM_TYPES.reduce((acc, type) => {
-        acc[type] = nbAssetsByType(assets, type);
-        return acc;
-    }, {});
+    return ITEM_TYPES.map((type) => {
+        return {
+            label: type,
+            count: nbAssetsByType(assets, type)
+        };
+    });
 }

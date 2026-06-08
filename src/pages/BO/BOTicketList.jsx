@@ -3,10 +3,9 @@ import Ticket from "../../backend/model/Ticket";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
-import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
 import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
-import { getNbAssetInTickets, nbTicketsWithAsset } from "../../backend/services/ticket";
+import { getNbAssetInTicket,  nbTicketsWithAsset } from "../../backend/services/ticket";
 
 export default function BOTicketList() {
     const INITIAL_FILTERS = {
@@ -63,7 +62,7 @@ export default function BOTicketList() {
     const nbTicketAsset = nbTicketsWithAsset(filteredTickets);
 
 
-    const nbAssetInTicket = selectedTicket ? getNbAssetInTickets(selectedTicket) : [];
+    const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
 
 
     return (

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
-import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BODashboard.css";
-import { nbAssetsByType } from "../../backend/services/assets";
+import { nbAssetsByTypes } from "../../backend/services/assets";
 import { nbTicketsByTypes } from "../../backend/services/ticket";
 
 export default function BODashboard() {
@@ -23,6 +22,8 @@ export default function BODashboard() {
 
     const nbTicketType = nbTicketsByTypes(tickets);
 
+    const nbAssetType = nbAssetsByTypes(assets);
+
     return (
         <div className="bo-dashboard">
             <h1>Dashboard</h1>
@@ -41,11 +42,10 @@ export default function BODashboard() {
                 <div className="bo-dashboard-section">
                     <h2>Assets par type</h2>
                     <ul>
-                        {   
-                            ITEM_TYPES.map((type) => {
-                                const count = nbAssetsByType(assets, type);
+                        {   nbAssetType.map((type) => {
+                                const count = type.count;
                                 return count > 0 && (
-                                        <li key={type}><strong>{type}:</strong> {count}</li>
+                                        <li key={type.label}><strong>{type.label}:</strong> {count}</li>
                                 );
                             })
                         }
