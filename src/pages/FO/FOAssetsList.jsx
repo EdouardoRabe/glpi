@@ -4,6 +4,7 @@ import User from "../../backend/model/User";
 import State from "../../backend/model/State";
 import Location from "../../backend/model/Location";
 import Manufacturer from "../../backend/model/Manufacturer";
+import AssetModel from "../../backend/model/AssetModel";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/FO/FOAssetsList.css";
 import { Link } from "react-router-dom";
@@ -36,17 +37,13 @@ export default function FOAssetsList() {
             const loc  = await Location.getAll();
             const man  = await Manufacturer.getAll();
             const usr  = await User.getExcl([2, 3, 4, 5, 6]);
-
-            const modMap = new Map();
-            all.forEach(({ asset }) => {
-                if (asset.model?.id) modMap.set(asset.model.id, asset.model);
-            });
-
+            const mod = await AssetModel.getAll();
+            console.log("model ", mod);
             setAssets(all);
             setStates(sta);
             setLocations(loc);
             setManufacturers(man);
-            setModels([...modMap.values()]);
+            setModels(mod);
             setUsers(usr);
         };
         loadElements();
@@ -163,7 +160,7 @@ export default function FOAssetsList() {
                         <select id="filter-model" value={filters.modelId} onChange={(e) => handleFilterChange("modelId", e.target.value)}>
                             <option value="0">All Models</option>
                             {models.map((model) => (
-                                <option key={model.id} value={model.id}>{model.name}</option>
+                                <option key={`${model.id}-${model.name}`} value={model.id}>{model.name}</option>
                             ))}
                         </select>
                     </div>
