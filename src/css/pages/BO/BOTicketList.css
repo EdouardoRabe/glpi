@@ -194,8 +194,9 @@
   border-radius: 0;
   padding: 2rem;
   max-width: none;
-  max-height: none;
+  max-height: 85vh;
   box-shadow: none;
+  overflow-y: auto;
 }
 
 .bo-ticket-modal h2 {
