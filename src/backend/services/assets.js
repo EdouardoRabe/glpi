@@ -57,3 +57,18 @@ export function nbAssetsByLocations(assets, locations) {
         };
     });
 }
+
+export function nbAssetsByManufacturer(assets, manufacturerId) {
+    return assets.filter((a) => {
+        return a.manufacturer?.id === manufacturerId;
+    }).length;
+}
+
+export function nbAssetsByManufacturers(assets, manufacturers) {
+    return manufacturers.map((manufacturer) => {
+        return {
+            label: manufacturer.name,
+            count: nbAssetsByManufacturer(assets, manufacturer.id)
+        };
+    });
+}
