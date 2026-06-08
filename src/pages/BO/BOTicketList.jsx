@@ -6,7 +6,7 @@ import { compareDates } from "../../backend/utils/comparisonUtils";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
 import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
-import { nbTicketsWithAsset } from "../../backend/services/ticket";
+import { getNbAssetInTickets, nbTicketsWithAsset } from "../../backend/services/ticket";
 
 export default function BOTicketList() {
     const INITIAL_FILTERS = {
@@ -61,6 +61,9 @@ export default function BOTicketList() {
     });
 
     const nbTicketAsset = nbTicketsWithAsset(filteredTickets);
+
+
+    const nbAssetInTicket = selectedTicket ? getNbAssetInTickets(selectedTicket) : [];
 
 
     return (
@@ -175,11 +178,10 @@ export default function BOTicketList() {
                             <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
                         </div>
 
-                        {   ITEM_TYPES.map((type) => {
-                                const count = selectedTicket.assets.filter((a) => a.itemType === type).length;
+                        {   nbAssetInTicket.map(({ label, count }) => {
                                 return count > 0 ? (    
-                                        <div key={type} className="bo-ticket-modal-section">
-                                            <p><strong>{type}:</strong> {count}</p>
+                                        <div key={label} className="bo-ticket-modal-section">
+                                            <p><strong>{label}:</strong> {count}</p>
                                         </div>
                                 ) : null;
                             })

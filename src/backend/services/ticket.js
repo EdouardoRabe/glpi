@@ -17,7 +17,6 @@ export function nbTicketWithAsset(tickets, type) {
     return tickets.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
 }
 
-
 export function nbTicketsWithAsset(tickets) {
     return ITEM_TYPES.map((type) => {
         const count = nbTicketWithAsset(tickets, type);
