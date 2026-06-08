@@ -170,6 +170,14 @@
 }
 
 Ticket/{ticket_id}/Ticket_User  //apiV1
+{
+  "input": {
+    "tickets_id": 1,
+    "users_id": 42,
+    "type": 1
+  }
+}
+
 TeamMember // apiV2
 
 Valeur    Rôle
