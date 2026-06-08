@@ -5,7 +5,7 @@ import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
 import { ITEM_TYPES } from "../../backend/utils/type";
 import "../../css/pages/BO/BOTicketList.css";
-import { getSommeCost, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/utils/cost";
+import { getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/utils/cost";
 
 export default function BOTicketList() {
     // État initial des filtres
@@ -214,7 +214,7 @@ export default function BOTicketList() {
                                 <h3>Associated Costs</h3>
                                 {selectedTicket.costs.map((cost) => (
                                     <p key={cost.id}>
-                                        Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Fixed Cost: {cost.cost_fixed}
+                                        Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Cost by Time: { getSommeCostByTime(cost) } | Fixed Cost: {cost.cost_fixed}
                                     </p>
                                 ))}
                                 <p><strong>Duration: { getSommeDuration(selectedTicket.costs) }
