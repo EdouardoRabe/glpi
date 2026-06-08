@@ -12,3 +12,18 @@ export function nbAssetsByTypes(assets) {
         };
     });
 }
+
+export function nbAssetsByStatus(assets, statusId) {
+    return assets.filter((a) => {
+        return a.status?.id === statusId;
+    }).length;
+}
+
+export function nbAssetsByStatuses(assets, statuses) {
+    return statuses.map((status) => {
+        return {
+            label: status.name,
+            count: nbAssetsByStatus(assets, status.id)
+        };
+    });
+}
