@@ -5,7 +5,6 @@ import Ticket from "../../backend/model/Ticket.js";
 
 export default function BOCorbeille(){
         const [onCorbeille, setOnCorbeille] = useState([]);
-        const [delet , setDelet] = useState([]);
 
         useEffect(() => {
             const fetchConfig = async () => {
@@ -14,7 +13,6 @@ export default function BOCorbeille(){
                     const tabDeleted = deleted.map((del) => del.idticket);
                     const on = tabDeleted.length > 0 ? await Ticket.getIncl(tabDeleted) : [];
                     console.log(on);
-                    setDelet(deleted)
                     setOnCorbeille(on);
                 } catch (error) {
                     console.error('Erreur:', error);
@@ -25,23 +23,25 @@ export default function BOCorbeille(){
 
     const toRestore = async (id)=>{
         console.log("Ho averina ", id);
-        const del2 = delet.filter((d) => d.idticket == id);
-        console.log("Ho averina ", del2[0]);
-        await del(`/corbeille/${del2[0].id}`);
-
+        await del(`/corbeille/${id}`);
+        const updatedOnCorbeille = onCorbeille.filter((ticket) => ticket.id !== id);
+        setOnCorbeille(updatedOnCorbeille);
     }
 
 
     return (
         <div>
             <h1>Corbeille</h1>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>REF</th>
-                    <th>NAME</th>
-                    <th>ACTION</th>
-                </tr>
+            { onCorbeille.length===0 ? <p>Aucun ticket dans la corbeille.</p> : (<table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>REF</th>
+                        <th>NAME</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {
                         onCorbeille.map((ticket) =>(
                             <tr key={`${ticket.id}-${ticket.name}`}>
@@ -58,7 +58,8 @@ export default function BOCorbeille(){
                             </tr>
                         ))
                     }
-            </table>
+                </tbody>
+            </table>)}
         </div>
     )
 }

@@ -86,6 +86,7 @@ export default function BOTicketList() {
         const data = {idticket : id};
         await post('/corbeille', data);
         console.log("Ho voafafa ", id);
+        setTickets(prev => prev.filter(({ticket}) => ticket.id !== id));
     }
 
 
@@ -181,7 +182,7 @@ export default function BOTicketList() {
                                     View Details
                                 </button>
                             </div>
-                             <div className="bo-ticket-item-actions">
+                             <div className="bo-ticket-item-actions-red">
                                 <button type="button" onClick={() => toCorbeille(ticket.id)}>
                                     Corbeille
                                 </button>
