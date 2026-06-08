@@ -17,9 +17,16 @@ export function nbTicketsByTypes(tickets) {
 export function nbTicketWithAsset(ticketsCompletes, type) {
     return ticketsCompletes.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
 }
+export function nbTicketWithAssetIsAll(ticketsCompletes, type) {
+    return ticketsCompletes.filter((ticket) => ticket.assets.every((asset) => asset.itemType === type)).length;
+}
 
 export function ticketWithAsset(ticketsCompletes, type) {
     return ticketsCompletes.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type));
+}
+
+export function ticketWithAssetIsAll(ticketsCompletes, type) {
+    return ticketsCompletes.filter((ticket) => ticket.assets.every((asset) => asset.itemType === type));
 }
 
 export function getCostTicketAsset(ticketsCompletes, type){
@@ -27,9 +34,21 @@ export function getCostTicketAsset(ticketsCompletes, type){
     return getCostTotal(filtered);
 }
 
+export function getCostTicketAssetIsAll(ticketsCompletes, type){
+    const filtered = ticketWithAssetIsAll(ticketsCompletes, type);
+    return getCostTotal(filtered);
+}
+
 export function nbCostTicketAssets(ticketsCompletes) {
     return ITEM_TYPES.map((type) => {
         const count =  getCostTicketAsset(ticketsCompletes, type);
+        return { label: type, count };
+    });
+}
+
+export function nbCostTicketAssetsIsAll(ticketsCompletes) {
+    return ITEM_TYPES.map((type) => {
+        const count =  getCostTicketAssetIsAll(ticketsCompletes, type);
         return { label: type, count };
     });
 }
