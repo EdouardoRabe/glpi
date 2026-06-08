@@ -124,10 +124,6 @@ export default function BOTicketList() {
                     <h3>Total Tickets</h3>
                     <p className="bo-ticket-stat-value">{filteredTickets.length}</p>
                 </div>
-                <div className="bo-ticket-stat">
-                    <h3>Total Cost</h3>
-                    <p className="bo-ticket-stat-value">{getCostTotal(filteredTickets)}</p>
-                </div>
                 {
                     ITEM_TYPES.map((type) => {
                         const count = filteredTickets.reduce((acc, ticket) => {
