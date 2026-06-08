@@ -42,3 +42,18 @@ export function nbAssetsByModels(assets, models) {
         };
     });
 }
+
+export function nbAssetsByLocation(assets, locationId) {
+    return assets.filter((a) => {
+        return a.location?.id === locationId;
+    }).length;
+}
+
+export function nbAssetsByLocations(assets, locations) {
+    return locations.map((location) => {
+        return {
+            label: location.name,
+            count: nbAssetsByLocation(assets, location.id)
+        };
+    });
+}
