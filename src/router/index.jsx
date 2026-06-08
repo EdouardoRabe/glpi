@@ -11,6 +11,7 @@ import FOCreateTicket from "../pages/FO/FOCreateTicket.jsx";
 import FOAssetsDetails from "../pages/FO/FOAssetsDetails.jsx";
 import BOStatusTicket from "../pages/BO/BOStatusTicket.jsx";
 import FOTicketList from "../pages/FO/FOTicketList.jsx";
+import BOCorbeille from "../pages/BO/BOCorbeille.jsx";
 
 
 export const router = createBrowserRouter([
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
             {
                 path: "status-ticket",
                 element: <BOStatusTicket/>
+            },
+            {
+                path: "corbeille",
+                element: <BOCorbeille/>
             }
         ]
     },

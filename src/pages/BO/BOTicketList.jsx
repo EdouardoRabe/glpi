@@ -7,6 +7,7 @@ import "../../css/pages/BO/BOTicketList.css";
 import { getCostTotal, getCostTotalByTime, getCostTotalFixed, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
 import { getCostTicketCompletByStatusAll, getNbAssetInTicket,  nbTicketsWithAsset } from "../../backend/services/ticket";
 import StatusTicket from "../../backend/model/StatusTicket";
+import { get, post } from "../../backend/utils/expressApi";
 
 export default function BOTicketList() {
     const INITIAL_FILTERS = {
@@ -28,6 +29,22 @@ export default function BOTicketList() {
             const status = await StatusTicket.getAll();
             setTickets(tic);
             setStatusTicket(status);
+            console.log(tic)
+            const corbeille  = await get('/corbeille');
+            console.log(corbeille, " corbeille")
+            const filtered = tic.filter((ticket) => {
+                const isdelete = !corbeille.some((line) => {
+                        console.log(line.idticket, "===", ticket.ticket.id )
+                        return line.idticket === ticket.ticket.id
+                    }
+                )
+                console.log("id ", ticket.ticket.id, " isdelete ", isdelete);
+                return isdelete;
+            }
+        );
+            console.log("filtered ",filtered)
+        
+            setTickets(filtered);
         };
         loadTickets();
     }, []);
@@ -63,6 +80,13 @@ export default function BOTicketList() {
     });
 
     const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
+
+    const toCorbeille = async (id)=>{
+        console.log("Ho fafana ", id);
+        const data = {idticket : id};
+        await post('/corbeille', data);
+        console.log("Ho voafafa ", id);
+    }
 
 
     return (
@@ -151,6 +175,16 @@ export default function BOTicketList() {
                                         View Details
                                     </button>
                                 </div>
+                            </div>
+                            <div className="bo-ticket-item-actions">
+                                <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs, users })}>
+                                    View Details
+                                </button>
+                            </div>
+                             <div className="bo-ticket-item-actions">
+                                <button type="button" onClick={() => toCorbeille(ticket.id)}>
+                                    Corbeille
+                                </button>
                             </div>
                         </div>
                 )})}
