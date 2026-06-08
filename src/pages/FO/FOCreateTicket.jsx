@@ -22,6 +22,7 @@ export default function FOCreateTicket() {
     const [assignedIds, setAssignedIds] = useState([]);
     const [observersIds, setObserversIds] = useState([]);
     const [users, setUsers] = useState([]);
+    const [costs, setCosts] = useState([]);
 
     useEffect(() =>{
         const loadElements = async () =>{
@@ -57,9 +58,9 @@ export default function FOCreateTicket() {
                 external_id: refTicket,
             };
             const newTicket = new Ticket(payload);
-            await newTicket.saveWithAll(selectedUsers, selectedObjects);
+            await newTicket.saveWithAll(selectedUsers, selectedObjects, costs);
             setMessage({ type: "success", text: "Ticket created successfully!" });
-            console.log("Ticket créé avec succès :", newTicket, " — users associés :", selectedUsers, " — items associés :", selectedObjects);
+            console.log("Ticket créé avec succès :", newTicket, " — users associés :", selectedUsers, " — items associés :", selectedObjects, " — costs :", costs);
 
             setRefTicket("");
             setDate(getNowDate());
@@ -70,6 +71,7 @@ export default function FOCreateTicket() {
             setRequestersIds([]);
             setAssignedIds([]);
             setObserversIds([]);
+            setCosts([]);
 
             setTimeout(() => setMessage(null), 3000);
         } catch (error) {
@@ -208,6 +210,62 @@ export default function FOCreateTicket() {
                             <option value={String(item.id)}>{item.name}</option>
                         ))}
                     </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label>Costs</label>
+                    <div>
+                        {costs.map((cost, index) => (
+                            <div key={index} className="fo-create-ticket-cost-row">
+                                <input
+                                    type="number"
+                                    placeholder="Duration (s)"
+                                    value={cost.duration || ""}
+                                    onChange={(e) => {
+                                        const updatedCosts = [...costs];
+                                        updatedCosts[index].duration = Number(e.target.value);
+                                        setCosts(updatedCosts);
+                                    }}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Time Cost"
+                                    value={cost.cost_time || ""}
+                                    onChange={(e) => {
+                                        const updatedCosts = [...costs];
+                                        updatedCosts[index].cost_time = Number(e.target.value);
+                                        setCosts(updatedCosts);
+                                    }}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Fixed Cost"
+                                    value={cost.cost_fixed || ""}
+                                    onChange={(e) => {
+                                        const updatedCosts = [...costs];
+                                        updatedCosts[index].cost_fixed = Number(e.target.value);
+                                        setCosts(updatedCosts);
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCosts(costs.filter((_, i) => i !== index));
+                                    }}
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        ))}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCosts([...costs, { duration: 0, cost_time: 0, cost_fixed: 0 }]);
+                            }}
+                        >
+                            + Add Cost
+                        </button>
+                    </div>
                 </div>
 
                 <div className="fo-create-ticket-actions">

@@ -167,10 +167,33 @@ class Ticket {
         await this.saveUsers(users);
     }
 
-    async saveWithAll(users = [], items = []) {
+    async saveCosts(costs = []) {
+        if (this.id === null) {
+            throw new Error("saveCosts() : ce ticket n'a pas d'ID");
+        }
+        const results = [];
+        for (const cost of costs) {
+            const payload = {
+                duration: cost.duration || 0,
+                cost_time: cost.cost_time || 0,
+                cost_fixed: cost.cost_fixed || 0,
+            };
+            const result = await api.post(`Assistance/Ticket/${this.id}/Cost`, payload);
+            if (result?.error) {
+                console.warn(`Ajout coût au ticket #${this.id} échoué : ${result.message || JSON.stringify(result)}`);
+            } else {
+                console.log(`Coût ajouté au ticket #${this.id} avec succès`);
+            }
+            results.push(result);
+        }
+        return results;
+    }
+
+    async saveWithAll(users = [], items = [], costs = []) {
         await this.save();
         await this.saveUsers(users);
         await this.saveItems(items);
+        await this.saveCosts(costs);
     }
 
 
