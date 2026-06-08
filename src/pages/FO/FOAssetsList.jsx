@@ -236,7 +236,7 @@ export default function FOAssetsList() {
                     <div className="pagination-info">
                         <span>Page {currentPage} sur {totalPages}</span>
                         <span className="pagination-items">
-                        Affichant {startIndex + 1} à {Math.min(endIndex, assets.length) } sur {assets.length} items
+                        Affichant {startIndex + 1} à {Math.min(endIndex, filteredAssetsAvantPagination.length) } sur {filteredAssetsAvantPagination.length} items
                         </span>
                     </div>
 
