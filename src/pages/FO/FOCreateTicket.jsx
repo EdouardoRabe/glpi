@@ -1,5 +1,6 @@
 import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
+import User from "../../backend/model/User";
 import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
 import { getNowDate, getNowTime } from "../../backend/utils/dateUtils";
 import { useState, useEffect} from "react";
@@ -17,11 +18,17 @@ export default function FOCreateTicket() {
     const [selectedItems, setSelectedItems] = useState([]);
     const [items, setItems] = useState([]);
     const [message, setMessage] = useState(null);
+    const [requestersIds, setRequestersIds] = useState([]);
+    const [assignedIds, setAssignedIds] = useState([]);
+    const [observersIds, setObserversIds] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() =>{
         const loadElements = async () =>{
-            const items = await Asset.getAll();
-            setItems(items);
+            const assets = await Asset.getAll();
+            setItems(assets);
+            const usersList = await User.getExcl([2, 3, 4, 5, 6]);
+            setUsers(usersList);
         };
         loadElements();
     }, [])
@@ -31,6 +38,12 @@ export default function FOCreateTicket() {
             const selectedObjects = selectedItems
                 .map(id => items.find(it => it.id === id))
                 .filter(Boolean);
+
+            const selectedUsers = [
+                ...requestersIds.map(id => ({ type: "User", role: "requester", id })),
+                ...assignedIds.map(id => ({ type: "User", role: "assigned", id })),
+                ...observersIds.map(id => ({ type: "User", role: "observer", id })),
+            ];
 
             const daty    = parseDDMMYYYY(date, heure);
             const dateStr = toGLPIDateTime(daty);
@@ -44,17 +57,20 @@ export default function FOCreateTicket() {
                 external_id: refTicket,
             };
             const newTicket = new Ticket(payload);
-            newTicket.saveWithItems(selectedObjects);
+            await newTicket.saveWithAll(selectedUsers, selectedObjects);
             setMessage({ type: "success", text: "Ticket created successfully!" });
-            console.log("Ticket créé avec succès :", newTicket, " — items associés :", selectedObjects);
+            console.log("Ticket créé avec succès :", newTicket, " — users associés :", selectedUsers, " — items associés :", selectedObjects);
 
             setRefTicket("");
-            setDate("");
-            setHeure("");
+            setDate(getNowDate());
+            setHeure(getNowTime());
             setTitle("");
             setDescription("");
             setSelectedItems([]);
-            
+            setRequestersIds([]);
+            setAssignedIds([]);
+            setObserversIds([]);
+
             setTimeout(() => setMessage(null), 3000);
         } catch (error) {
             setMessage({ type: "error", text: "Error creating ticket. Please try again." });
@@ -127,6 +143,57 @@ export default function FOCreateTicket() {
                 </div>
 
                 <div className="fo-create-ticket-form-group">
+                    <label htmlFor="requesters">Requesters (hold Ctrl to select multiple)</label>
+                    <select
+                        id="requesters"
+                        multiple
+                        value={requestersIds.map(String)}
+                        onChange={(e) => {
+                            const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
+                            setRequestersIds(ids);
+                        }}
+                    >
+                        {users.map((user) => (
+                            <option value={String(user.id)}>{user.username}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="assigned">Assigned Technicians (hold Ctrl to select multiple)</label>
+                    <select
+                        id="assigned"
+                        multiple
+                        value={assignedIds.map(String)}
+                        onChange={(e) => {
+                            const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
+                            setAssignedIds(ids);
+                        }}
+                    >
+                        {users.map((user) => (
+                            <option value={String(user.id)}>{user.username}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
+                    <label htmlFor="observers">Observers (hold Ctrl to select multiple)</label>
+                    <select
+                        id="observers"
+                        multiple
+                        value={observersIds.map(String)}
+                        onChange={(e) => {
+                            const ids = Array.from(e.target.selectedOptions, option => Number(option.value));
+                            setObserversIds(ids);
+                        }}
+                    >
+                        {users.map((user) => (
+                            <option value={String(user.id)}>{user.username}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="fo-create-ticket-form-group">
                     <label htmlFor="items">Associated Assets (hold Ctrl to select multiple)</label>
                     <select
                         id="items"
@@ -138,7 +205,7 @@ export default function FOCreateTicket() {
                         }}
                     >
                         {items.map((item) => (
-                            <option key={item.id} value={String(item.id)}>{item.name}</option>
+                            <option value={String(item.id)}>{item.name}</option>
                         ))}
                     </select>
                 </div>

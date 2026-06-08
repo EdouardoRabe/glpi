@@ -81,6 +81,11 @@ class Ticket {
         return cost;
     }
 
+    async getUsers(){
+        const users = await api.get(`Assistance/Ticket/${this.id}/TeamMember`);
+        return users;
+    }
+
     static async getAllComplete() {
         const tickets = await Ticket.getAll();
         const ticketsWithItems = await Promise.all(
@@ -88,6 +93,7 @@ class Ticket {
                 ticket,
                 assets: await ticket.getItemsAssets(),
                 costs: await ticket.getCosts(),
+                users: await ticket.getUsers(),
             }))
         );
         return ticketsWithItems;
@@ -131,6 +137,39 @@ class Ticket {
 
     async saveWithItems(items = []) {
         await this.save();
+        await this.saveItems(items);
+    }
+
+    async saveUsers(users = []) {
+        if (this.id === null) {
+            throw new Error("saveUsers() : ce ticket n'a pas d'ID");
+        }
+        const results = [];
+        for (const user of users) {
+            const payload = {
+                type: user.type,
+                id: user.id,
+                role: user.role,
+            };
+            const result = await api.post(`Assistance/Ticket/${this.id}/TeamMember`, payload);
+            if (result?.error) {
+                console.warn(`Association user #${user.id} (rôle ${user.role}) au ticket #${this.id} échouée : ${result.message || JSON.stringify(result)}`);
+            } else {
+                console.log(`Association user #${user.id} (rôle ${user.role}) au ticket #${this.id} réussie`);
+            }
+            results.push(result);
+        }
+        return results;
+    }
+
+    async saveWithUsers(users = []) {
+        await this.save();
+        await this.saveUsers(users);
+    }
+
+    async saveWithAll(users = [], items = []) {
+        await this.save();
+        await this.saveUsers(users);
         await this.saveItems(items);
     }
 

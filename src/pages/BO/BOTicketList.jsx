@@ -141,7 +141,7 @@ export default function BOTicketList() {
             </div>
 
             <div className="bo-ticket-items">
-                {filteredTickets.map(({ ticket, assets, costs }) => (
+                {filteredTickets.map(({ ticket, assets, costs, users }) => (
                     <div key={ticket.id} className="bo-ticket-item">
                         <div className="bo-ticket-item-header">
                             <div className="bo-ticket-item-info">
@@ -154,7 +154,7 @@ export default function BOTicketList() {
                                 </div>
                             </div>
                             <div className="bo-ticket-item-actions">
-                                <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs })}>
+                                <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs, users })}>
                                     View Details
                                 </button>
                             </div>
@@ -192,6 +192,17 @@ export default function BOTicketList() {
                                 {selectedTicket.assets.map((asset) => (
                                     <p key={`${asset.itemType}-${asset.id}`}>
                                         {asset.name} ({asset.itemType})
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+
+                        {selectedTicket.users.length > 0 && (
+                            <div className="bo-ticket-modal-section">
+                                <h3>Team Members</h3>
+                                {selectedTicket.users.map((user) => (
+                                    <p key={`${user.role}-${user.id}`}>
+                                        {user.name} ({user.role})
                                     </p>
                                 ))}
                             </div>

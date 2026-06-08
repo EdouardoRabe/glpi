@@ -158,7 +158,11 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
 
         if (res.ok) {
             const ct = res.headers.get("content-type") || "";
-            if (ct.includes("application/json")) return await res.json();
+            if (ct.includes("application/json")) {
+                const text = await res.text();
+                if (!text) return { success: true };
+                return JSON.parse(text);
+            }
             return await res.text();
         }
 
