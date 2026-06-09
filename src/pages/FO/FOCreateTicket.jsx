@@ -1,10 +1,11 @@
 import Asset from "../../backend/model/Asset";
 import Ticket from "../../backend/model/Ticket";
 import User from "../../backend/model/User";
-import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
+import { TICKET_PRIORITY, TICKET_TYPE, parseDDMMYYYY, toGLPIDateTime } from "../../backend/utils/utils";
 import { getNowDate, getNowTime } from "../../backend/utils/dateUtils";
 import { useState, useEffect} from "react";
 import "../../css/pages/FO/FOCreateTicket.css";
+import StatusTicket from "../../backend/model/StatusTicket";
 
 export default function FOCreateTicket() {
     const [refTicket, setRefTicket] = useState("");
@@ -12,7 +13,7 @@ export default function FOCreateTicket() {
     const [heure, setHeure] = useState(getNowTime());
     const [type, setType] = useState(TICKET_TYPE[0].id);
     const [priority, setPriority] = useState(TICKET_PRIORITY[0].id);
-    const [status, setStatus] = useState(TICKET_STATUS[0].id);
+    const [status, setStatus] = useState(1);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [selectedItems, setSelectedItems] = useState([]);
@@ -23,6 +24,7 @@ export default function FOCreateTicket() {
     const [observersIds, setObserversIds] = useState([]);
     const [users, setUsers] = useState([]);
     const [costs, setCosts] = useState([]);
+    const [statusTicket, setStatusTicket] = useState([]);
 
     useEffect(() =>{
         const loadElements = async () =>{
@@ -30,6 +32,8 @@ export default function FOCreateTicket() {
             setItems(assets);
             const usersList = await User.getExcl([2, 3, 4, 5, 6]);
             setUsers(usersList);
+            const status = await StatusTicket.getAll();
+            setStatusTicket(status);
         };
         loadElements();
     }, [])
@@ -141,8 +145,8 @@ export default function FOCreateTicket() {
                 <div className="fo-create-ticket-form-group">
                     <label htmlFor="status">Status</label>
                     <select id="status" value={status} onChange={(e) => setStatus(e.target.value)}>
-                        {TICKET_STATUS.map((s) => (
-                            <option key={s.id} value={s.id}>{s.name}</option>
+                        {statusTicket.map((s) => (
+                            <option key={s.id_status} value={s.id_status}>{s.french_name}</option>
                         ))}
                     </select>
                 </div>
