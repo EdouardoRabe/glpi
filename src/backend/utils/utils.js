@@ -29,14 +29,14 @@ export const TICKET_TYPE = [
     { id: 2, name: "Request" },
 ];
 
-export const TICKET_STATUS = [
-    { id: 1, name: "New" },
-    { id: 2, name: "Processing (Assigned)" },
-    { id: 3, name: "Processing (Planned)" },
-    { id: 4, name: "Pending" },
-    { id: 5, name: "Solved" },
-    { id: 6, name: "Closed" },
-];
+// export const TICKET_STATUS = [
+//     { id: 1, name: "New" },
+//     { id: 2, name: "Processing (Assigned)" },
+//     { id: 3, name: "Processing (Planned)" },
+//     { id: 4, name: "Pending" },
+//     { id: 5, name: "Solved" },
+//     { id: 6, name: "Closed" },
+// ];  //Juste reference fotsiny
 
 export const TICKET_PRIORITY = [
     { id: 1, name: "Very Low" },
