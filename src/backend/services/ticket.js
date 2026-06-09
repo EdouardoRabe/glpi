@@ -6,6 +6,27 @@ export function nbTicketsByType(tickets, typeId) {
     return tickets.filter((t) => Number(t.type) === Number(typeId)).length;
 }
 
+export function ticketsByType(tickets, typeId) {
+    return tickets.filter((t) => Number(t.type) === Number(typeId));
+}
+
+export function nbTicketsByStatus(tickets, statusId) {
+    return tickets.filter((t) => Number(t.status) === Number(statusId)).length;
+}
+
+export function ticketsByStatus(tickets, statusId) {
+    return tickets.filter((t) => Number(t.status) === Number(statusId));
+}
+
+export function ticketGroupByStatus(tickets, statusList) {
+    return statusList.map((stat) => {
+        const status = stat;
+        const tickets = ticketsByStatus(tickets, stat.id_status);
+        return { status,  tickets };
+    });
+}
+   
+
 export function nbTicketsByTypes(tickets) {
     return TICKET_TYPE.map((type) => {
         const label = type.name;
