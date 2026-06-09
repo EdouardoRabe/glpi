@@ -99,6 +99,20 @@ class Ticket {
         return ticketsWithItems;
     }
 
+    async enrich() {
+        return {
+            ticket: this,
+            costs: await this.getCosts(),
+            assets: await this.getItemsAssets(),
+            users: await this.getUsers(),
+        };
+    }
+
+    static async enrichAll(tickets) {
+        return Promise.all(tickets.map(ticket => ticket.enrich()));
+    }
+
+
     async save() {
         if (this.id !== null) {
             throw new Error("save() : ce ticket a déjà un ID, utilisez update()");

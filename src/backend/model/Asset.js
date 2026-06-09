@@ -232,6 +232,18 @@ class Asset {
         );
     }
 
+    async enrich() {
+        return {
+            asset: this,
+            imageUrl: await this.getImageUrl(),
+        };
+    }
+
+    static async enrichAll(assets) {
+        return Promise.all(assets.map(asset => asset.enrich()));
+    }
+
+
     static async deleteAll() {
         await Promise.all(
             ITEM_TYPES.map(itemType => Asset.deleteAllSimple(itemType))
