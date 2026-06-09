@@ -11,17 +11,17 @@ export function ticketsByType(tickets, typeId) {
 }
 
 export function nbTicketsByStatus(tickets, statusId) {
-    return tickets.filter((t) => Number(t.status) === Number(statusId)).length;
+    return tickets.filter((t) => Number(t.status.id) === Number(statusId)).length;
 }
 
 export function ticketsByStatus(tickets, statusId) {
-    return tickets.filter((t) => Number(t.status) === Number(statusId));
+    return tickets.filter((t) => Number(t.status.id) === Number(statusId));
 }
 
-export function ticketGroupByStatus(tickets, statusList) {
+export function ticketGroupByStatus(tic, statusList) {
     return statusList.map((stat) => {
         const status = stat;
-        const tickets = ticketsByStatus(tickets, stat.id_status);
+        const tickets = ticketsByStatus(tic, stat.id_status);
         return { status,  tickets };
     });
 }
