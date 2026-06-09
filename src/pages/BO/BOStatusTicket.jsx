@@ -14,14 +14,14 @@ export default function BOStatusTicket () {
 
     const handleChange = (idstatus, key, value)=>{
         setStatusTicket( prev =>
-                                            prev.map(item =>
-                                                item.id_status === idstatus
-                                                    ? {
-                                                        ...item,
-                                                         [key] : value
-                                                    }
-                                                    : item
-                                            )
+            prev.map(item =>
+                item.id_status === idstatus
+                    ? {
+                        ...item,
+                            [key] : value
+                    }
+                    : item
+            )
         )
     }
 
