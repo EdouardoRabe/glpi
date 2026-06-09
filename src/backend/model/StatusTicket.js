@@ -8,7 +8,7 @@ class StatusTicket {
     }
 
     static async update(id, data = {}){
-       await put(`/status/${id}`, data);
+       return await put(`/status/${id}`, data);
     }
 
     static async delete(id){

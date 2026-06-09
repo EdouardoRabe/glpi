@@ -25,6 +25,11 @@ export default function BOStatusTicket () {
         )
     }
 
+    const updateStatus = async (status) =>{
+        const result = await StatusTicket.update(status.id_status, status);
+        console.log("update effectué ", result);
+    }
+
 
     return (
         <div>
@@ -36,6 +41,7 @@ export default function BOStatusTicket () {
                         <th>NOM</th>
                         <th>MALAGASY NAME</th>
                         <th>COLOR</th>
+                        <th>ACTION</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +52,6 @@ export default function BOStatusTicket () {
                                 <td>{state.french_name}</td>
                                 <td>
                                     <input type="text" defaultValue={state.malagasy_name} onChange={(e) => handleChange(state.id_status, "malagasy_name", e.target.value)} />
-                                    <button >Changer</button>
                                 </td>
                                 <td>
                                     <div
@@ -57,9 +62,10 @@ export default function BOStatusTicket () {
                                         }}
                                     />
                                     <input type="color" defaultValue={state.color}  onChange={(e) => handleChange(state.id_status, "color", e.target.value)}/>
-                                    <button>Changer</button>
                                 </td>
-                                 
+                                 <td>
+                                    <button onClick={() => updateStatus(state)} >Modifier</button>
+                                 </td>
                             </tr>
                         ))
                     }
