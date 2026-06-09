@@ -1,11 +1,11 @@
 import { useEffect } from "react"
-import { get } from "../../backend/utils/expressApi"
+import StatusTicket from "../../backend/model/StatusTicket";
 
 export default function BOStatusTicket () {
 
     useEffect(() => {
         const load = async () => {
-            const status = await get("/status");
+            const status = await StatusTicket.getByIdByMalagasyName("Vita");
             console.log("status: ", status);
         }   
         load();
