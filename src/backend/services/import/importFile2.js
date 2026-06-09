@@ -7,9 +7,9 @@ import {
     toGLPIDateTime,
     getEnumIdByName,
     TICKET_TYPE,
-    TICKET_STATUS,
     TICKET_PRIORITY,
 } from "../../utils/utils.js";
+import StatusTicket from "../../model/StatusTicket.js";
 
 const EXPECTED_HEADERS = [
     "ref_ticket", "date", "heure", "type",
@@ -62,9 +62,10 @@ export const importFile2 = async (file) => {
         try {
             const date    = parseDDMMYYYY(row.date, row.heure);
             const dateStr = toGLPIDateTime(date);
-
+            
+            const stat = await StatusTicket.getByIdByFrenchName(row.status);
             const type     = getEnumIdByName(TICKET_TYPE,     row.type,     1);
-            const status   = getEnumIdByName(TICKET_STATUS,   row.status,   1);
+            const status   =  stat ? stat.id_status : 1;
             const priority = getEnumIdByName(TICKET_PRIORITY, row.priority, 3);
 
             const ticketPayload = {
