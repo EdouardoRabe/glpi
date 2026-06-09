@@ -25,6 +25,18 @@ export function ticketGroupByStatus(tic, statusList) {
         return { status,  tickets };
     });
 }
+
+export function ticketsCompletByStatus(tickets, statusId) {
+    return tickets.filter((t) => Number(t.ticket.status.id) === Number(statusId));
+}
+
+export function ticketCompletGroupByStatus(tic, statusList) {
+    return statusList.map((stat) => {
+        const status = stat;
+        const tickets = ticketsCompletByStatus(tic, stat.id_status);
+        return { status,  tickets };
+    });
+}
    
 
 export function nbTicketsByTypes(tickets) {
