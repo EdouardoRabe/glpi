@@ -22,12 +22,17 @@ export default function FOTicketList(){
         console.log(tick, " En drag");
     }
 
-    const handleDrop = (group) =>{
+    const handleDrop = async (group) =>{
         console.log("ticket ", draggedTicket.external_id, " vers ", group.status.id_status);
         const fil = group.tickets.find((t) => t.ticket.id === draggedTicket.id);
         if(fil){
             console.log("Ce ticket est deja : ", group.status.french_name);
+            return
         }
+        const data = {status : {id : group.status.id_status}};
+        const result = await draggedTicket.update(data);
+        console.log("resultat du dragg ", result);
+        setDraggetTicket(null);
     }
 
     return (
