@@ -24,6 +24,7 @@ function FOMainLayout() {
                 <div className="fo-navbar-menu">
                     <Link to={"/frontOffice/assets"}>Assets</Link>
                     <Link to={"/frontOffice/create-ticket"}>Create Ticket</Link>
+                    <Link to={"/frontOffice/list-ticket"}>List Ticket</Link>
                     <button onClick={handleRefresh}>Refresh Token</button>
                 </div>
             </nav>
