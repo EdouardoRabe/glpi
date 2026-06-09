@@ -9,6 +9,7 @@ import BODashboard from "../pages/BO/BODashboard.jsx";
 import BOTicketList from "../pages/BO/BOTicketList.jsx";
 import FOCreateTicket from "../pages/FO/FOCreateTicket.jsx";
 import FOAssetsDetails from "../pages/FO/FOAssetsDetails.jsx";
+import BOStatusTicket from "../pages/BO/BOStatusTicket.jsx";
 
 
 export const router = createBrowserRouter([
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
             {
                 path: "tickets",
                 element: <BOTicketList/>
+            },
+            {
+                path: "status-ticket",
+                element: <BOStatusTicket/>
             }
         ]
     },

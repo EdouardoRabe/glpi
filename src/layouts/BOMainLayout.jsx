@@ -47,6 +47,7 @@ function BOMainLayout() {
                         <Link to={"/import"}>Import</Link>
                         <Link to={"/dashboard"}>Dashboard</Link>
                         <Link to={"/tickets"}>Tickets</Link>
+                        <Link to={"/status-ticket"}>Status Tickets</Link>
                         <button onClick={handleRefresh}>Refresh Token</button>
                         <button onClick={handleLogout}>Logout</button>
                     </div>
