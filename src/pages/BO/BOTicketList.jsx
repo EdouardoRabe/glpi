@@ -133,7 +133,7 @@ export default function BOTicketList() {
                     <div key={ticket.id} className="bo-ticket-item">
                         <div className="bo-ticket-item-header">
                             <div className="bo-ticket-item-info">
-                                <div className="bo-ticket-item-id">#{ticket.external_id} - {ticket.name}</div>
+                                <div className="bo-ticket-item-id">#{ticket.external_id} - {ticket.name} - id {ticket.id}</div>
                                 <div className="bo-ticket-item-meta">
                                     <span>Type: {getEnumNameById(TICKET_TYPE, ticket.type) || "-"}</span>
                                     <span> | Priority: {getEnumNameById(TICKET_PRIORITY, ticket.priority) || "-"}</span>
