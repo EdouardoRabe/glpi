@@ -5,6 +5,7 @@ import { ticketCompletGroupByStatus} from "../../backend/services/ticket";
 
 export default function FOTicketList(){
     const [groups, setGroups] = useState([]);
+    const [draggedTicket, setDraggetTicket] = useState(null);
 
     useEffect(()=>{
         const load = async () =>{
@@ -16,17 +17,40 @@ export default function FOTicketList(){
         load();
     }, [])
 
+    const handleDrag = (tick) =>{
+        setDraggetTicket(tick);
+        console.log(tick, " En drag");
+    }
+
+    const handleDrop = (group) =>{
+        console.log("ticket ", draggedTicket.external_id, " vers ", group.status.id_status);
+        const fil = group.tickets.find((t) => t.ticket.id === draggedTicket.id);
+        if(fil){
+            console.log("Ce ticket est deja : ", group.status.french_name);
+        }
+    }
+
     return (
         <div>
             <h1>Liste des tickets</h1>
-            <div>
+            <div >
                 {
                     groups.map((group) => (
-                        <div key={`${group.status.id_status}`}>
+                        <div 
+                            key={`${group.status.id_status}`} 
+                            style={{backgroundColor: group.status.color}} 
+                            onDragOver={(e) => e.preventDefault()}
+                            onDrop={() => handleDrop(group)}
+                        >
                             <h2>{group.status.french_name}</h2>
                             {
                                 group.tickets.map((tic) => (
-                                    <div key={`${tic.ticket.id}-${tic.ticket.external_id}`}>
+                                    <div
+                                        key={`${tic.ticket.id}-${tic.ticket.external_id}`} 
+                                        style={{backgroundColor: "#ebe3da"}} 
+                                        draggable
+                                        onDragStart={() => handleDrag(tic.ticket)}
+                                    >
                                         <p>Ticket Ref: {tic.ticket.external_id}</p>
                                     </div>
                                 ))
