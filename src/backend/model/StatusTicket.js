@@ -23,20 +23,17 @@ class StatusTicket {
        await post(`/status/${id}`, data);
     }
 
-    static async getByIdByEnglishName(englishName){
-        const status = await StatusTicket.getAll();
+    static getByIdByEnglishName(status, englishName){
         const filtered = status.filter((status) => status.english_name === englishName);
         return filtered.length > 0 ? filtered [0] : null;
     }
 
-    static async getByIdByFrenchName(frenchName){
-        const status = await StatusTicket.getAll();
+    static getByIdByFrenchName(status, frenchName){
         const filtered = status.filter((status) => status.french_name === frenchName);
         return filtered.length > 0 ? filtered [0] : null;
     }
 
-     static async getByIdByMalagasyName(MalagasyName){
-        const status = await StatusTicket.getAll();
+     static getByIdByMalagasyName(status, MalagasyName){
         const filtered = status.filter((status) => status.malagasy_name === MalagasyName);
         return filtered.length > 0 ? filtered [0] : null;
     }
