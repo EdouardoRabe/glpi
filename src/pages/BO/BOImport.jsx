@@ -48,7 +48,6 @@ export default function BOImport() {
                     <input type="checkbox" checked={importImage} onChange={(e) => {setImportImage(e.target.checked)}}/>
                     <input id="file4" type="file" onChange={(event) => setFile4(event.target.files?.[0] ?? null)} accept=".zip" />
                 </div>
-
                 <div className="bo-import-actions">
                     <button onClick={handleFileUpload}>Upload Files</button>
                 </div>
