@@ -64,7 +64,7 @@ export const importFile2 = async (file) => {
             const dateStr = toGLPIDateTime(date);
             
             const statAll = await StatusTicket.getAll();
-            const stat = StatusTicket.getByIdByFrenchName(statAll, row.status);
+            const stat = StatusTicket.getByFrenchName(statAll, row.status);
             const type     = getEnumIdByName(TICKET_TYPE,     row.type,     1);
             const status   =  stat ? stat.id_status : 1;
             const priority = getEnumIdByName(TICKET_PRIORITY, row.priority, 3);

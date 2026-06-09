@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import Ticket from "../../backend/model/Ticket";
-import { TICKET_PRIORITY, TICKET_TYPE, TICKET_STATUS, getEnumNameById } from "../../backend/utils/utils";
+import { TICKET_PRIORITY, TICKET_TYPE,  getEnumNameById } from "../../backend/utils/utils";
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
 import "../../css/pages/BO/BOTicketList.css";
 import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
 import { getNbAssetInTicket,  nbTicketsWithAsset } from "../../backend/services/ticket";
+import StatusTicket from "../../backend/model/StatusTicket";
 
 export default function BOTicketList() {
     const INITIAL_FILTERS = {
@@ -19,11 +20,14 @@ export default function BOTicketList() {
     const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [filters, setFilters] = useState(INITIAL_FILTERS);
+    const [statusTicket, setStatusTicket] = useState([]);
 
     useEffect(() => {
         const loadTickets = async () => {
             const tic = await Ticket.getAllComplete();
+            const status = await StatusTicket.getAll();
             setTickets(tic);
+            setStatusTicket(status);
         };
         loadTickets();
     }, []);
@@ -97,9 +101,9 @@ export default function BOTicketList() {
                         <label htmlFor="filter-status">Status</label>
                         <select id="filter-status" value={filters.stateId} onChange={(e) => handleFilterChange("stateId", e.target.value)}>
                             <option value="0">All Status</option>
-                            {TICKET_STATUS.map((state) => (
-                                <option key={state.id} value={state.id}>
-                                    {state.name}
+                            {statusTicket.map((state) => (
+                                <option key={state.id_status} value={state.id_status}>
+                                    {state.french_name}
                                 </option>
                             ))}
                         </select>
@@ -129,26 +133,27 @@ export default function BOTicketList() {
             </div>
 
             <div className="bo-ticket-items">
-                {filteredTickets.map(({ ticket, assets, costs, users }) => (
-                    <div key={ticket.id} className="bo-ticket-item">
-                        <div className="bo-ticket-item-header">
-                            <div className="bo-ticket-item-info">
-                                <div className="bo-ticket-item-id">#{ticket.external_id} - {ticket.name} - id {ticket.id}</div>
-                                <div className="bo-ticket-item-meta">
-                                    <span>Type: {getEnumNameById(TICKET_TYPE, ticket.type) || "-"}</span>
-                                    <span> | Priority: {getEnumNameById(TICKET_PRIORITY, ticket.priority) || "-"}</span>
-                                    <span> | Status: {getEnumNameById(TICKET_STATUS, ticket.status?.id) || "-"}</span>
-                                    <span> | Date: {formatToYYYYMMDD_HHmm(ticket.date)}</span>
+                {filteredTickets.map(({ ticket, assets, costs, users }) => {
+                    return (
+                        <div key={ticket.id} className="bo-ticket-item">
+                            <div className="bo-ticket-item-header">
+                                <div className="bo-ticket-item-info">
+                                    <div className="bo-ticket-item-id">#{ticket.external_id} - {ticket.name} - id {ticket.id}</div>
+                                    <div className="bo-ticket-item-meta">
+                                        <span>Type: {getEnumNameById(TICKET_TYPE, ticket.type) || "-"}</span>
+                                        <span> | Priority: {getEnumNameById(TICKET_PRIORITY, ticket.priority) || "-"}</span>
+                                        <span> | Status: { StatusTicket.getByIdStatus(statusTicket, ticket.status?.id)?.french_name || "-"}</span>
+                                        <span> | Date: {formatToYYYYMMDD_HHmm(ticket.date)}</span>
+                                    </div>
+                                </div>
+                                <div className="bo-ticket-item-actions">
+                                    <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs, users })}>
+                                        View Details
+                                    </button>
                                 </div>
                             </div>
-                            <div className="bo-ticket-item-actions">
-                                <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs, users })}>
-                                    View Details
-                                </button>
-                            </div>
                         </div>
-                    </div>
-                ))}
+                )})}
             </div>
 
             {selectedTicket && (
