@@ -12,8 +12,9 @@
 3. [Transférer des données entre éléments](#3-transférer-des-données-entre-éléments)
 4. [Drag entre deux listes](#4-drag-entre-deux-listes)
 5. [Kanban complet — tickets GLPI](#5-kanban-complet--tickets-glpi)
-6. [Feedback visuel](#6-feedback-visuel)
-7. [Pièges courants](#7-pièges-courants)
+6. [Rendre draggable SOUS CONDITION](#6-rendre-draggable-sous-condition)
+7. [Feedback visuel](#7-feedback-visuel)
+8. [Pièges courants](#8-pièges-courants)
 
 ---
 
@@ -552,7 +553,135 @@ export default function KanbanTickets() {
 
 ---
 
-## 6. Feedback visuel
+## 6. Rendre draggable SOUS CONDITION
+
+L'attribut `draggable` n'est pas un simple drapeau : il accepte un **booléen**. Tu peux donc écrire `draggable={uneCondition}` pour décider, au cas par cas, si un élément peut être déplacé ou non.
+
+```jsx
+<div draggable={true}>   {/* déplaçable */}
+<div draggable={false}>  {/* PAS déplaçable */}
+<div draggable={canDrag}>{/* déplaçable seulement si canDrag est true */}
+```
+
+> ⚠️ Mets bien des **accolades** : `draggable={false}` (booléen JS). Écrire `draggable="false"` (chaîne de texte) ne marche PAS — une chaîne non vide est considérée comme `true`.
+
+### Exemple 1 — un interrupteur active/désactive le drag
+
+```jsx
+import { useState } from "react";
+
+export default function DragVerrouillable() {
+    const [canDrag, setCanDrag] = useState(true);
+
+    return (
+        <div>
+            <label style={{ display: "flex", gap: 8, marginBottom: 12, color: "#f5f0eb" }}>
+                <input
+                    type="checkbox"
+                    checked={canDrag}
+                    onChange={(e) => setCanDrag(e.target.checked)}
+                />
+                Autoriser le déplacement
+            </label>
+
+            <div
+                draggable={canDrag}                       // ← condition ici
+                onDragStart={() => console.log("drag !")}
+                style={{
+                    padding: 12,
+                    background: "#1e1e1e",
+                    border: "1px solid #2a2a2a",
+                    borderRadius: 4,
+                    cursor: canDrag ? "grab" : "not-allowed",  // ← curseur adapté
+                    opacity: canDrag ? 1 : 0.5,                // ← grisé si verrouillé
+                }}
+            >
+                {canDrag ? "Glisse-moi !" : "🔒 Verrouillé"}
+            </div>
+        </div>
+    );
+}
+```
+
+### Exemple 2 — condition basée sur la donnée (cas GLPI réel)
+
+Cas typique : un **ticket clos** ou **résolu** ne doit plus être déplacé dans le Kanban. On calcule la condition à partir du statut du ticket.
+
+```jsx
+// Les statuts qu'on a le droit de déplacer
+const STATUTS_DEPLACABLES = [1, 2, 4];   // Nouveau, En cours, En attente
+
+function TicketCard({ ticket, onDragStart }) {
+    // Ce ticket est-il déplaçable ?
+    const canDrag = STATUTS_DEPLACABLES.includes(ticket.status);
+
+    return (
+        <div
+            draggable={canDrag}                          // ← dépend du statut
+            onDragStart={() => {
+                if (!canDrag) return;                    // ← sécurité (voir ⚠️ plus bas)
+                onDragStart(ticket);
+            }}
+            style={{
+                padding: "10px 12px",
+                background: "#111111",
+                border: "1px solid #2a2a2a",
+                borderRadius: 4,
+                cursor: canDrag ? "grab" : "not-allowed",
+                opacity: canDrag ? 1 : 0.6,
+            }}
+            title={canDrag ? "" : "Ce ticket est figé (clos/résolu)"}
+        >
+            #{ticket.id} — {ticket.name}
+            {!canDrag && <span style={{ marginLeft: 6 }}>🔒</span>}
+        </div>
+    );
+}
+```
+
+### Exemple 3 — condition basée sur les droits (rôle utilisateur)
+
+```jsx
+function TicketCard({ ticket, currentUser, onDragStart }) {
+    // Seuls les techniciens et admins peuvent déplacer
+    const canDrag = currentUser.role === "technicien" || currentUser.role === "admin";
+
+    return (
+        <div
+            draggable={canDrag}
+            onDragStart={() => canDrag && onDragStart(ticket)}
+            style={{ cursor: canDrag ? "grab" : "default", opacity: canDrag ? 1 : 0.7 }}
+        >
+            #{ticket.id} — {ticket.name}
+        </div>
+    );
+}
+```
+
+### ⚠️ Important : garde aussi `onDragStart` ET le `onDrop`
+
+`draggable={false}` empêche de **commencer** le drag dans la plupart des navigateurs. Mais par sécurité, ajoute toujours une garde :
+
+```jsx
+// 1. Au départ : ne rien sauvegarder si pas autorisé
+onDragStart={() => {
+    if (!canDrag) return;       // ← ceinture de sécurité
+    setDraggedTicket(ticket);
+}}
+
+// 2. À l'arrivée : revérifier côté zone de drop si besoin
+const handleDrop = (targetGroup) => {
+    if (!draggedTicket) return;
+    if (!STATUTS_DEPLACABLES.includes(draggedTicket.status)) return;  // ← double-check
+    // ... déplacer
+};
+```
+
+> 💡 **Règle :** `draggable={condition}` gère le **visuel et le comportement navigateur**, mais la **vraie protection** se fait dans `onDragStart` / `onDrop` / l'API. Ne fais jamais confiance au seul attribut `draggable` pour une règle métier importante.
+
+---
+
+## 7. Feedback visuel
 
 ### Ce que tu dois toujours faire
 
@@ -582,7 +711,7 @@ userSelect: "none",
 
 ---
 
-## 7. Pièges courants
+## 8. Pièges courants
 
 ### ❌ Oublier `e.preventDefault()` dans `onDragOver`
 
@@ -607,6 +736,19 @@ userSelect: "none",
 
 // ✅
 <div draggable onDragStart={handleDragStart}>
+```
+
+---
+
+### ❌ Mettre `draggable` en chaîne au lieu d'un booléen
+
+```jsx
+// ❌ "false" est une CHAÎNE non vide → considérée comme true → reste draggable !
+<div draggable="false">
+
+// ✅ Utiliser un vrai booléen avec des accolades
+<div draggable={false}>
+<div draggable={canDrag}>
 ```
 
 ---
