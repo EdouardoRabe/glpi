@@ -36,26 +36,52 @@ export default function FOTicketList(){
         setDragOverGroup(null);
     }
 
-    const handleDrop = async (group) => {
+    const moveTicketBetweenGroups = (currentGroups, ticketId, targetStatusId) => {
+        const sourceGroupIndex = currentGroups.findIndex(g =>
+            g.tickets.some(t => t.ticket.id === ticketId)
+        );
+        if (sourceGroupIndex === -1) return currentGroups;
+        const targetGroupIndex = currentGroups.findIndex(g => g.status.id_status === targetStatusId);
+        if (targetGroupIndex === -1) return currentGroups;
+        const ticketToMove = currentGroups[sourceGroupIndex].tickets.find(t => t.ticket.id === ticketId);
+        if (!ticketToMove) return currentGroups;
+        const newGroups = [...currentGroups];
+        newGroups[sourceGroupIndex] = {
+            ...newGroups[sourceGroupIndex],
+            tickets: newGroups[sourceGroupIndex].tickets.filter(t => t.ticket.id !== ticketId)
+        };
+        newGroups[targetGroupIndex] = {
+            ...newGroups[targetGroupIndex],
+            tickets: [...newGroups[targetGroupIndex].tickets, ticketToMove]
+        };
+        return newGroups;
+    }
+
+    const handleDrop = async (targetGroup) => {
         setDragOverGroup(null);
 
         if (!draggedTicket) return;
 
-        const fil = group.tickets.find((t) => t.ticket.id === draggedTicket.id);
-        if(fil){
-            console.log("Ce ticket est déjà dans:", group.status.french_name);
+        const alreadyInTarget = targetGroup.tickets.find((t) => t.ticket.id === draggedTicket.id);
+        if(alreadyInTarget){
+            console.log("Ce ticket est déjà dans:", targetGroup.status.french_name);
             return;
         }
 
-        const data = { status: { id: group.status.id_status } };
+        setGroups(prevGroups =>
+            moveTicketBetweenGroups(prevGroups, draggedTicket.id, targetGroup.status.id_status)
+        );
+
         try {
+            const data = { status: { id: targetGroup.status.id_status } };
             await draggedTicket.update(data);
+        } catch (error) {
+            console.error('Erreur lors du déplacement du ticket:', error);
+
             const tic = await Ticket.getAllComplete();
             const stat = await StatusTicket.getAll();
             const grouped = ticketCompletGroupByStatus(tic, stat);
             setGroups(grouped);
-        } catch (error) {
-            console.error('Erreur lors du déplacement du ticket:', error);
         }
 
         setDraggedTicket(null);
