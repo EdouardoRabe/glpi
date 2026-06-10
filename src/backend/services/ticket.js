@@ -72,17 +72,17 @@ export function getCostTicketAssetIsAll(ticketsCompletes, type){
     return getCostTotal(filtered);
 }
 
-export function nbCostTicketAssets(ticketsCompletes) {
+export function getCostTicketsAssets(ticketsCompletes) {
     return ITEM_TYPES.map((type) => {
-        const count =  getCostTicketAsset(ticketsCompletes, type);
-        return { label: type, count };
+        const cost =  getCostTicketAsset(ticketsCompletes, type);
+        return { label: type, cost };
     });
 }
 
-export function nbCostTicketAssetsIsAll(ticketsCompletes) {
+export function getCostTickestAssetsIsAll(ticketsCompletes) {
     return ITEM_TYPES.map((type) => {
-        const count =  getCostTicketAssetIsAll(ticketsCompletes, type);
-        return { label: type, count };
+        const cost =  getCostTicketAssetIsAll(ticketsCompletes, type);
+        return { label: type, cost };
     });
 }
 
