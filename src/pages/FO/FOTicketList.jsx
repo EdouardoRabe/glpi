@@ -80,14 +80,16 @@ export default function FOTicketList(){
             return;
         }
 
-        const tab = [draggedTicket.status.id, targetGroup.status.id_status];
+        //Juste au cas ou
 
-        if(matchMove(tab)){
-            openPopUp();
-            setTarget(targetGroup);
-            console.log("move pop up detecte: ", draggedTicket.status.id, " vers ", targetGroup.status.id_status);
-            return;
-        }
+        // const tab = [draggedTicket.status.id, targetGroup.status.id_status];
+
+        // if(matchMove(tab)){
+        //     openPopUp();
+        //     setTarget(targetGroup);
+        //     console.log("move pop up detecte: ", draggedTicket.status.id, " vers ", targetGroup.status.id_status);
+        //     return;
+        // }
 
 
         try {
