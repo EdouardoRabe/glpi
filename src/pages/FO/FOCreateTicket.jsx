@@ -6,6 +6,7 @@ import { getNowDate, getNowTime } from "../../backend/utils/dateUtils";
 import { useState, useEffect} from "react";
 import "../../css/pages/FO/FOCreateTicket.css";
 import StatusTicket from "../../backend/model/StatusTicket";
+import { useNavigate } from "react-router-dom";
 
 export default function FOCreateTicket() {
     const [refTicket, setRefTicket] = useState("");
@@ -25,6 +26,7 @@ export default function FOCreateTicket() {
     const [users, setUsers] = useState([]);
     const [costs, setCosts] = useState([]);
     const [statusTicket, setStatusTicket] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() =>{
         const loadElements = async () =>{
@@ -64,6 +66,7 @@ export default function FOCreateTicket() {
                 date: dateStr,
                 external_id: refTicket,
             };
+
             const newTicket = new Ticket(payload);
             await newTicket.saveWithAll(selectedUsers, selectedObjects, costs);
             setMessage({ type: "success", text: "Ticket created successfully!" });
@@ -79,6 +82,8 @@ export default function FOCreateTicket() {
             setAssignedIds([]);
             setObserversIds([]);
             setCosts([]);
+
+            navigate("/frontOffice/list-ticket");
 
             setTimeout(() => setMessage(null), 3000);
         } catch (error) {
@@ -226,6 +231,7 @@ export default function FOCreateTicket() {
                     <div>
                         {costs.map((cost, index) => (
                             <div key={index} className="fo-create-ticket-cost-row">
+                                <label htmlFor="">Duration</label>
                                 <input
                                     type="number"
                                     placeholder="Duration (s)"
@@ -236,6 +242,7 @@ export default function FOCreateTicket() {
                                         setCosts(updatedCosts);
                                     }}
                                 />
+                                <label htmlFor="">Time cost</label>
                                 <input
                                     type="number"
                                     placeholder="Time Cost"
@@ -246,6 +253,7 @@ export default function FOCreateTicket() {
                                         setCosts(updatedCosts);
                                     }}
                                 />
+                                <label htmlFor="">Cost fixed</label>
                                 <input
                                     type="number"
                                     placeholder="Fixed Cost"

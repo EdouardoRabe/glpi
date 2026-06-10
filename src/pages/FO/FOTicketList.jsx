@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState} from "react"
 import Ticket from "../../backend/model/Ticket";
 import StatusTicket from "../../backend/model/StatusTicket";
 import { getNbAssetInTicket, ticketCompletGroupByStatus} from "../../backend/services/ticket";
 import { getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
+import { useNavigate } from "react-router-dom";
 
 export default function FOTicketList(){
     const [groups, setGroups] = useState([]);
     const [draggedTicket, setDraggetTicket] = useState(null);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         const load = async () =>{
@@ -42,6 +44,9 @@ export default function FOTicketList(){
 
     const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
     
+    const createTicket = () =>{
+        navigate("/frontOffice/create-ticket");
+    }
 
     return (
         <div>
@@ -63,15 +68,20 @@ export default function FOTicketList(){
                                         style={{backgroundColor: "#ebe3da"}} 
                                         draggable
                                         onDragStart={() => handleDrag(tic.ticket)}
+                                        onClick={() => openTicketDetails(tic)}
                                     >
                                         <p>Ticket Ref: {tic.ticket.external_id}</p>
-                                        <div className="bo-ticket-item-actions">
-                                            <button type="button" onClick={() => openTicketDetails(tic)}>
-                                                View Details
-                                            </button>
-                                        </div>
                                     </div>
                                 ))
+                            }
+                            {
+                                group.status.id_status === 1 && (
+                                    <div className="bo-ticket-item-actions">
+                                        <button type="button" onClick={() => createTicket()}>
+                                            Ajouter
+                                        </button>
+                                    </div>
+                                )
                             }
                         </div>
                     ))
