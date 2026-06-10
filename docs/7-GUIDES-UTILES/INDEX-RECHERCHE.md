@@ -194,6 +194,16 @@
 
 ---
 
+### "Je veux un champ description / un éditeur de texte riche (gras, listes) / TinyMCE"
+→ [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
+- Textarea simple (compteur, auto-resize)
+- React Quill (install + usage, compatible React 19)
+- TinyMCE self-hosted (sans clé API)
+- Afficher le HTML sauvegardé (dangerouslySetInnerHTML + DOMPurify)
+- Intégration GLPI (ticket.content = HTML)
+
+---
+
 ## 🆘 JE SAIS PAS QUOI FAIRE
 
 **Choisissez:**
@@ -253,8 +263,11 @@
 **R** - Radio · Reduce · Re-render
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#radio) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#reduce) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md)
 
-**D** - Diaporama · Slider
-→ [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
+**D** - Diaporama · Slider · Description
+→ [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md) · [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
+
+**E** - Éditeur · Editor · WYSIWYG
+→ [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
 
 **G** - Grille · Grid · Galerie · Gallery
 → [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md) · [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
@@ -265,8 +278,11 @@
 **S** - Select · setState · spread · Sort · Set · Skeleton · Squelette · Statut · Status
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#select) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#sort) · [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md#partie-3--les-set) · [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md) · [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md)
 
-**T** - Tooltip · Infobulle
-→ [INFOBULLES-TOOLTIPS.md](./INFOBULLES-TOOLTIPS.md)
+**T** - Tooltip · Infobulle · TinyMCE · Textarea · Texte riche
+→ [INFOBULLES-TOOLTIPS.md](./INFOBULLES-TOOLTIPS.md) · [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
+
+**Q** - Quill · react-quill
+→ [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
 
 **V** - Vide · Empty state
 → [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md)
