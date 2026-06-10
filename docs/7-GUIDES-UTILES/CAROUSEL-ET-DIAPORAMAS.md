@@ -589,6 +589,213 @@ export default function Gallery({ images }) {
 
 ---
 
+## 🎯 Cas réels : brancher une vraie liste (tickets, assets)
+
+> **LA question :** « Je dois créer mes `<div>` en boucle AVANT de passer au carousel ? »
+> **Réponse : OUI.** Tu transformes ta liste de données en liste de JSX avec `.map()`, puis tu passes ce résultat au carousel. Voici les 2 façons de le faire.
+
+### Façon 1 — `.map()` directement dans le JSX (la plus simple)
+
+Tu fais le `.map()` au moment où tu passes la prop. C'est rapide et ça marche tout de suite.
+
+```javascript
+import { useEffect, useState } from "react";
+import Ticket from "../../backend/model/Ticket";
+import CardSlider from "./CardSlider";
+import "./CardSlider.css";
+
+export default function TicketsCarousel() {
+    const [tickets, setTickets] = useState([]);
+
+    useEffect(() => {
+        const load = async () => {
+            const data = await Ticket.getAll();
+            setTickets(data);
+        };
+        load();
+    }, []);
+
+    return (
+        <CardSlider
+            visibleCount={3}
+            cards={tickets.map((ticket) => (    // ← la boucle est ICI
+                <div key={ticket.id} className="ticket-card">
+                    <h4>#{ticket.external_id}</h4>
+                    <p>{ticket.name}</p>
+                    <span>Priorité : {ticket.priority}</span>
+                </div>
+            ))}
+        />
+    );
+}
+```
+
+> 💡 Le `cards={tickets.map(...)}` produit un **tableau de `<div>`**. C'est exactement ce que le carousel attend. Le `key={ticket.id}` reste obligatoire sur chaque div.
+
+---
+
+### Façon 2 — une variable avant le `return` (plus lisible)
+
+Quand le contenu de la carte devient gros, sors le `.map()` dans une variable. Le `return` reste propre.
+
+```javascript
+export default function TicketsCarousel() {
+    const [tickets, setTickets] = useState([]);
+
+    useEffect(() => {
+        const load = async () => setTickets(await Ticket.getAll());
+        load();
+    }, []);
+
+    // 1. On construit les cartes AVANT le return
+    const ticketCards = tickets.map((ticket) => (
+        <div key={ticket.id} className="ticket-card">
+            <h4>#{ticket.external_id}</h4>
+            <p>{ticket.name}</p>
+            <span>Priorité : {ticket.priority}</span>
+        </div>
+    ));
+
+    // 2. On passe la variable au carousel
+    return <CardSlider visibleCount={3} cards={ticketCards} />;
+}
+```
+
+> ✅ **Façon 1 vs Façon 2 :** elles font exactement la même chose. Utilise la **Façon 2** dès que la carte fait plus de 3-4 lignes — c'est plus lisible.
+
+---
+
+### Façon 3 — le carousel reçoit les données brutes (le plus réutilisable)
+
+Au lieu de passer du JSX, tu passes **les tickets directement** et le carousel s'occupe de l'affichage via une fonction `renderItem`. C'est le pattern le plus propre pour réutiliser partout.
+
+#### CardSliderData.jsx (version améliorée)
+```javascript
+import { useState } from "react";
+
+export default function CardSliderData({ items, renderItem, visibleCount = 3 }) {
+    const [start, setStart] = useState(0);
+    const maxStart = Math.max(0, items.length - visibleCount);
+
+    const prev = () => setStart((s) => Math.max(0, s - 1));
+    const next = () => setStart((s) => Math.min(maxStart, s + 1));
+
+    return (
+        <div className="card-slider">
+            <button className="carousel-arrow left" onClick={prev} disabled={start === 0}>◀</button>
+
+            <div className="card-slider-viewport">
+                <div
+                    className="card-slider-track"
+                    style={{ transform: `translateX(-${start * (100 / visibleCount)}%)` }}
+                >
+                    {items.map((item, index) => (
+                        <div
+                            key={item.id ?? index}
+                            className="card-slider-item"
+                            style={{ minWidth: `${100 / visibleCount}%` }}
+                        >
+                            {renderItem(item)}   {/* ← le carousel appelle ta fonction */}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <button className="carousel-arrow right" onClick={next} disabled={start === maxStart}>▶</button>
+        </div>
+    );
+}
+```
+
+#### Usage avec des tickets
+```javascript
+<CardSliderData
+    items={tickets}              // ← données brutes, PAS de .map() ici
+    visibleCount={3}
+    renderItem={(ticket) => (    // ← tu décris UNE carte, le carousel boucle
+        <div className="ticket-card">
+            <h4>#{ticket.external_id}</h4>
+            <p>{ticket.name}</p>
+        </div>
+    )}
+/>
+```
+
+#### Le même carousel réutilisé avec des assets
+```javascript
+<CardSliderData
+    items={assets}
+    visibleCount={4}
+    renderItem={(asset) => (
+        <div className="asset-card">
+            <h4>{asset.name}</h4>
+            <p>{asset.itemType}</p>
+        </div>
+    )}
+/>
+```
+
+> ✅ **Avantage de la Façon 3 :** le même carousel marche pour tickets, assets, users... Tu changes juste `items` et `renderItem`. C'est le `key` géré à l'intérieur (`item.id ?? index`), donc tu n'as plus à y penser.
+
+---
+
+### CSS de la carte (à ajouter)
+```css
+.ticket-card {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.ticket-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #c0392b;
+    font-size: 14px;
+}
+
+.ticket-card p {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 13px;
+}
+
+.ticket-card span {
+    font-size: 12px;
+    color: #999;
+}
+```
+
+---
+
+### ⚠️ Les 3 erreurs classiques quand tu branches une vraie liste
+
+```javascript
+// ❌ 1. Oublier le key → warning React "Each child should have a unique key"
+tickets.map((t) => <div>{t.name}</div>)
+// ✅
+tickets.map((t) => <div key={t.id}>{t.name}</div>)
+
+
+// ❌ 2. Passer la liste vide pendant le chargement → carousel cassé/vide
+return <CardSlider cards={tickets.map(...)} />   // tickets = [] au début
+// ✅ Attendre les données
+if (tickets.length === 0) return <p>Chargement...</p>;
+return <CardSlider cards={tickets.map(...)} />;
+
+
+// ❌ 3. Appeler renderItem au lieu de le passer (Façon 3)
+renderItem={renderTicket(ticket)}   // ← exécute tout de suite = erreur
+// ✅ Passer la fonction, le carousel l'appellera
+renderItem={(ticket) => renderTicket(ticket)}
+// ou simplement
+renderItem={renderTicket}
+```
+
+---
+
 ## Quel composant choisir ?
 
 | Tu veux... | Utilise | JavaScript ? |

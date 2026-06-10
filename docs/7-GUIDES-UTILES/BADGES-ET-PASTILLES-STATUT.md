@@ -268,6 +268,84 @@ export default function CountBadge({ count }) {
 
 ---
 
+## 🎯 Cas réel : badges dans une liste de tickets
+
+> **La question :** « Comment j'utilise ces badges quand j'ai une vraie liste ? »
+> **Réponse :** tu boucles sur tes tickets avec `.map()` et tu mets le badge **à l'intérieur** de chaque ligne. Le badge reçoit la valeur du ticket courant.
+
+### TicketsListWithBadges.jsx
+```javascript
+import { useEffect, useState } from "react";
+import Ticket from "../../backend/model/Ticket";
+import TicketStatusBadge from "./TicketStatusBadge";
+import PriorityBadge from "./PriorityBadge";
+import "./TicketsListWithBadges.css";
+
+export default function TicketsListWithBadges() {
+    const [tickets, setTickets] = useState([]);
+
+    useEffect(() => {
+        const load = async () => setTickets(await Ticket.getAll());
+        load();
+    }, []);
+
+    return (
+        <table className="tickets-table">
+            <thead>
+                <tr>
+                    <th>Réf</th>
+                    <th>Titre</th>
+                    <th>Statut</th>
+                    <th>Priorité</th>
+                </tr>
+            </thead>
+            <tbody>
+                {tickets.map((ticket) => (        // ← on boucle sur les tickets
+                    <tr key={ticket.id}>
+                        <td>#{ticket.external_id}</td>
+                        <td>{ticket.name}</td>
+                        <td>
+                            {/* le badge reçoit le statut DE CE ticket */}
+                            <TicketStatusBadge statusId={ticket.status?.id} />
+                        </td>
+                        <td>
+                            <PriorityBadge priority={ticket.priority} />
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
+```
+
+### TicketsListWithBadges.css
+```css
+.tickets-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tickets-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background-color: #000;
+    color: white;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.tickets-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+```
+
+> 💡 Le badge n'a **pas besoin de connaître la liste**. Il reçoit juste une valeur (`statusId`, `priority`) et affiche la bonne couleur. C'est la boucle `.map()` autour qui le répète pour chaque ticket.
+
+---
+
 ## Résumé
 
 | Composant | Quand l'utiliser |
