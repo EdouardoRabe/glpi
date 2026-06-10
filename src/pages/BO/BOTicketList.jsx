@@ -176,16 +176,11 @@ export default function BOTicketList() {
                                         View Details
                                     </button>
                                 </div>
-                            </div>
-                            <div className="bo-ticket-item-actions">
-                                <button type="button" onClick={() => openTicketDetails({ ticket, assets, costs, users })}>
-                                    View Details
-                                </button>
-                            </div>
-                             <div className="bo-ticket-item-actions-red">
-                                <button type="button" onClick={() => toCorbeille(ticket.id)}>
-                                    Corbeille
-                                </button>
+                                <div className="bo-ticket-item-actions-red">
+                                    <button type="button" onClick={() => toCorbeille(ticket.id)}>
+                                        Corbeille
+                                    </button>
+                                </div>
                             </div>
                         </div>
                 )})}
