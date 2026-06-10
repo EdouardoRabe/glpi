@@ -183,6 +183,17 @@
 
 ---
 
+### "Je veux faire défiler des images / des cartes (carousel, slider, galerie)"
+→ [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
+- Carousel basique (1 slide à la fois, flèches)
+- Carousel avec indicateurs (dots)
+- Carousel automatique (auto-play)
+- Slider de cartes (plusieurs visibles)
+- Scroll horizontal CSS pur (scroll-snap)
+- Galerie d'images (grande + miniatures)
+
+---
+
 ## 🆘 JE SAIS PAS QUOI FAIRE
 
 **Choisissez:**
@@ -209,8 +220,8 @@
 **B** - Button · bind · Badge · Pastille
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#button) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#event) · [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md)
 
-**C** - Checkbox · Closure · Controlled · Carte · Card · Chargement
-→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#checkbox) · [GUIDE-CLOSURES-STALE-STATE.md](./GUIDE-CLOSURES-STALE-STATE.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#controlled) · [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md) · [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md)
+**C** - Checkbox · Closure · Controlled · Carte · Card · Chargement · Carousel · Carrousel
+→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#checkbox) · [GUIDE-CLOSURES-STALE-STATE.md](./GUIDE-CLOSURES-STALE-STATE.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#controlled) · [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md) · [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md) · [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
 
 **D** - Destructuring · Delete
 → [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#destructuring) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#filter)
@@ -242,8 +253,11 @@
 **R** - Radio · Reduce · Re-render
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#radio) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#reduce) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md)
 
-**G** - Grille · Grid
-→ [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md)
+**D** - Diaporama · Slider
+→ [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
+
+**G** - Grille · Grid · Galerie · Gallery
+→ [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md) · [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
 
 **P** - Pastille · Priorité · Pagination
 → [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md) · [PAGINATION.md](./PAGINATION.md)
