@@ -1,5 +1,7 @@
 # Guide SQLite3 — Utilisation concrète
 
+> 📘 **Pour savoir QUELLE fonction utiliser et QUAND** (`CASE WHEN`, `COALESCE`, agrégats, pivot, window functions, CTE...), voir le guide complémentaire : [sqlite-fonctions-quand-les-utiliser.md](sqlite-fonctions-quand-les-utiliser.md).
+
 ## Ouvrir une base de données
 
 ```bash
