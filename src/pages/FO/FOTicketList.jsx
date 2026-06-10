@@ -12,6 +12,18 @@ export default function FOTicketList(){
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [dragOverGroup, setDragOverGroup] = useState(null);
     const navigate = useNavigate();
+    const [showPopUp, setShowPopUp] = useState(false);
+    const [description, setDescription] = useState(null);
+    const [target, setTarget] = useState(null);
+    const move = [
+        {current: 6, target: 2},
+        {current : 6, target: 1}
+    ];
+
+    const matchMove =(tabId) =>{
+        return move.some((mv) => (tabId[0]===mv.current && tabId[1]===mv.target));
+    }
+    
 
     useEffect(()=>{
         const load = async () =>{
@@ -68,6 +80,16 @@ export default function FOTicketList(){
             return;
         }
 
+        const tab = [draggedTicket.status.id, targetGroup.status.id_status];
+
+        if(matchMove(tab)){
+            openPopUp();
+            setTarget(targetGroup);
+            console.log("move pop up detecte: ", draggedTicket.status.id, " vers ", targetGroup.status.id_status);
+            return;
+        }
+
+
         try {
             const data = { status: { id: targetGroup.status.id_status } };
             await draggedTicket.update(data);
@@ -87,8 +109,48 @@ export default function FOTicketList(){
         setDraggedTicket(null);
     }
 
+    const continuer = async () =>{
+        console.log("[CONTINUER] ", draggedTicket.status.id, " vers ", target.status.id_status, " description", description);
+         try {
+
+            const payloadITIL = {
+                "input": {
+                    "itemtype": "Ticket",
+                    "items_id": draggedTicket.id,
+                    "content": description,
+                    "requesttypes_id": 1
+                }
+            }
+
+            await StatusTicket.createITIL(draggedTicket.id, payloadITIL);
+            console.log("description ajoute");
+
+            const data = { status: { id: target.status.id_status } };
+            await draggedTicket.update(data);
+            
+            setGroups(prevGroups =>
+                moveTicketBetweenGroups(prevGroups, draggedTicket.id, target.status.id_status)
+            );
+
+            
+        } catch (error) {
+            console.error('Erreur lors du déplacement du ticket:', error);
+
+            const tic = await Ticket.getAllComplete();
+            const stat = await StatusTicket.getAll();
+            const grouped = ticketCompletGroupByStatus(tic, stat);
+            setGroups(grouped);
+        }
+        setDraggedTicket(null);
+        setTarget(null);
+        setShowPopUp(null);
+    }
+
     const openTicketDetails = (complete) => setSelectedTicket(complete ?? null);
     const closeTicketDetails = () => setSelectedTicket(null);
+
+    const openPopUp = () => setShowPopUp(true);
+    const closePopUp = () => setShowPopUp(false);
 
     const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
 
@@ -217,6 +279,18 @@ export default function FOTicketList(){
                                 <p><strong>Total : {getSommeCost(selectedTicket.costs)}</strong></p>
                             </div>
                         )}
+                    </div>
+                </dialog>
+            )}
+            {showPopUp && (
+                <dialog open onCancel={closePopUp}>
+                    <div className="fo-ticket-modal">
+                        <div className="fo-ticket-modal-header">
+                            <button type="button" onClick={closePopUp}>Fermer</button>
+                        </div>
+                        <label htmlFor="area">Entrer un description</label>
+                        <textarea  name="" id="area" onChange={(e) => setDescription(e.target.value)}/>
+                        <button onClick={() => continuer()}>Continuer</button>
                     </div>
                 </dialog>
             )}
