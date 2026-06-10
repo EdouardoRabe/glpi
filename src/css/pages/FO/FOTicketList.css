@@ -49,7 +49,6 @@
 }
 
 .fo-ticket-drop-zone {
-    flex: 1;
     background-color: white;
     border-radius: 0 0 8px 8px;
     padding: 1rem;
@@ -58,6 +57,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 .fo-ticket-drop-zone.drag-over {
@@ -123,7 +125,8 @@
     font-weight: 600;
     transition: background-color 0.2s;
     width: 100%;
-    margin-top: auto;
+    margin-top: 0.75rem;
+    flex-shrink: 0;
 }
 
 .fo-ticket-add-button:hover {
@@ -208,15 +211,84 @@
 }
 
 /* Dialog Styling */
-dialog {
-    border: none;
+.fo-ticket-list dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #999;
     border-radius: 8px;
     padding: 0;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 90%;
+    max-height: 90vh;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: auto;
 }
 
-dialog::backdrop {
+.fo-ticket-list dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.fo-ticket-modal {
+    border: none;
+    border-radius: 0;
+    padding: 2rem;
+    max-width: none;
+    max-height: 85vh;
+    box-shadow: none;
+    overflow-y: auto;
+}
+
+.fo-ticket-modal h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #000;
+    padding-bottom: 1rem;
+    color: #000;
+}
+
+.fo-ticket-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.fo-ticket-modal-header h2 {
+    margin: 0;
+    flex: 1;
+}
+
+.fo-ticket-modal-header button {
+    padding: 0.5rem 1rem;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.fo-ticket-modal-header button:hover {
+    background-color: #1a1a1a;
+}
+
+.fo-ticket-modal-section {
+    margin-bottom: 1.5rem;
+}
+
+.fo-ticket-modal-section h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: #000;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.5rem;
+}
+
+.fo-ticket-modal-section p {
+    margin-bottom: 0.5rem;
+    color: #333;
 }
 
 /* Responsive */
@@ -236,7 +308,8 @@ dialog::backdrop {
     }
 
     .fo-ticket-modal {
-        max-width: 90vw;
+        padding: 1.5rem;
+        max-width: 95%;
     }
 }
 
