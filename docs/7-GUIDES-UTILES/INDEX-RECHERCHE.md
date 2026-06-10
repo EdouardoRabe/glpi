@@ -56,6 +56,17 @@
 
 ---
 
+### "Je dois passer des données d'une page à une autre (useNavigate, useLocation, params)"
+→ [3.4-passer-donnees-entre-pages.md](../4-NAVIGATION/3.4-passer-donnees-entre-pages.md)
+- Param URL (`useNavigate` + `useParams`)
+- Query string (`useSearchParams`)
+- State / objet complet (`useNavigate` + `useLocation`)
+- Le piège du refresh (state perdu) + pattern robuste
+- Passer un message après action ("Ticket créé !")
+- Quelle méthode choisir
+
+---
+
 ### "Je dois faire une recherche / filtrage multicritères"
 → [multi-criteria-filter.md](../8-PATTERNS-REELS/07-RECHERCHE-FILTRES/multi-criteria-filter.md)
 - Filtrage côté client (JavaScript)
@@ -278,6 +289,12 @@
 
 **E** - Éditeur · Editor · WYSIWYG
 → [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
+
+**N** - Navigate · useNavigate · Navigation
+→ [3.4-passer-donnees-entre-pages.md](../4-NAVIGATION/3.4-passer-donnees-entre-pages.md)
+
+**L** - useLocation · Location · state
+→ [3.4-passer-donnees-entre-pages.md](../4-NAVIGATION/3.4-passer-donnees-entre-pages.md)
 
 **G** - Grille · Grid · Galerie · Gallery
 → [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md) · [CAROUSEL-ET-DIAPORAMAS.md](./CAROUSEL-ET-DIAPORAMAS.md)
