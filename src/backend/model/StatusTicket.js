@@ -1,3 +1,4 @@
+import { postV1 } from "../utils/apiV1";
 import { del, get, post, put } from "../utils/expressApi";
 
 class StatusTicket {
@@ -16,27 +17,31 @@ class StatusTicket {
     }
 
     static async create(id, data = {}){
-       await post(`/status/${id}`, data);
+       return await post(`/status/${id}`, data);
+    }
+
+    static async createITIL(id, data = {}){
+        return await postV1(`Ticket/${id}/ITILFollowup`, data);
     }
 
     static getByEnglishName(status, englishName){
-        const filtered = status.filter((status) => status?.english_name.toLowerCase() === englishName.toLowerCase());
-        return filtered.length > 0 ? filtered [0] : null;
+        const filtered = status.find((status) => status?.english_name.toLowerCase() === englishName.toLowerCase());
+        return filtered ?? null;
     }
 
     static getByFrenchName(status, frenchName){
-        const filtered = status.filter((status) => status?.french_name.toLowerCase() === frenchName.toLowerCase());
-        return filtered.length > 0 ? filtered [0] : null;
+        const filtered = status.find((status) => status?.french_name.toLowerCase() === frenchName.toLowerCase());
+        return filtered ?? null;
     }
 
     static getByMalagasyName(status, MalagasyName){
-        const filtered = status.filter((status) => status?.malagasy_name.toLowerCase() === MalagasyName.toLowerCase());
-        return filtered.length > 0 ? filtered [0] : null;
+        const filtered = status.find((status) => status?.malagasy_name.toLowerCase() === MalagasyName.toLowerCase());
+        return  filtered ?? null;
     }
 
     static getByIdStatus(status, idStatus){
-        const filtered = status.filter((status) => status?.id_status === idStatus);
-        return filtered.length > 0 ? filtered [0] : null;
+        const filtered = status.find((status) => status?.id_status === idStatus);
+        return filtered ?? null;
     }
 }
 export default StatusTicket;

@@ -194,6 +194,16 @@
 
 ---
 
+### "Je veux un loading rond qui tourne / trois points / spinner / barre de progression"
+→ [PROGRESS-BARS.md](./PROGRESS-BARS.md)
+- Barres de progression (déterminé : upload, %)
+- Spinner rond qui tourne (le classique)
+- Trois points qui rebondissent
+- Trois points qui tournent en rond (orbit)
+- Spinner + texte centré + plein écran (overlay)
+
+---
+
 ### "Je veux un champ description / un éditeur de texte riche (gras, listes) / TinyMCE"
 → [EDITEUR-TEXTE-DESCRIPTION.md](./EDITEUR-TEXTE-DESCRIPTION.md)
 - Textarea simple (compteur, auto-resize)

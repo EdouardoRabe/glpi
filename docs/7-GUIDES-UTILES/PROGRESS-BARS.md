@@ -1,4 +1,6 @@
-# Guide Barres de Progression en React
+# Guide Barres de Progression & Spinners en React
+
+> 🔎 **Mots-clés de recherche :** barre de progression, progress bar, loading, chargement, spinner, rond qui tourne, cercle, trois points, three dots, points qui tournent, loader, animation chargement, indéterminé
 
 Ce guide fournit des exemples **directement utilisables** — copie le code React + CSS ensemble, c'est prêt à marcher!
 
@@ -8,8 +10,9 @@ Ce guide fournit des exemples **directement utilisables** — copie le code Reac
 2. [Barre avec Bouton](#barre-avec-bouton)
 3. [Chargement en Boucle (Indéterminé)](#chargement-en-boucle-indéterminé)
 4. [Animations Multiples](#animations-multiples)
-5. [Barre Animée Automatique](#barre-animée-automatique)
-6. [Cas d'usage Réels](#cas-dusage-réels)
+5. [Spinners Circulaires (rond qui tourne, trois points)](#spinners-circulaires-rond-qui-tourne-trois-points)
+6. [Barre Animée Automatique](#barre-animée-automatique)
+7. [Cas d'usage Réels](#cas-dusage-réels)
 
 ---
 
@@ -327,6 +330,282 @@ export default function MultipleLoadingBars() {
     100% { left: 100%; }
 }
 ```
+
+---
+
+## Spinners Circulaires (rond qui tourne, trois points)
+
+Les **spinners** servent quand tu ne connais pas la durée (chargement de données, attente API). Pas de pourcentage, juste une animation en boucle.
+
+### 1. Rond qui tourne (le classique)
+
+#### Spinner.jsx
+```javascript
+export default function Spinner() {
+    return <div className="spinner"></div>;
+}
+```
+
+#### Spinner.css
+```css
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0e0e0;       /* l'anneau gris */
+    border-top-color: #000;          /* la partie noire qui tourne */
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+```
+
+> 💡 Le secret : un cercle avec une bordure grise, mais **un seul côté en noir** (`border-top-color`). Quand on le fait tourner, seul le bout noir bouge → effet de rotation.
+
+---
+
+### 2. Trois points qui rebondissent
+
+#### DotsLoader.jsx
+```javascript
+export default function DotsLoader() {
+    return (
+        <div className="dots-loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    );
+}
+```
+
+#### DotsLoader.css
+```css
+.dots-loader {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.dots-loader span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #000;
+    animation: dot-bounce 1.4s infinite ease-in-out both;
+}
+
+/* Décalage pour que les points rebondissent l'un après l'autre */
+.dots-loader span:nth-child(1) { animation-delay: -0.32s; }
+.dots-loader span:nth-child(2) { animation-delay: -0.16s; }
+.dots-loader span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes dot-bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+```
+
+> 💡 Les `animation-delay` négatifs décalent chaque point dans le temps → l'effet de vague.
+
+---
+
+### 3. Trois points qui tournent en rond
+
+C'est ce que tu décrivais : des points disposés en triangle qui **tournent autour du centre**.
+
+#### OrbitLoader.jsx
+```javascript
+export default function OrbitLoader() {
+    return (
+        <div className="orbit-loader">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    );
+}
+```
+
+#### OrbitLoader.css
+```css
+.orbit-loader {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    animation: spin 1.2s linear infinite;   /* tout le groupe tourne */
+}
+
+.orbit-loader span {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #000;
+}
+
+/* Les 3 points placés en triangle */
+.orbit-loader span:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); }
+.orbit-loader span:nth-child(2) { bottom: 0; left: 0; }
+.orbit-loader span:nth-child(3) { bottom: 0; right: 0; }
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+```
+
+---
+
+### 4. Spinner avec texte (cas réel)
+
+Le plus utile : un rond qui tourne + un message, centré.
+
+#### LoadingSpinner.jsx
+```javascript
+export default function LoadingSpinner({ message = "Chargement..." }) {
+    return (
+        <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p className="loading-spinner-text">{message}</p>
+        </div>
+    );
+}
+```
+
+#### LoadingSpinner.css
+```css
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-spinner-text {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+```
+
+**Usage (pendant un chargement de données) :**
+```javascript
+import { useEffect, useState } from "react";
+import Ticket from "../../backend/model/Ticket";
+import LoadingSpinner from "./LoadingSpinner";
+
+export default function TicketsPage() {
+    const [tickets, setTickets] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const load = async () => {
+            setLoading(true);
+            try {
+                setTickets(await Ticket.getAll());
+            } finally {
+                setLoading(false);
+            }
+        };
+        load();
+    }, []);
+
+    if (loading) return <LoadingSpinner message="Chargement des tickets..." />;
+
+    return (
+        <div>
+            {tickets.map((t) => <p key={t.id}>{t.name}</p>)}
+        </div>
+    );
+}
+```
+
+---
+
+### 5. Spinner plein écran (overlay)
+
+Pour bloquer toute la page pendant une action importante (sauvegarde, etc.).
+
+#### FullScreenLoader.jsx
+```javascript
+export default function FullScreenLoader({ message = "Veuillez patienter..." }) {
+    return (
+        <div className="fullscreen-loader">
+            <div className="fullscreen-loader-box">
+                <div className="spinner"></div>
+                <p>{message}</p>
+            </div>
+        </div>
+    );
+}
+```
+
+#### FullScreenLoader.css
+```css
+.fullscreen-loader {
+    position: fixed;
+    inset: 0;                                  /* couvre tout l'écran */
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.fullscreen-loader-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 2rem 3rem;
+    border-radius: 8px;
+}
+
+.fullscreen-loader-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+```
+
+**Usage :**
+```javascript
+{isSaving && <FullScreenLoader message="Sauvegarde en cours..." />}
+```
+
+> 💡 **Régler la vitesse :** change la durée dans `animation: spin 0.8s ...`. Plus petit = plus rapide (ex: `0.5s`), plus grand = plus lent (ex: `1.5s`).
 
 ---
 
@@ -676,8 +955,15 @@ Chaque exemple est **copy-paste prêt** — le JSX et le CSS sont ensemble!
 | **ProgressWithButton** | Barre interactive avec boutons | Déterminé + Contrôle |
 | **LoadingBar** | Chargement indéfini simple | Indéterminé |
 | **MultipleLoadingBars** | 3 animations différentes | Indéterminé |
+| **Spinner** | Rond qui tourne (le classique) | Indéterminé |
+| **DotsLoader** | Trois points qui rebondissent | Indéterminé |
+| **OrbitLoader** | Trois points qui tournent en rond | Indéterminé |
+| **LoadingSpinner** | Rond + texte, centré (cas réel) | Indéterminé |
+| **FullScreenLoader** | Spinner plein écran (overlay) | Indéterminé |
 | **AutoProgressBar** | Progression automatique aléatoire | Déterminé auto |
 | **FileUploadProgress** | Upload avec barre de progression | Déterminé + API |
 | **DataLoadingBar** | Chargement API avec message success | Déterminé + API |
+
+> 🔑 **Barre vs Spinner :** utilise une **barre** quand tu connais l'avancement (upload, %), un **spinner** quand tu ne sais pas combien de temps ça prend (attente API).
 
 ✅ **Comment utiliser:** Copie le JSX + le CSS correspondant dans tes fichiers!
