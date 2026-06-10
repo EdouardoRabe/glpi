@@ -122,6 +122,7 @@ export default function FOTicketList(){
                                 onDragOver={(e) => handleDragOver(e, group.status.id_status)}
                                 onDragLeave={handleDragLeave}
                                 onDrop={() => handleDrop(group)}
+                                role="button"
                             >
                                 {group.tickets.length === 0 ? (
                                     <p className="fo-ticket-empty-message">Aucun ticket</p>
