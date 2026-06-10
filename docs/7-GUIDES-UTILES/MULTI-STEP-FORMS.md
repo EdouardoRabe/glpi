@@ -443,9 +443,13 @@ export default function WizardWithPersistence() {
 
 ### Wizard d'inscription complète
 
+> ⚠️ **Cet exemple utilise `zod`** (librairie de validation). Si tu ne l'as pas, installe-la avec `npm install zod`. Sinon, remplace les `*.safeParse(formData)` par une validation manuelle (voir la section [Validation par étape](#validation-par-étape) plus haut).
+>
+> ⚠️ **CSS :** cet exemple utilise les classes `.wizard-progress`, `.wizard-steps`, `.step-indicator`, `.wizard-content`, `.wizard-buttons`. Réutilise le [CSS pour wizard](#css-pour-wizard) plus haut (la classe racine y est `.wizard` — garde le même nom de classe sur ta `<div>` racine ci-dessous).
+
 ```javascript
 import { useState } from "react"
-import { z } from "zod"
+import { z } from "zod"   // npm install zod
 
 const accountSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -654,7 +658,7 @@ export default function SignupWizard() {
   }
 
   return (
-    <div className="wizard-container">
+    <div className="wizard">
       {/* Progress */}
       <div className="wizard-progress">
         <div

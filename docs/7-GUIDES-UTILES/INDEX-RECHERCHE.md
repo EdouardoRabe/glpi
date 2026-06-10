@@ -145,6 +145,44 @@
 
 ---
 
+### "Je dois afficher un statut / une priorité avec une couleur"
+→ [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md)
+- Badge simple et coloré
+- Pastille avec point (en ligne / hors ligne)
+- Badge de statut de ticket GLPI (id → couleur)
+- Badge de priorité
+- Badge compteur (notifications)
+
+---
+
+### "Je dois afficher une liste de cartes / une grille"
+→ [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md)
+- Carte simple
+- Grille responsive (sans media query)
+- Carte d'asset GLPI
+- Cartes de statistiques (dashboard)
+- Carte cliquable
+
+---
+
+### "Ma page est vide pendant le chargement / quand il n'y a pas de données"
+→ [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md)
+- Squelette animé (skeleton)
+- Squelette de carte et de tableau
+- Écran vide (aucune donnée)
+- Pattern complet : loading → vide → données
+
+---
+
+### "Je veux un message d'aide au survol (?)"
+→ [INFOBULLES-TOOLTIPS.md](./INFOBULLES-TOOLTIPS.md)
+- Tooltip CSS pur (le plus simple)
+- Tooltip composant React
+- Tooltip dans 4 directions
+- Icône d'aide "?" avec texte multi-lignes
+
+---
+
 ## 🆘 JE SAIS PAS QUOI FAIRE
 
 **Choisissez:**
@@ -168,11 +206,11 @@
 **A** - Array · Async · await
 → [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md) · [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md) · [GUIDE-ASYNC-USEEFFECT.md](./GUIDE-ASYNC-USEEFFECT.md)
 
-**B** - Button · bind
-→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#button) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#event)
+**B** - Button · bind · Badge · Pastille
+→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#button) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#event) · [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md)
 
-**C** - Checkbox · Closure · Controlled
-→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#checkbox) · [GUIDE-CLOSURES-STALE-STATE.md](./GUIDE-CLOSURES-STALE-STATE.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#controlled)
+**C** - Checkbox · Closure · Controlled · Carte · Card · Chargement
+→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#checkbox) · [GUIDE-CLOSURES-STALE-STATE.md](./GUIDE-CLOSURES-STALE-STATE.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#controlled) · [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md) · [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md)
 
 **D** - Destructuring · Delete
 → [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#destructuring) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#filter)
@@ -204,8 +242,20 @@
 **R** - Radio · Reduce · Re-render
 → [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#radio) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#reduce) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md)
 
-**S** - Select · setState · spread · Sort · Set
-→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#select) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#sort) · [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md#partie-3--les-set)
+**G** - Grille · Grid
+→ [CARTES-ET-GRILLES.md](./CARTES-ET-GRILLES.md)
+
+**P** - Pastille · Priorité · Pagination
+→ [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md) · [PAGINATION.md](./PAGINATION.md)
+
+**S** - Select · setState · spread · Sort · Set · Skeleton · Squelette · Statut · Status
+→ [GUIDE-FORMULAIRE-ELEMENTS.md](./GUIDE-FORMULAIRE-ELEMENTS.md#select) · [GUIDE-ETAT-RE-RENDER.md](./GUIDE-ETAT-RE-RENDER.md) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md) · [GUIDE-ARRAY-METHODES.md](./GUIDE-ARRAY-METHODES.md#sort) · [GUIDE-ARRAY-MAP-SET.md](./GUIDE-ARRAY-MAP-SET.md#partie-3--les-set) · [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md) · [BADGES-ET-PASTILLES-STATUT.md](./BADGES-ET-PASTILLES-STATUT.md)
+
+**T** - Tooltip · Infobulle
+→ [INFOBULLES-TOOLTIPS.md](./INFOBULLES-TOOLTIPS.md)
+
+**V** - Vide · Empty state
+→ [CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md](./CHARGEMENT-SQUELETTE-ET-ECRAN-VIDE.md)
 
 **U** - undefined · Update
 → [GUIDE-ERREURS-MESSAGES.md](./GUIDE-ERREURS-MESSAGES.md#undefined) · [GUIDE-AVANT-APRES-PATTERNS.md](./GUIDE-AVANT-APRES-PATTERNS.md#modifier)

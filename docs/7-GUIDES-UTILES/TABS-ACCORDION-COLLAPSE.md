@@ -66,34 +66,38 @@ export default function SimpleTabs() {
 ### Tabs avec icônes
 
 ```javascript
-const [activeTab, setActiveTab] = useState("home")
+import { useState } from "react"
 
-const tabs = [
-  { id: "home", label: "Accueil", icon: "🏠", content: "..." },
-  { id: "user", label: "Profil", icon: "👤", content: "..." },
-  { id: "settings", label: "Paramètres", icon: "⚙️", content: "..." },
-]
+export default function IconTabs() {
+  const [activeTab, setActiveTab] = useState("home")
 
-return (
-  <div className="tabs">
-    <div className="tabs-buttons">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          className={`tab-btn ${activeTab === tab.id ? "active" : ""}`}
-          onClick={() => setActiveTab(tab.id)}
-        >
-          <span className="tab-icon">{tab.icon}</span>
-          <span className="tab-label">{tab.label}</span>
-        </button>
-      ))}
+  const tabs = [
+    { id: "home", label: "Accueil", icon: "🏠", content: "Bienvenue !" },
+    { id: "user", label: "Profil", icon: "👤", content: "Mon profil" },
+    { id: "settings", label: "Paramètres", icon: "⚙️", content: "Mes paramètres" },
+  ]
+
+  return (
+    <div className="tabs">
+      <div className="tabs-buttons">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            className={`tab-btn ${activeTab === tab.id ? "active" : ""}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            <span className="tab-icon">{tab.icon}</span>
+            <span className="tab-label">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="tabs-content">
+        {tabs.find((t) => t.id === activeTab)?.content}
+      </div>
     </div>
-
-    <div className="tabs-content">
-      {tabs.find((t) => t.id === activeTab)?.content}
-    </div>
-  </div>
-)
+  )
+}
 ```
 
 ### CSS pour tabs
