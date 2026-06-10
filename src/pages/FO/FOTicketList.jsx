@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import Ticket from "../../backend/model/Ticket";
 import StatusTicket from "../../backend/model/StatusTicket";
-import { ticketCompletGroupByStatus} from "../../backend/services/ticket";
+import { getNbAssetInTicket, ticketCompletGroupByStatus} from "../../backend/services/ticket";
+import { getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
 
 export default function FOTicketList(){
     const [groups, setGroups] = useState([]);
     const [draggedTicket, setDraggetTicket] = useState(null);
+    const [selectedTicket, setSelectedTicket] = useState(null);
 
     useEffect(()=>{
         const load = async () =>{
@@ -35,6 +37,12 @@ export default function FOTicketList(){
         setDraggetTicket(null);
     }
 
+    const openTicketDetails  = (complete) => setSelectedTicket(complete ?? null);
+    const closeTicketDetails = ()         => setSelectedTicket(null);
+
+    const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
+    
+
     return (
         <div>
             <h1>Liste des tickets</h1>
@@ -57,6 +65,11 @@ export default function FOTicketList(){
                                         onDragStart={() => handleDrag(tic.ticket)}
                                     >
                                         <p>Ticket Ref: {tic.ticket.external_id}</p>
+                                        <div className="bo-ticket-item-actions">
+                                            <button type="button" onClick={() => openTicketDetails(tic)}>
+                                                View Details
+                                            </button>
+                                        </div>
                                     </div>
                                 ))
                             }
@@ -64,6 +77,69 @@ export default function FOTicketList(){
                     ))
                 }
             </div>
+            {selectedTicket && (
+                <dialog open onCancel={closeTicketDetails}>
+                    <div className="bo-ticket-modal">
+                        <div className="bo-ticket-modal-header">
+                            <h2>Ticket #{selectedTicket.ticket.external_id}</h2>
+                            <button type="button" onClick={closeTicketDetails}>Close</button>
+                        </div>
+
+                        <div className="bo-ticket-modal-section">
+                            <p><strong>Title:</strong> {selectedTicket.ticket.name}</p>
+                            <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
+                        </div>
+
+                        {   nbAssetInTicket.map(({ label, count }) => {
+                                return count > 0 ? (    
+                                        <div key={label} className="bo-ticket-modal-section">
+                                            <p><strong>{label}:</strong> {count}</p>
+                                        </div>
+                                ) : null;
+                            })
+                        }
+
+                        {selectedTicket.assets.length > 0 && (
+                            <div className="bo-ticket-modal-section">
+                                <h3>Associated Assets</h3>
+                                {selectedTicket.assets.map((asset) => (
+                                    <p key={`${asset.itemType}-${asset.id}`}>
+                                        {asset.name} ({asset.itemType})
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+
+                        {selectedTicket.users.length > 0 && (
+                            <div className="bo-ticket-modal-section">
+                                <h3>Team Members</h3>
+                                {selectedTicket.users.map((user) => (
+                                    <p key={`${user.role}-${user.id}`}>
+                                        {user.name} ({user.role})
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+
+                        {selectedTicket.costs.length > 0 && (
+                            <div className="bo-ticket-modal-section">
+                                <h3>Associated Costs</h3>
+                                {selectedTicket.costs.map((cost) => (
+                                    <p key={cost.id}>
+                                        Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Cost by Time: { getSommeCostByTime(cost) } | Fixed Cost: {cost.cost_fixed}
+                                    </p>
+                                ))}
+                                <p><strong>Duration: { getSommeDuration(selectedTicket.costs) }
+                                |  Time Cost: { getSommeTimeCost(selectedTicket.costs) }
+                                |  Cost by Time: { getTotalCostByTime(selectedTicket.costs) }
+                                |  Fixed Cost: { getSommeFixedCost(selectedTicket.costs) }
+                                </strong></p>
+                                <strong> Total : { getSommeCost(selectedTicket.costs) }</strong>
+                            </div>
+                        )}
+                    </div>
+                </dialog>
+            )}
         </div>
     )
 }

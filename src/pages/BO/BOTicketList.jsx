@@ -4,7 +4,7 @@ import { TICKET_PRIORITY, TICKET_TYPE,  getEnumNameById } from "../../backend/ut
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
 import "../../css/pages/BO/BOTicketList.css";
-import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost } from "../../backend/services/cost";
+import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
 import { getNbAssetInTicket,  nbTicketsWithAsset } from "../../backend/services/ticket";
 import StatusTicket from "../../backend/model/StatusTicket";
 
@@ -210,6 +210,7 @@ export default function BOTicketList() {
                                 ))}
                                 <p><strong>Duration: { getSommeDuration(selectedTicket.costs) }
                                 |  Time Cost: { getSommeTimeCost(selectedTicket.costs) }
+                                |  Cost by Time: { getTotalCostByTime(selectedTicket.costs) }
                                 |  Fixed Cost: { getSommeFixedCost(selectedTicket.costs) }
                                 </strong></p>
                                 <strong> Total : { getSommeCost(selectedTicket.costs) }</strong>

@@ -13,6 +13,12 @@ export const getSommeCostByTime = (cost) => {
     return (cost.duration * cost.cost_time / 3600).toFixed(2);
 };
 
+export const getTotalCostByTime = (costs) =>{
+    return costs.reduce((acc, cost)=>{
+        return acc + Number(getSommeCostByTime(cost));
+    }, 0).toFixed(2);
+}
+
 export const getSommeTimeCost = (costs) => {
     return costs.reduce((acc, cost) => {
         return acc + cost.cost_time;
