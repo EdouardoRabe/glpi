@@ -68,13 +68,13 @@ export default function FOTicketList(){
             return;
         }
 
-        setGroups(prevGroups =>
-            moveTicketBetweenGroups(prevGroups, draggedTicket.id, targetGroup.status.id_status)
-        );
-
         try {
             const data = { status: { id: targetGroup.status.id_status } };
             await draggedTicket.update(data);
+            
+            setGroups(prevGroups =>
+                moveTicketBetweenGroups(prevGroups, draggedTicket.id, targetGroup.status.id_status)
+            );
         } catch (error) {
             console.error('Erreur lors du déplacement du ticket:', error);
 
