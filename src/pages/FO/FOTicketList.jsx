@@ -4,11 +4,13 @@ import StatusTicket from "../../backend/model/StatusTicket";
 import { getNbAssetInTicket, ticketCompletGroupByStatus} from "../../backend/services/ticket";
 import { getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
 import { useNavigate } from "react-router-dom";
+import "../../css/pages/FO/FOTicketList.css";
 
 export default function FOTicketList(){
     const [groups, setGroups] = useState([]);
-    const [draggedTicket, setDraggetTicket] = useState(null);
+    const [draggedTicket, setDraggedTicket] = useState(null);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [dragOverGroup, setDragOverGroup] = useState(null);
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -21,88 +23,128 @@ export default function FOTicketList(){
         load();
     }, [])
 
-    const handleDrag = (tick) =>{
-        setDraggetTicket(tick);
-        console.log(tick, " En drag");
+    const handleDragStart = (tick) => {
+        setDraggedTicket(tick);
     }
 
-    const handleDrop = async (group) =>{
-        console.log("ticket ", draggedTicket.external_id, " vers ", group.status.id_status);
+    const handleDragOver = (e, groupId) => {
+        e.preventDefault();
+        setDragOverGroup(groupId);
+    }
+
+    const handleDragLeave = () => {
+        setDragOverGroup(null);
+    }
+
+    const handleDrop = async (group) => {
+        setDragOverGroup(null);
+
+        if (!draggedTicket) return;
+
         const fil = group.tickets.find((t) => t.ticket.id === draggedTicket.id);
         if(fil){
-            console.log("Ce ticket est deja : ", group.status.french_name);
-            return
+            console.log("Ce ticket est déjà dans:", group.status.french_name);
+            return;
         }
-        const data = {status : {id : group.status.id_status}};
-        const result = await draggedTicket.update(data);
-        console.log("resultat du dragg ", result);
-        setDraggetTicket(null);
+
+        const data = { status: { id: group.status.id_status } };
+        try {
+            await draggedTicket.update(data);
+            const tic = await Ticket.getAllComplete();
+            const stat = await StatusTicket.getAll();
+            const grouped = ticketCompletGroupByStatus(tic, stat);
+            setGroups(grouped);
+        } catch (error) {
+            console.error('Erreur lors du déplacement du ticket:', error);
+        }
+
+        setDraggedTicket(null);
     }
 
-    const openTicketDetails  = (complete) => setSelectedTicket(complete ?? null);
-    const closeTicketDetails = ()         => setSelectedTicket(null);
+    const openTicketDetails = (complete) => setSelectedTicket(complete ?? null);
+    const closeTicketDetails = () => setSelectedTicket(null);
 
     const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
-    
-    const createTicket = () =>{
+
+    const createTicket = () => {
         navigate("/frontOffice/create-ticket");
     }
 
     return (
-        <div>
-            <h1>Liste des tickets</h1>
-            <div >
+        <div className="fo-ticket-list">
+            <h1>Tableau des tickets</h1>
+
+            <div className="fo-ticket-kanban">
                 {
                     groups.map((group) => (
-                        <div 
-                            key={`${group.status.id_status}`} 
-                            style={{backgroundColor: group.status.color}} 
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={() => handleDrop(group)}
+                        <div
+                            key={`${group.status.id_status}`}
+                            className="fo-ticket-column"
                         >
-                            <h2>{group.status.french_name}</h2>
-                            {
-                                group.tickets.map((tic) => (
-                                    <div
-                                        key={`${tic.ticket.id}-${tic.ticket.external_id}`} 
-                                        style={{backgroundColor: "#ebe3da"}} 
-                                        draggable
-                                        onDragStart={() => handleDrag(tic.ticket)}
-                                        onClick={() => openTicketDetails(tic)}
+                            <div
+                                className="fo-ticket-column-header"
+                                style={{ backgroundColor: group.status.color }}
+                            >
+                                <span>{group.status.french_name}</span>
+                                <span className="fo-ticket-column-count">
+                                    {group.tickets.length}
+                                </span>
+                            </div>
+
+                            <div
+                                className={`fo-ticket-drop-zone ${dragOverGroup === group.status.id_status ? 'drag-over' : ''}`}
+                                onDragOver={(e) => handleDragOver(e, group.status.id_status)}
+                                onDragLeave={handleDragLeave}
+                                onDrop={() => handleDrop(group)}
+                            >
+                                {group.tickets.length === 0 ? (
+                                    <p className="fo-ticket-empty-message">Aucun ticket</p>
+                                ) : (
+                                    group.tickets.map((tic) => (
+                                        <div
+                                            key={`${tic.ticket.id}-${tic.ticket.external_id}`}
+                                            className="fo-ticket-card"
+                                            draggable
+                                            onDragStart={() => handleDragStart(tic.ticket)}
+                                            onClick={() => openTicketDetails(tic)}
+                                        >
+                                            <p className="fo-ticket-card-ref">
+                                                #{tic.ticket.external_id}
+                                            </p>
+                                        </div>
+                                    ))
+                                )}
+
+                                {group.status.id_status === 1 && (
+                                    <button
+                                        className="fo-ticket-add-button"
+                                        onClick={createTicket}
                                     >
-                                        <p>Ticket Ref: {tic.ticket.external_id}</p>
-                                    </div>
-                                ))
-                            }
-                            {
-                                group.status.id_status === 1 && (
-                                    <div className="bo-ticket-item-actions">
-                                        <button type="button" onClick={() => createTicket()}>
-                                            Ajouter
-                                        </button>
-                                    </div>
-                                )
-                            }
+                                        + Ajouter un ticket
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     ))
                 }
             </div>
+
             {selectedTicket && (
                 <dialog open onCancel={closeTicketDetails}>
-                    <div className="bo-ticket-modal">
-                        <div className="bo-ticket-modal-header">
+                    <div className="fo-ticket-modal">
+                        <div className="fo-ticket-modal-header">
                             <h2>Ticket #{selectedTicket.ticket.external_id}</h2>
-                            <button type="button" onClick={closeTicketDetails}>Close</button>
+                            <button type="button" onClick={closeTicketDetails}>Fermer</button>
                         </div>
 
-                        <div className="bo-ticket-modal-section">
-                            <p><strong>Title:</strong> {selectedTicket.ticket.name}</p>
+                        <div className="fo-ticket-modal-section">
+                            <p><strong>Titre:</strong> {selectedTicket.ticket.name}</p>
                             <p><strong>Description:</strong> {selectedTicket.ticket.content || "-"}</p>
                         </div>
 
                         {   nbAssetInTicket.map(({ label, count }) => {
-                                return count > 0 ? (    
-                                        <div key={label} className="bo-ticket-modal-section">
+                                return count > 0 ? (
+                                        <div key={label} className="fo-ticket-modal-section">
                                             <p><strong>{label}:</strong> {count}</p>
                                         </div>
                                 ) : null;
@@ -110,8 +152,8 @@ export default function FOTicketList(){
                         }
 
                         {selectedTicket.assets.length > 0 && (
-                            <div className="bo-ticket-modal-section">
-                                <h3>Associated Assets</h3>
+                            <div className="fo-ticket-modal-section">
+                                <h3>Ressources associées</h3>
                                 {selectedTicket.assets.map((asset) => (
                                     <p key={`${asset.itemType}-${asset.id}`}>
                                         {asset.name} ({asset.itemType})
@@ -121,8 +163,8 @@ export default function FOTicketList(){
                         )}
 
                         {selectedTicket.users.length > 0 && (
-                            <div className="bo-ticket-modal-section">
-                                <h3>Team Members</h3>
+                            <div className="fo-ticket-modal-section">
+                                <h3>Équipe</h3>
                                 {selectedTicket.users.map((user) => (
                                     <p key={`${user.role}-${user.id}`}>
                                         {user.name} ({user.role})
@@ -132,19 +174,20 @@ export default function FOTicketList(){
                         )}
 
                         {selectedTicket.costs.length > 0 && (
-                            <div className="bo-ticket-modal-section">
-                                <h3>Associated Costs</h3>
+                            <div className="fo-ticket-modal-section">
+                                <h3>Coûts associés</h3>
                                 {selectedTicket.costs.map((cost) => (
                                     <p key={cost.id}>
-                                        Duration: {cost.duration}s | Time Cost: {cost.cost_time} | Cost by Time: { getSommeCostByTime(cost) } | Fixed Cost: {cost.cost_fixed}
+                                        Durée: {cost.duration}s | Coût horaire: {cost.cost_time} | Total horaire: {getSommeCostByTime(cost)} | Coût fixe: {cost.cost_fixed}
                                     </p>
                                 ))}
-                                <p><strong>Duration: { getSommeDuration(selectedTicket.costs) }
-                                |  Time Cost: { getSommeTimeCost(selectedTicket.costs) }
-                                |  Cost by Time: { getTotalCostByTime(selectedTicket.costs) }
-                                |  Fixed Cost: { getSommeFixedCost(selectedTicket.costs) }
+                                <p><strong>
+                                    Durée totale: {getSommeDuration(selectedTicket.costs)}s |
+                                    Coût horaire total: {getSommeTimeCost(selectedTicket.costs)} |
+                                    Total horaire: {getTotalCostByTime(selectedTicket.costs)} |
+                                    Coût fixe total: {getSommeFixedCost(selectedTicket.costs)}
                                 </strong></p>
-                                <strong> Total : { getSommeCost(selectedTicket.costs) }</strong>
+                                <p><strong>Total : {getSommeCost(selectedTicket.costs)}</strong></p>
                             </div>
                         )}
                     </div>
