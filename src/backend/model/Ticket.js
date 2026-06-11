@@ -210,6 +210,30 @@ class Ticket {
         await this.saveCosts(costs);
     }
 
+    async removeUser(userId) {
+        if (this.id === null) throw new Error("removeUser() : ce ticket n'a pas d'ID");
+        const links = await apiV1.getV1(`Ticket/${this.id}/Ticket_User`); 
+        const targets = links.filter((link) => link.users_id === userId);
+        const results = [];
+        for (const link of targets) {
+            const result = await apiV1.delV1(`Ticket/${this.id}/Ticket_User/${link.id}`);
+            console.log(`Liaison user #${userId} (lien #${link.id}) supprimée du ticket #${this.id}`);
+            results.push(result);
+        }
+        return results;
+    }
+
+    async removeAllUsers() {
+        if (this.id === null) throw new Error("removeAllUsers() : ce ticket n'a pas d'ID");
+        const links = await apiV1.getV1(`Ticket/${this.id}/Ticket_User`);
+        const results = [];
+        for (const link of links) {
+            const result = await apiV1.delV1(`Ticket/${this.id}/Ticket_User/${link.id}`);
+            console.log(`Lien #${link.id} (user #${link.users_id}) supprimé du ticket #${this.id}`);
+            results.push(result);
+        }
+        return results;
+    }
 
     async update(fields = {}) {
         if (this.id === null) {

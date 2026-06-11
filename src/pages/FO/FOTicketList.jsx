@@ -227,7 +227,7 @@ export default function FOTicketList(){
                 <dialog open onCancel={closeTicketDetails}>
                     <div className="fo-ticket-modal">
                         <div className="fo-ticket-modal-header">
-                            <h2>Ticket #{selectedTicket.ticket.external_id}</h2>
+                            <h2>Ticket #{selectedTicket.ticket.external_id} id {selectedTicket.ticket.id}</h2>
                             <button type="button" onClick={closeTicketDetails}>Fermer</button>
                         </div>
 
@@ -261,7 +261,7 @@ export default function FOTicketList(){
                                 <h3>Équipe</h3>
                                 {selectedTicket.users.map((user) => (
                                     <p key={`${user.role}-${user.id}`}>
-                                        {user.name} ({user.role})
+                                        {user.id} {user.name} ({user.role})
                                     </p>
                                 ))}
                             </div>
