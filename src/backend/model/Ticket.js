@@ -235,7 +235,7 @@ class Ticket {
         return results;
     }
 
-     async removeItem(itemId) {
+    async removeItem(itemId) {
         if (this.id === null) throw new Error("removeItem() : ce ticket n'a pas d'ID");
         const links = await apiV1.getV1(`Ticket/${this.id}/Item_Ticket`); 
         const targets = links.filter((link) => link.items_id === itemId);
@@ -248,13 +248,38 @@ class Ticket {
         return results;
     }
 
-     async removeAllItems() {
+    async removeAllItems() {
         if (this.id === null) throw new Error("removeAllItems() : ce ticket n'a pas d'ID");
         const links = await apiV1.getV1(`Ticket/${this.id}/Item_Ticket`);
         const results = [];
         for (const link of links) {
             const result = await apiV1.delV1(`Ticket/${this.id}/Item_Ticket/${link.id}`);
             console.log(`Lien #${link.id} (item #${link.items_id}) supprimé du ticket #${this.id}`);
+            results.push(result);
+        }
+        return results;
+    }
+
+    async removeCost(costId) {
+        if (this.id === null) throw new Error("removeCost() : ce ticket n'a pas d'ID");
+        const links = await api.get(`Assistance/Ticket/${this.id}/Cost`); 
+        const targets = links.filter((link) => link.id === costId);
+        const results = [];
+        for (const link of targets) {
+            const result = await api.del(`Assistance/Ticket/${this.id}/Cost/${link.id}`);
+            console.log(`Liaison coût #${costId} (lien #${link.id}) supprimée du ticket #${this.id}`);
+            results.push(result);
+        }
+        return results;
+    }
+
+    async removeAllCosts() {
+        if (this.id === null) throw new Error("removeAllCosts() : ce ticket n'a pas d'ID");
+        const links = await api.get(`Assistance/Ticket/${this.id}/Cost`);
+        const results = [];
+        for (const link of links) {
+            const result = await api.del(`Assistance/Ticket/${this.id}/Cost/${link.id}`);
+            console.log(`Lien #${link.id} (coût #${link.id}) supprimé du ticket #${this.id}`);
             results.push(result);
         }
         return results;
