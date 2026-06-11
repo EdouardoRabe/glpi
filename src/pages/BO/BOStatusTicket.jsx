@@ -5,11 +5,17 @@ import "../../css/pages/BO/BOStatusTicket.css";
 export default function BOStatusTicket () {
     const [statusTicket, setStatusTicket] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [language, setLanguage] = useState([]);
+    const [selectedLanguage, setSelectedLanguage] = useState(null);
 
     useEffect(() => {
         const load = async () => {
             const status = await StatusTicket.getAll();
             setStatusTicket(status);
+
+            const lang = await StatusTicket.getLanguages();
+            setLanguage(lang);
+            console.log("lang ",lang);
         }
         load();
     }, [])
@@ -42,7 +48,15 @@ export default function BOStatusTicket () {
     return (
         <div className="bo-status-ticket">
             <h1>Gestion des statuts de tickets</h1>
-
+             <div className="fo-assets-filter-item">
+                        <label htmlFor="filter-user">Langue</label>
+                        <select id="filter-user" value={selectedLanguage?.code} onChange={(e) => setSelectedLanguage(e.target.value)}>
+                            {language.map(({code, name}) => (
+                                <option key={code} value={code}>{name}</option>
+                            ))}
+                        </select>
+                        <button>Changer</button>
+                    </div>
             <div className="bo-status-ticket-table-wrapper">
                 <table>
                     <thead>

@@ -19,11 +19,14 @@ class StatusTicket {
     static async create(id, data = {}){
        return await post(`/status/${id}`, data);
     }
+    
+    static async getLanguages(){
+        return await get("/status/languages");
+    }
 
     static async createITIL(id, data = {}){
         return await postV1(`Ticket/${id}/ITILFollowup`, data);
     }
-
     static getByLanguageName(status, language, name) {
         const key = `${language.toLowerCase()}_name`;
         const filtered = status.find((s) => s?.[key]?.toLowerCase() === name.toLowerCase());
