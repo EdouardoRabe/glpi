@@ -29,13 +29,12 @@ export function ticketsCompletByStatus(ticketsComplet, statusId) {
 export function getCostTicketCompletByStatus(ticketsComplet, statusId) {
     const filtered = ticketsCompletByStatus(ticketsComplet, statusId);
     return getCostTotal(filtered);
-
 }
 
 export function getCostTicketCompletByStatusAll(ticketsComplet, status){
     return status.map((stat) => {
         const cost = getCostTicketCompletByStatus(ticketsComplet, stat.id_status);
-        return { label: stat.name, cost };
+        return { label: stat.french_name, cost };
     });
 }
 
