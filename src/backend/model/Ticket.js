@@ -235,6 +235,31 @@ class Ticket {
         return results;
     }
 
+     async removeItem(itemId) {
+        if (this.id === null) throw new Error("removeItem() : ce ticket n'a pas d'ID");
+        const links = await apiV1.getV1(`Ticket/${this.id}/Item_Ticket`); 
+        const targets = links.filter((link) => link.items_id === itemId);
+        const results = [];
+        for (const link of targets) {
+            const result = await apiV1.delV1(`Ticket/${this.id}/Item_Ticket/${link.id}`);
+            console.log(`Liaison item #${itemId} (lien #${link.id}) supprimée du ticket #${this.id}`);
+            results.push(result);
+        }
+        return results;
+    }
+
+     async removeAllItems() {
+        if (this.id === null) throw new Error("removeAllItems() : ce ticket n'a pas d'ID");
+        const links = await apiV1.getV1(`Ticket/${this.id}/Item_Ticket`);
+        const results = [];
+        for (const link of links) {
+            const result = await apiV1.delV1(`Ticket/${this.id}/Item_Ticket/${link.id}`);
+            console.log(`Lien #${link.id} (item #${link.items_id}) supprimé du ticket #${this.id}`);
+            results.push(result);
+        }
+        return results;
+    }
+
     async update(fields = {}) {
         if (this.id === null) {
             throw new Error("update() : ce ticket n'a pas d'ID, utilisez save()");
