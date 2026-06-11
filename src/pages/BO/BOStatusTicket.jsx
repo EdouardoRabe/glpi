@@ -7,6 +7,7 @@ export default function BOStatusTicket () {
     const [loading, setLoading] = useState(false);
     const [language, setLanguage] = useState([]);
     const [selectedLanguage, setSelectedLanguage] = useState(null);
+    const [configs, setConfigs] = useState([]);
 
     useEffect(() => {
         const load = async () => {
@@ -15,6 +16,9 @@ export default function BOStatusTicket () {
 
             const lang = await StatusTicket.getLanguages();
             setLanguage(lang);
+
+            const displayConfig = await StatusTicket.getConfigs();
+            setConfigs(displayConfig);
 
         }
         load();
@@ -49,6 +53,7 @@ export default function BOStatusTicket () {
         try {
             const result = await StatusTicket.updateConfig("display", { value: selectedLanguage?.name});
             console.log("Configuration mise à jour:", result);
+            setConfigs(prev => prev.map(c => c.code === "display" ? { ...c, value: selectedLanguage?.name } : c));
             setSelectedLanguage(null);
         } catch (error) {
             console.error('Erreur lors de la mise à jour de la configuration:', error);
@@ -58,24 +63,39 @@ export default function BOStatusTicket () {
     return (
         <div className="bo-status-ticket">
             <h1>Gestion des statuts de tickets</h1>
-             <div className="fo-assets-filter-item">
-                        <select id="filter-user" value={selectedLanguage?.code} 
-                            onChange={(e) => {
-                                const lang = language.find((l) => l.code === e.target.value);
-                                setSelectedLanguage(lang ?? null);
-                            }}>
-                            <option value="">Choisir une langue</option>
-                            {language.map((lang) => (
-                                <option key={lang.code} value={lang.code}>{lang.name}</option>
-                            ))}
-                        </select>
-                        <button onClick={() => updateConfig()}>Changer</button>
-                    </div>
+             <div className="bo-status-ticket-config">
+                <label htmlFor="filter-user" className="bo-status-ticket-config-label">
+                    Langue d'affichage
+                </label>
+                <select
+                    id="filter-user"
+                    className="bo-status-ticket-config-select"
+                    value={selectedLanguage?.code ?? ""}
+                    onChange={(e) => {
+                        const lang = language.find((l) => l.code === e.target.value);
+                        setSelectedLanguage(lang ?? null);
+                    }}
+                >
+                    <option value="">Choisir une langue</option>
+                    {language.map((lang) => (
+                        <option key={lang.code} value={lang.code}>{lang.name}</option>
+                    ))}
+                </select>
+                <button
+                    className="bo-status-ticket-button"
+                    onClick={() => updateConfig()}
+                    disabled={!selectedLanguage}
+                >
+                    Changer
+                </button>
+            </div>
+
             <div className="bo-status-ticket-table-wrapper">
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Display Name</th>
                             <th>Nom français</th>
                             <th>Nom malgache</th>
                             <th>Couleur</th>
@@ -87,6 +107,7 @@ export default function BOStatusTicket () {
                             statusTicket.map((state) => (
                                 <tr key={`${state.id_status}-${state.french_name}`}>
                                     <td className="bo-status-ticket-id">{state.id_status}</td>
+                                    <td className="bo-status-ticket-name">{StatusTicket.getDisplayName(state, configs)}</td>
                                     <td className="bo-status-ticket-name">{state.french_name}</td>
                                     <td>
                                         <input
