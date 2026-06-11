@@ -10,49 +10,33 @@ export function ticketsByType(tickets, typeId) {
     return tickets.filter((t) => Number(t.type) === Number(typeId));
 }
 
+export function nbTicketsByTypes(tickets) {
+    return TICKET_TYPE.map((type) => {
+        const label = type.name;
+        const count = nbTicketsByType(tickets, type.id);
+        return { label, count };
+    });
+}
+
 export function nbTicketsByStatus(tickets, statusId) {
     return tickets.filter((t) => Number(t.status.id) === Number(statusId)).length;
 }
 
-export function ticketsByStatus(tickets, statusId) {
-    return tickets.filter((t) => Number(t.status.id) === Number(statusId));
+export function ticketsCompletByStatus(ticketsComplet, statusId) {
+    return ticketsComplet.filter((t) => Number(t.ticket.status.id) === Number(statusId));
 }
 
-export function getCostTicketByStatus(tickets, statusId) {
-    const filtered = ticketsByStatus(tickets, statusId);
-    return getCostTotal(filtered);
-}
-
-export function getCostTicketCompletByStatus(tickets, statusId) {
-    const filtered = ticketsCompletByStatus(tickets, statusId);
+export function getCostTicketCompletByStatus(ticketsComplet, statusId) {
+    const filtered = ticketsCompletByStatus(ticketsComplet, statusId);
     return getCostTotal(filtered);
 
 }
 
-export function getCostTicketByStatusAll(tickets, status){
+export function getCostTicketCompletByStatusAll(ticketsComplet, status){
     return status.map((stat) => {
-        const cost = getCostTicketByStatus(tickets, stat.id_status);
+        const cost = getCostTicketCompletByStatus(ticketsComplet, stat.id_status);
         return { label: stat.name, cost };
     });
-}
-
-export function getCostTicketCompletByStatusAll(tickets, status){
-    return status.map((stat) => {
-        const cost = getCostTicketCompletByStatus(tickets, stat.id_status);
-        return { label: stat.name, cost };
-    });
-}
-
-export function ticketGroupByStatus(tic, statusList) {
-    return statusList.map((stat) => {
-        const status = stat;
-        const tickets = ticketsByStatus(tic, stat.id_status);
-        return { status,  tickets };
-    });
-}
-
-export function ticketsCompletByStatus(tickets, statusId) {
-    return tickets.filter((t) => Number(t.ticket.status.id) === Number(statusId));
 }
 
 export function ticketCompletGroupByStatus(tic, statusList) {
@@ -63,14 +47,6 @@ export function ticketCompletGroupByStatus(tic, statusList) {
     });
 }
    
-
-export function nbTicketsByTypes(tickets) {
-    return TICKET_TYPE.map((type) => {
-        const label = type.name;
-        const count = nbTicketsByType(tickets, type.id);
-        return { label, count };
-    });
-}
 
 export function nbTicketWithAsset(ticketsCompletes, type) {
     return ticketsCompletes.filter((ticket) => ticket.assets.some((asset) => asset.itemType === type)).length;
