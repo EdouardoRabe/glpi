@@ -16,6 +16,15 @@ export const getCostTotalFixed = (tickets) => {
     return getSommeFixedCost(tickets.flatMap((t) => t.costs));
 }
 
+export const getCostTotalDuration = (tickets) => {
+    return getSommeDuration(tickets.flatMap((t) => t.costs));
+}
+
+export const getCostTimeCost = (tickets) => {
+    return getSommeTimeCost(tickets.flatMap((t) => t.costs));
+}
+
+
 
 export const getSommeCostByTime = (cost) => {
     return (cost.duration * cost.cost_time / 3600).toFixed(2);
