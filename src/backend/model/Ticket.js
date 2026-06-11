@@ -222,6 +222,17 @@ class Ticket {
         }
         return this;
     }
+
+    static async updateStatic(ticketId, fields = {}) {
+        if (ticketId === null) {
+            throw new Error("update() : ce ticket n'a pas d'ID, utilisez save()");
+        }
+        Object.assign(this, fields);
+        const result = await api.patch(Ticket.endpoint, fields, ticketId);
+        if (result?.error) {
+            throw new Error(result.message || `Erreur lors de la mise à jour du ticket #${ticketId}`);
+        }
+    }
  
     async delete() {
         if (this.id === null) {

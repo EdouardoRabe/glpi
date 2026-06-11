@@ -10,6 +10,7 @@ import {
     TICKET_PRIORITY,
 } from "../../utils/utils.js";
 import StatusTicket from "../../model/StatusTicket.js";
+import Ticket from "../../model/Ticket.js";
 
 const EXPECTED_HEADERS = [
     "ref_ticket", "date", "heure", "type",
@@ -66,8 +67,14 @@ export const importFile2 = async (file) => {
             const statAll = await StatusTicket.getAll();
             const stat = StatusTicket.getByLanguageName(statAll, "english", row.status);
             const type     = getEnumIdByName(TICKET_TYPE,     row.type,     1);
-            const status   =  stat ? stat.id_status : 1;
+            let status   =  stat ? stat.id_status : 1;
             const priority = getEnumIdByName(TICKET_PRIORITY, row.priority, 3);
+            let isClosed = false;
+
+            if(status === 6) {
+                status =2;
+                isClosed = true;
+            }
 
             const ticketPayload = {
                 input: {
@@ -129,6 +136,11 @@ export const importFile2 = async (file) => {
                 } else {
                     console.log(`[LINKED] Ticket #${ticketId} ← ${found.itemtype} "${itemName}" (#${found.asset.id})`);
                 }
+            }
+
+            if(isClosed){
+                const data = { status: { id: 6 } };
+                await Ticket.updateStatic(ticketId, data);
             }
 
             results.created++;
