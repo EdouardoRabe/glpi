@@ -163,6 +163,20 @@ export default function FOTicketList(){
         navigate("/frontOffice/create-ticket");
     }
 
+    const removeAllUsersFromTicket = async (ticket) => {
+        try {
+            await ticket.removeAllUsers();
+            const tic = await Ticket.getAllComplete();
+            const stat = await StatusTicket.getAll();
+            const grouped = ticketCompletGroupByStatus(tic, stat);
+            setGroups(grouped);
+            closeTicketDetails();
+        }
+        catch (error) {
+            console.error("Erreur lors de la suppression des utilisateurs du ticket:", error);
+        }
+    }
+
     return (
         <div className="fo-ticket-list">
             <h1>Tableau des tickets</h1>
@@ -284,6 +298,7 @@ export default function FOTicketList(){
                                 <p><strong>Total : {getSommeCost(selectedTicket.costs)}</strong></p>
                             </div>
                         )}
+                        {/* <button onClick={() => removeAllUsersFromTicket(selectedTicket.ticket)}>Supprimer tous les utilisateurs</button> */}
                     </div>
                 </dialog>
             )}
