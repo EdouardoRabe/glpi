@@ -146,6 +146,22 @@ GET    /Software/:id                 → Détail logiciel
 
 GET    /SoftwareLicense              → Liste licences
 GET    /SoftwareLicense/:id          → Détail licence
+
+GET    /SoftwareVersion              → Versions de logiciels
+GET    /Item_SoftwareVersion         → Logiciels installés sur un asset
+```
+
+### Connexions entre assets : `Computer_Item` ⭐
+> Relie un périphérique direct (moniteur, imprimante, téléphone…) à un ordinateur.
+```
+GET    /Computer_Item                            → Toutes les connexions
+POST   /Computer_Item                            → Connecter un item à un PC
+DELETE /Computer_Item/:id                        → Déconnecter
+GET    /Computer/:id/Computer_Item               → Items connectés à ce PC
+GET    /Computer_Item?searchText[computers_id]=3 → Filtrer par ordinateur
+```
+```json
+{ "input": { "computers_id": 3, "itemtype": "Monitor", "items_id": 7 } }
 ```
 
 ### Paramètres spéciaux GET /:id pour Computer
@@ -183,7 +199,63 @@ POST   /Ticket/:id/ITILSolution      → Ajouter une solution
 GET    /Ticket/:id/TicketCost        → Coûts
 POST   /Ticket/:id/TicketCost        → Ajouter un coût
 GET    /Ticket/:id/TicketValidation  → Validations
+GET    /Ticket/:id/Ticket_User       → Acteurs utilisateurs (demandeur/attribué/observateur) ⭐
+POST   /Ticket/:id/Ticket_User       → Ajouter un acteur utilisateur
+DELETE /Ticket/:id/Ticket_User/:link → Retirer un acteur utilisateur ⭐
+GET    /Ticket/:id/Group_Ticket      → Acteurs groupes
+GET    /Ticket/:id/Supplier_Ticket   → Acteurs fournisseurs
+GET    /Ticket/:id/Ticket_Ticket     → Tickets liés (doublon / parent / fils)
+GET    /Ticket/:id/ITILFollowup      → Suivis (déjà listé)
+GET    /Ticket/:id/Notepad           → Notes internes
 ```
+
+### Acteurs du ticket : `Ticket_User`, `Group_Ticket`, `Supplier_Ticket` ⭐⭐
+
+> Dans GLPI, **un utilisateur n'est pas « dans » un ticket directement**. Le lien passe par une **table de jointure** `Ticket_User`. Chaque association (ticket ↔ user ↔ rôle) est **une ligne avec son propre `id`**. Pour retirer un acteur, on supprime **la ligne de liaison**, pas l'utilisateur lui-même.
+
+```
+GET    /Ticket_User                          → Toutes les liaisons user↔ticket
+POST   /Ticket_User                          → Ajouter un acteur
+DELETE /Ticket_User/:link_id                 → Retirer un acteur (route plate)
+
+# Routes imbriquées (recommandées) ⭐
+GET    /Ticket/:id/Ticket_User               → Acteurs d'un ticket précis
+DELETE /Ticket/:id/Ticket_User/:link_id      → Retirer un acteur de ce ticket
+```
+
+#### Rôles (`type`)
+| type | Rôle |
+|------|------|
+| 1 | Demandeur (requester) |
+| 2 | Attribué / technicien (assigned) |
+| 3 | Observateur (watcher) |
+
+#### Body ajout d'un acteur (POST)
+```json
+{
+  "input": {
+    "tickets_id": 403,
+    "users_id": 12,
+    "type": 2
+  }
+}
+```
+
+#### ⚠️ Piège : id de liaison ≠ id du user
+Pour retirer le user #12 du ticket #403, on ne peut **pas** faire `DELETE …?users_id=12`. Il faut :
+1. `GET /Ticket/403/Ticket_User` → retrouver la ligne `{ "id": 14, "users_id": 12, "type": 2 }`
+2. `DELETE /Ticket/403/Ticket_User/14` → c'est **14** (l'id du *lien*) qu'on met à la fin, **pas** 12
+
+#### Mêmes principes pour groupes et fournisseurs
+| Table | Lie le ticket à… | Champ clé |
+|-------|------------------|-----------|
+| `Ticket_User` | un utilisateur | `users_id` + `type` |
+| `Group_Ticket` | un groupe | `groups_id` + `type` |
+| `Supplier_Ticket` | un fournisseur | `suppliers_id` + `type` |
+
+> 💡 Le même schéma s'applique aux autres objets ITIL : `Problem_User`, `Change_User`, etc.
+
+---
 
 ### Relation ticket ↔ asset : Item_Ticket ⭐
 ```
@@ -223,6 +295,38 @@ GET    /Item_Ticket?searchText[items_id]=3&searchText[itemtype]=Computer
 
 ---
 
+## 4.bis Autres objets ITIL : Problème, Changement, Base de connaissances
+
+> `Problem` et `Change` partagent **exactement** le même fonctionnement que `Ticket` (acteurs, suivis, tâches, solutions, coûts). Seul le préfixe change.
+
+```
+GET    /Problem                      → Liste problèmes
+POST   /Problem                      → Créer problème
+GET    /Problem/:id/Problem_User     → Acteurs (même logique que Ticket_User)
+GET    /Problem/:id/ITILFollowup     → Suivis
+
+GET    /Change                       → Liste changements
+GET    /Change/:id/Change_User       → Acteurs
+GET    /Change/:id/ITILFollowup      → Suivis
+
+GET    /Problem_Ticket               → Lien problème↔ticket
+GET    /Change_Ticket                → Lien changement↔ticket
+GET    /Change_Problem               → Lien changement↔problème
+```
+
+### Base de connaissances & réservations
+```
+GET    /KnowbaseItem                 → Articles de la base de connaissances
+GET    /KnowbaseItem/:id             → Détail article
+GET    /KnowbaseItemCategory         → Catégories d'articles
+
+GET    /Reservation                  → Réservations de matériel
+POST   /Reservation                  → Réserver un matériel
+GET    /ReservationItem              → Matériels réservables
+```
+
+---
+
 ## 5. Administration
 
 ```
@@ -248,6 +352,29 @@ DELETE /Entity/:id                   → Supprimer entité
 
 GET    /Profile                      → Liste profils
 GET    /Profile/:id                  → Détail profil
+
+GET    /Profile_User                 → Affectation profil↔utilisateur (par entité)
+GET    /Group_User                   → Appartenance utilisateur↔groupe
+POST   /Group_User                   → Ajouter un user dans un groupe
+DELETE /Group_User/:id               → Retirer un user d'un groupe
+```
+
+### Fournisseurs, contacts, contrats
+```
+GET    /Supplier                     → Liste fournisseurs
+POST   /Supplier                     → Créer fournisseur
+GET    /Supplier/:id                 → Détail fournisseur
+
+GET    /Contact                      → Liste contacts
+GET    /Contact_Supplier             → Lien contact↔fournisseur
+
+GET    /Contract                     → Liste contrats
+POST   /Contract                     → Créer contrat
+GET    /Contract_Item                → Lien contrat↔asset
+POST   /Contract_Item                → Rattacher un asset à un contrat
+
+GET    /Budget                       → Liste budgets
+GET    /Infocom                      → Fiches financières (coût, garantie, amortissement)
 ```
 
 ---
@@ -367,9 +494,15 @@ DELETE /ComputerModel/:id?force_purge=true   → Supprimer modèle PC définitiv
 DELETE /MonitorModel/:id?force_purge=true    → Supprimer modèle moniteur définitivement
 DELETE /State/:id?force_purge=true           → Supprimer état définitivement
 DELETE /Item_Ticket/:id                      → Délier asset d'un ticket
+DELETE /Ticket/:id/Ticket_User/:link_id      → Retirer un acteur user d'un ticket
+DELETE /Ticket/:id/Group_Ticket/:link_id     → Retirer un acteur groupe
+DELETE /Computer_Item/:id                    → Déconnecter un périphérique d'un PC
+DELETE /Contract_Item/:id                    → Détacher un asset d'un contrat
 ```
 
 > ⚠️ Sans `force_purge=true`, l'item est mis à la corbeille (`is_deleted=1`) mais pas supprimé.
+>
+> 💡 Les **tables de jointure** (`Item_Ticket`, `Ticket_User`, `Computer_Item`, `Document_Item`…) n'ont **pas** de corbeille : un `DELETE` sur la liaison la supprime directement. On supprime toujours **l'id de la liaison**, jamais l'id de l'objet lié.
 
 ---
 
@@ -435,6 +568,37 @@ POST /Ticket/1/ITILFollowup
     "is_private": 0
   }
 }
+```
+
+### Affecter un technicien (acteur attribué) à un ticket
+```json
+POST /Ticket/403/Ticket_User
+{
+  "input": {
+    "tickets_id": 403,
+    "users_id": 12,
+    "type": 2
+  }
+}
+```
+
+### Retirer un acteur d'un ticket (2 étapes)
+```
+# 1. retrouver l'id du lien pour ce user
+GET /Ticket/403/Ticket_User
+→ [ { "id": 14, "users_id": 12, "type": 2 }, ... ]
+
+# 2. supprimer le lien (14 = id du lien, PAS 12 = id du user)
+DELETE /Ticket/403/Ticket_User/14
+```
+
+### Retirer TOUS les acteurs d'un ticket
+```
+GET /Ticket/403/Ticket_User          → récupérer tous les liens
+# puis boucler :
+DELETE /Ticket/403/Ticket_User/14
+DELETE /Ticket/403/Ticket_User/15
+...
 ```
 
 ### Valeurs status ticket
