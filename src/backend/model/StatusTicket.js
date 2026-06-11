@@ -24,20 +24,12 @@ class StatusTicket {
         return await postV1(`Ticket/${id}/ITILFollowup`, data);
     }
 
-    static getByEnglishName(status, englishName){
-        const filtered = status.find((status) => status?.english_name.toLowerCase() === englishName.toLowerCase());
+    static getByLanguageName(status, language, name) {
+        const key = `${language.toLowerCase()}_name`;
+        const filtered = status.find((s) => s?.[key]?.toLowerCase() === name.toLowerCase());
         return filtered ?? null;
     }
 
-    static getByFrenchName(status, frenchName){
-        const filtered = status.find((status) => status?.french_name.toLowerCase() === frenchName.toLowerCase());
-        return filtered ?? null;
-    }
-
-    static getByMalagasyName(status, MalagasyName){
-        const filtered = status.find((status) => status?.malagasy_name.toLowerCase() === MalagasyName.toLowerCase());
-        return  filtered ?? null;
-    }
 
     static getByIdStatus(status, idStatus){
         const filtered = status.find((status) => status?.id_status === idStatus);
