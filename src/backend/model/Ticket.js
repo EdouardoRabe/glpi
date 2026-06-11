@@ -223,6 +223,12 @@ class Ticket {
         return results;
     }
 
+    async updateUser(userId, newUserId, newRole) {
+        if (this.id === null) throw new Error("updateUser() : ce ticket n'a pas d'ID");
+        await this.removeUser(userId);
+        await this.saveUsers([{ id: newUserId, type: "User", role: newRole }]);
+    }
+
     async removeAllUsers() {
         if (this.id === null) throw new Error("removeAllUsers() : ce ticket n'a pas d'ID");
         const links = await apiV1.getV1(`Ticket/${this.id}/Ticket_User`);
