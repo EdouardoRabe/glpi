@@ -45,17 +45,31 @@ export default function BOStatusTicket () {
         }
     }
 
+    const updateConfig = async () => {
+        try {
+            const result = await StatusTicket.updateConfig("display", { value: selectedLanguage?.name});
+            console.log("Configuration mise à jour:", result);
+            setSelectedLanguage(null);
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour de la configuration:', error);
+        }
+    }
+
     return (
         <div className="bo-status-ticket">
             <h1>Gestion des statuts de tickets</h1>
              <div className="fo-assets-filter-item">
-                        <label htmlFor="filter-user">Langue</label>
-                        <select id="filter-user" value={selectedLanguage?.code} onChange={(e) => setSelectedLanguage(e.target.value)}>
-                            {language.map(({code, name}) => (
-                                <option key={code} value={code}>{name}</option>
+                        <select id="filter-user" value={selectedLanguage?.code} 
+                            onChange={(e) => {
+                                const lang = language.find((l) => l.code === e.target.value);
+                                setSelectedLanguage(lang ?? null);
+                            }}>
+                            <option value="">Choisir une langue</option>
+                            {language.map((lang) => (
+                                <option key={lang.code} value={lang.code}>{lang.name}</option>
                             ))}
                         </select>
-                        <button>Changer</button>
+                        <button onClick={() => updateConfig()}>Changer</button>
                     </div>
             <div className="bo-status-ticket-table-wrapper">
                 <table>

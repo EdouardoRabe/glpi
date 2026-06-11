@@ -21,6 +21,10 @@ class StatusTicket {
        return await put(`/status/${id}`, data);
     }
 
+    static async updateConfig(code, data = {}){
+        return await put(`/statusConfig/${code}`, data);
+    }
+
     static async delete(id){
         return await del(`/status/${id}`);
     }
