@@ -25,7 +25,6 @@ export const getCostTimeCost = (tickets) => {
 }
 
 
-
 export const getSommeCostByTime = (cost) => {
     return (cost.duration * cost.cost_time / 3600).toFixed(2);
 };

@@ -18,6 +18,31 @@ export function ticketsByStatus(tickets, statusId) {
     return tickets.filter((t) => Number(t.status.id) === Number(statusId));
 }
 
+export function getCostTicketByStatus(tickets, statusId) {
+    const filtered = ticketsByStatus(tickets, statusId);
+    return getCostTotal(filtered);
+}
+
+export function getCostTicketCompletByStatus(tickets, statusId) {
+    const filtered = ticketsCompletByStatus(tickets, statusId);
+    return getCostTotal(filtered);
+
+}
+
+export function getCostTicketByStatusAll(tickets, status){
+    return status.map((stat) => {
+        const cost = getCostTicketByStatus(tickets, stat.id_status);
+        return { label: stat.name, cost };
+    });
+}
+
+export function getCostTicketCompletByStatusAll(tickets, status){
+    return status.map((stat) => {
+        const cost = getCostTicketCompletByStatus(tickets, stat.id_status);
+        return { label: stat.name, cost };
+    });
+}
+
 export function ticketGroupByStatus(tic, statusList) {
     return statusList.map((stat) => {
         const status = stat;
