@@ -4,8 +4,8 @@ import { TICKET_PRIORITY, TICKET_TYPE,  getEnumNameById } from "../../backend/ut
 import { formatToYYYYMMDD_HHmm } from "../../backend/utils/dateUtils";
 import { compareDates } from "../../backend/utils/comparisonUtils";
 import "../../css/pages/BO/BOTicketList.css";
-import { getCostTotal, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
-import { getNbAssetInTicket,  nbTicketsWithAsset } from "../../backend/services/ticket";
+import { getCostTotal, getCostTotalByTime, getCostTotalFixed, getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
+import { getCostTicketCompletByStatusAll, getNbAssetInTicket,  nbTicketsWithAsset } from "../../backend/services/ticket";
 import StatusTicket from "../../backend/model/StatusTicket";
 
 export default function BOTicketList() {
@@ -57,7 +57,6 @@ export default function BOTicketList() {
     const filteredTickets = orderTickets.filter(({ ticket }) => {
         if (filters.priorityId     > 0 && ticket.priority     !== filters.priorityId)     return false;
         if (filters.stateId > 0 && ticket.status?.id !== filters.stateId) return false;
-        if (filters.typeId        > 0 && ticket.type       !== filters.typeId)        return false;
         if (filters.dateMin !== ""      &&       compareDates(ticket.date, filters.dateMin) === -1 )        return false;
         if (filters.dateMax !== ""      &&       compareDates(ticket.date, filters.dateMax) === 1 )        return false;
         return true;
@@ -130,6 +129,7 @@ export default function BOTicketList() {
                     <h3>Total Tickets</h3>
                     <p className="bo-ticket-stat-value">{filteredTickets.length}</p>
                 </div>
+
             </div>
 
             <div className="bo-ticket-items">
