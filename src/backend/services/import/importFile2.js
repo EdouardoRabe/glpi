@@ -102,6 +102,7 @@ export const importFile2 = async (file) => {
             console.log(`[CREATED] Ticket #${ticketId} — "${row.titre}" (ref CSV: ${row.ref_ticket})`);
 
             const itemNames = parseItems(row.items);
+            const seenItems = new Set();
 
             for (const itemName of itemNames) {
                 const found = await findAssetByName(itemName);
@@ -118,6 +119,13 @@ export const importFile2 = async (file) => {
                 }
 
                 const itemtype = found.itemtype.toLowerCase() === "socket" ? "Glpi\\Socket" : found.itemtype;
+
+                const itemKey = `${itemtype}::${found.asset.id}`;
+                if (seenItems.has(itemKey)) {
+                    console.warn(`[SKIP] Ticket #${ticketId} — doublon ignoré : ${itemtype} #${found.asset.id} ("${itemName}")`);
+                    continue;
+                }
+                seenItems.add(itemKey);
 
                 const assocPayload = {
                     input: {
