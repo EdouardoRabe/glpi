@@ -182,23 +182,34 @@ async function apiCall(method, endpoint, resourceId = null, data = null, options
 
 export async function deleteAll(endpoint, protectedIds = [] ){
     try {
-        const items = await get(endpoint);
-        console.log(`Fetched ${items.length} items from ${endpoint} for deletion.`);
-        if (items?.error) {
-            console.error(`Failed to fetch items for deletion: ${items.message}`);
-            return;
-        }   
-        for (const item of items) {
-            if (protectedIds.includes(item.id)) {
-                console.log(`Skipping protected item #${item.id}`);
-                continue;
+        // L'API GLPI plafonne chaque GET à 100 éléments. On reboucle donc
+        // (re-fetch + delete) jusqu'à ce qu'il ne reste plus rien à supprimer.
+        while (true) {
+            const items = await get(endpoint);
+            if (items?.error) {
+                console.error(`Failed to fetch items for deletion: ${items.message}`);
+                return;
             }
-            const delResult = await del(endpoint, item.id, { force: true });
-            if (delResult?.error) {
-                console.error(`Failed to delete item #${item.id}: ${delResult.message}`);
-            } else {
-                console.log(`Deleted item #${item.id}`);
+
+            const deletable = items.filter((item) => !protectedIds.includes(item.id));
+
+            // Plus rien à supprimer (vide, ou il ne reste que des items protégés)
+            if (deletable.length === 0) break;
+
+            let deletedThisPass = 0;
+            for (const item of deletable) {
+                const delResult = await del(endpoint, item.id, { force: true });
+                if (delResult?.error) {
+                    console.error(`Failed to delete item #${item.id}: ${delResult.message}`);
+                } else {
+                    console.log(`Deleted item #${item.id}`);
+                    deletedThisPass++;
+                }
             }
+
+            // Sécurité anti-boucle infinie : si une passe entière n'a rien pu
+            // supprimer (échecs persistants), on arrête au lieu de tourner sans fin.
+            if (deletedThisPass === 0) break;
         }
     } catch (err) {
         console.error(`Error in deleteAll for ${endpoint}:`, err);
