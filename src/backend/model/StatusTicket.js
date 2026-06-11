@@ -8,6 +8,15 @@ class StatusTicket {
         return await get("/status");
     }
 
+    static async getConfigs(){
+        return await get("/statusConfig");
+    }
+
+    static getConfig(configs, code){
+        const filtered = configs.find((c) => c.code === code);
+        return filtered?.value ?? null;
+    }
+
     static async update(id, data = {}){
        return await put(`/status/${id}`, data);
     }
@@ -39,8 +48,9 @@ class StatusTicket {
         return filtered ?? null;
     }
 
-    static getDisplayName(status){
-        return status?.[status?.to_display + "_name"] ?? status.french_name;
+    static getDisplayName(status, configs){
+        const displayConfig = StatusTicket.getConfig(configs, "display");
+        return status?.[displayConfig + "_name"] ?? status.french_name;
     }
 }
 export default StatusTicket;

@@ -8,6 +8,7 @@ import "../../css/pages/FO/FOTicketList.css";
 
 export default function FOTicketList(){
     const [groups, setGroups] = useState([]);
+    const [configs, setConfigs] = useState([]);
     const [draggedTicket, setDraggedTicket] = useState(null);
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [dragOverGroup, setDragOverGroup] = useState(null);
@@ -30,7 +31,9 @@ export default function FOTicketList(){
             const tic = await Ticket.getAllComplete();
             const stat = await StatusTicket.getAll();
             const grouped = ticketCompletGroupByStatus(tic, stat);
+            const config = await StatusTicket.getConfigs();
             setGroups(grouped);
+            setConfigs(config);
         }
         load();
     }, [])
@@ -175,7 +178,7 @@ export default function FOTicketList(){
                                 className="fo-ticket-column-header"
                                 style={{ backgroundColor: group.status.color }}
                             >
-                                <span>{StatusTicket.getDisplayName(group.status)}</span>
+                                <span>{StatusTicket.getDisplayName(group.status, configs)}</span>
                                 <span className="fo-ticket-column-count">
                                     {group.tickets.length}
                                 </span>

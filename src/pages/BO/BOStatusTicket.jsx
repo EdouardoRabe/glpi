@@ -15,7 +15,7 @@ export default function BOStatusTicket () {
 
             const lang = await StatusTicket.getLanguages();
             setLanguage(lang);
-            console.log("lang ",lang);
+
         }
         load();
     }, [])
