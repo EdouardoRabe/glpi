@@ -35,5 +35,9 @@ class StatusTicket {
         const filtered = status.find((status) => status?.id_status === idStatus);
         return filtered ?? null;
     }
+
+    static getDisplayName(status){
+        return status?.[status?.to_display + "_name"] ?? status.french_name;
+    }
 }
 export default StatusTicket;

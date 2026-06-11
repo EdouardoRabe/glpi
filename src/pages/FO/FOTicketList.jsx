@@ -175,7 +175,7 @@ export default function FOTicketList(){
                                 className="fo-ticket-column-header"
                                 style={{ backgroundColor: group.status.color }}
                             >
-                                <span>{group.status.french_name}</span>
+                                <span>{StatusTicket.getDisplayName(group.status)}</span>
                                 <span className="fo-ticket-column-count">
                                     {group.tickets.length}
                                 </span>
