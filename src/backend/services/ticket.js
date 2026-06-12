@@ -153,3 +153,8 @@ export function getNbAssetInTicket(ticketComplete) {
     });
 }
 
+export function getNbAssetInTicketOne(ticketComplete, type) {
+    const count = ticketComplete.assets.filter((a) => a.itemType === type).length;
+    return count;
+}
+
