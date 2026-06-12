@@ -2,6 +2,7 @@ import api from "../utils/api";
 import apiV1 from "../utils/apiV1"
 import { clause, and, or, fetchAll } from "../utils/query";
 import Asset from "./Asset";
+import CostTicket from "./CostTicket";
 
 class Ticket {
 
@@ -86,6 +87,10 @@ class Ticket {
         return users;
     }
 
+    async getSuperCost(){
+        return await CostTicket.getByTicket(this.id);
+    }
+
     static async getAllComplete() {
         const tickets = await Ticket.getAll();
         const ticketsWithItems = await Promise.all(
@@ -94,6 +99,7 @@ class Ticket {
                 assets: await ticket.getItemsAssets(),
                 costs: await ticket.getCosts(),
                 users: await ticket.getUsers(),
+                super_cost: await ticket.getSuperCost(),
             }))
         );
         return ticketsWithItems;

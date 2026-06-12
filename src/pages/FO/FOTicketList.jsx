@@ -5,6 +5,7 @@ import { getNbAssetInTicket, ticketCompletGroupByStatus} from "../../backend/ser
 import { getSommeCost, getSommeCostByTime, getSommeDuration, getSommeFixedCost, getSommeTimeCost, getTotalCostByTime } from "../../backend/services/cost";
 import { useNavigate } from "react-router-dom";
 import "../../css/pages/FO/FOTicketList.css";
+import CostTicket from "../../backend/model/CostTicket";
 
 export default function FOTicketList(){
     const [groups, setGroups] = useState([]);
@@ -14,11 +15,11 @@ export default function FOTicketList(){
     const [dragOverGroup, setDragOverGroup] = useState(null);
     const navigate = useNavigate();
     const [showPopUp, setShowPopUp] = useState(false);
-    const [description, setDescription] = useState(null);
+    const [cost, setCost] = useState(0);
     const [target, setTarget] = useState(null);
     const move = [
-        {current: 6, target: 2},
-        {current : 6, target: 1}
+        {current: 2, target: 6},
+        {current : 1, target: 6}
     ];
 
     const matchMove =(tabId) =>{
@@ -83,16 +84,16 @@ export default function FOTicketList(){
             return;
         }
 
-        //Juste au cas ou
+        // Juste au cas ou
 
-        // const tab = [draggedTicket.status.id, targetGroup.status.id_status];
+        const tab = [draggedTicket.status.id, targetGroup.status.id_status];
 
-        // if(matchMove(tab)){
-        //     openPopUp();
-        //     setTarget(targetGroup);
-        //     console.log("move pop up detecte: ", draggedTicket.status.id, " vers ", targetGroup.status.id_status);
-        //     return;
-        // }
+        if(matchMove(tab)){
+            openPopUp();
+            setTarget(targetGroup);
+            console.log("move pop up detecte: ", draggedTicket.status.id, " vers ", targetGroup.status.id_status);
+            return;
+        }
 
 
         try {
@@ -115,20 +116,16 @@ export default function FOTicketList(){
     }
 
     const continuer = async () =>{
-        console.log("[CONTINUER] ", draggedTicket.status.id, " vers ", target.status.id_status, " description", description);
+        console.log("[CONTINUER] ", draggedTicket.status.id, " vers ", target.status.id_status, "cost", cost);
          try {
 
-            const payloadITIL = {
-                "input": {
-                    "itemtype": "Ticket",
-                    "items_id": draggedTicket.id,
-                    "content": description,
-                    "requesttypes_id": 1
-                }
+            const payloadCost = {
+                    "cost": cost,
+                    "id_ticket": draggedTicket.id,
             }
 
-            await StatusTicket.createITIL(draggedTicket.id, payloadITIL);
-            console.log("description ajoute");
+            await CostTicket.create(payloadCost);
+            console.log("cost ajouter");
 
             const data = { status: { id: target.status.id_status } };
             await draggedTicket.update(data);
@@ -308,8 +305,8 @@ export default function FOTicketList(){
                         <div className="fo-ticket-modal-header">
                             <button type="button" onClick={closePopUp}>Fermer</button>
                         </div>
-                        <label htmlFor="area">Entrer un description</label>
-                        <textarea  name="" id="area" onChange={(e) => setDescription(e.target.value)}/>
+                        <label htmlFor="area">Entrer le cost</label>
+                        <input  name="" type="number" onChange={(e) => setCost(Number(e.target.value))}/>
                         <button onClick={() => continuer()}>Continuer</button>
                     </div>
                 </dialog>

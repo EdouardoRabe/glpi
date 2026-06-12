@@ -1,6 +1,6 @@
 import { TICKET_TYPE } from "../utils/utils"; 
 import { ITEM_TYPES } from "../utils/type";
-import { getCostTotal } from "./cost";
+import { getCostTotal, getSommeCost} from "./cost";
 
 export function nbTicketsByType(tickets, typeId) {
     return tickets.filter((t) => Number(t.type) === Number(typeId)).length;
@@ -83,22 +83,52 @@ export function ticketWithAssetIsAll(ticketsCompletes, type) {
     return ticketsCompletes.filter((ticket) => ticket.assets.every((asset) => asset.itemType === type));
 }
 
-export function getCostTicketAsset(ticketsCompletes, type){
-    const filtered = ticketWithAsset(ticketsCompletes, type);
-    return getCostTotal(filtered);
+export function getCostTicketAsset(ticketsCompletes){
+    if(!ticketsCompletes){
+        return;
+    }
+
+    return ITEM_TYPES.map((type) => {
+
+        const filtered = ticketWithAsset(ticketsCompletes, type); 
+        
+        if(filtered.length === 0) { return {label : type, cost : 0}};
+            
+        const cost = filtered.reduce((acc, tic) => {
+                const count = tic.assets.length;
+                const cost = getSommeCost(tic.costs) ?? 0;
+                const reponse = cost / count;
+                return acc + reponse;
+            }, 0 );
+
+        const super_cost = filtered.reduce((acc, tic) => {
+            const count = tic.assets.length;
+            const cost = tic.super_cost.cost ?? 0;
+            const reponse = cost / count;
+            console.log("reponse ", reponse, " cost ", cost, " count ", count, type);
+            return acc + reponse;
+        }, 0 );
+
+        console.log(cost , " cost ");
+        return {label: type, cost : cost ?? 0, super_cost: super_cost ?? 0, total: (cost + super_cost).toFixed(2) ?? 0};
+
+
+    });
 }
+
+
 
 export function getCostTicketAssetIsAll(ticketsCompletes, type){
     const filtered = ticketWithAssetIsAll(ticketsCompletes, type);
     return getCostTotal(filtered);
 }
 
-export function getCostTicketsAssets(ticketsCompletes) {
-    return ITEM_TYPES.map((type) => {
-        const cost =  getCostTicketAsset(ticketsCompletes, type);
-        return { label: type, cost };
-    });
-}
+// export function getCostTicketsAssets(ticketsCompletes) {
+//     return ITEM_TYPES.map((type) => {
+//         const cost =  getCostTicketAsset(ticketsCompletes, type);
+//         return { label: type, cost };
+//     });
+// }
 
 export function getCostTickestAssetsIsAll(ticketsCompletes) {
     return ITEM_TYPES.map((type) => {
@@ -115,6 +145,7 @@ export function nbTicketsWithAsset(ticketsCompletes) {
 }
 
 export function getNbAssetInTicket(ticketComplete) {
+    console.log(ticketComplete, "complete");
     return ITEM_TYPES.map((type) => {
         const count = ticketComplete.assets.filter((a) => a.itemType === type).length;
         return { label: type, count };

@@ -12,6 +12,7 @@ import FOAssetsDetails from "../pages/FO/FOAssetsDetails.jsx";
 import BOStatusTicket from "../pages/BO/BOStatusTicket.jsx";
 import FOTicketList from "../pages/FO/FOTicketList.jsx";
 import BOCorbeille from "../pages/BO/BOCorbeille.jsx";
+import BOCostTicket from "../pages/BO/BOCostTicket.jsx";
 
 
 export const router = createBrowserRouter([
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
             {
                 path: "corbeille",
                 element: <BOCorbeille/>
+            },
+            {
+                path: "cost",
+                element: <BOCostTicket/>
             }
         ]
     },
