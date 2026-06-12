@@ -23,8 +23,8 @@ class CostTicket {
          return await del(`/cost/remove/${id_ticket}`);
     }
 
-    static async reouvrir(id_ticket){
-         return await post(`/cost/ouvrir/${id_ticket}`);
+    static async reouvrir(id_ticket, data){
+         return await post(`/cost/ouvrir/${id_ticket}`, data);
     }
 }
 export default CostTicket;

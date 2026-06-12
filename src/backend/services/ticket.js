@@ -119,7 +119,7 @@ export function getCostTicketAsset(ticketsCompletes){
 
         console.log(cost , " cost ");
         
-        return {label: type, cost : cost ?? 0, super_cost: super_cost ?? 0, ouverture_cost : ouverture_cost ?? 0, total: (cost + super_cost).toFixed(2) ?? 0};
+        return {label: type, cost : cost ?? 0, super_cost: super_cost ?? 0, ouverture_cost : ouverture_cost ?? 0, total: (cost + super_cost + ouverture_cost).toFixed(2) ?? 0};
 
 
     });
@@ -130,6 +130,7 @@ export function getCostTotalTicketAsset(ticketsCompletes){
     return {
         cost: cost.reduce((acc, c) => acc + Number(c.cost), 0).toFixed(2),
         super_cost: cost.reduce((acc, c) => acc + Number(c.super_cost), 0).toFixed(2),
+        ouverture_cost: cost.reduce((acc, c) => acc + Number(c.ouverture_cost), 0).toFixed(2),
         total: cost.reduce((acc, c) => acc + Number(c.cost) + Number(c.super_cost), 0).toFixed(2)
     }
 } 

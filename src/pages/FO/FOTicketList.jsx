@@ -18,6 +18,7 @@ export default function FOTicketList(){
     const [showPopUpInverse, setShowPopUpInverse] = useState(false);
     const [cost, setCost] = useState(0);
     const [target, setTarget] = useState(null);
+    const [pourcentage, setPourcetange] = useState(null);
     const move = [
         {current: 2, target: 6},
         {current : 1, target: 6}
@@ -170,16 +171,15 @@ export default function FOTicketList(){
         console.log("[CONTINUER] ", draggedTicket.status.id, " vers ", target.status.id_status, "cost", cost);
          try {
 
-             await CostTicket.reouvrir(draggedTicket.id);
+            await CostTicket.reouvrir(draggedTicket.id, { pourcentage : pourcentage ?? 0});
             console.log("cost ajouter");
-
+            
             const data = { status: { id: target.status.id_status } };
             await draggedTicket.update(data);
             
             setGroups(prevGroups =>
                 moveTicketBetweenGroups(prevGroups, draggedTicket.id, target.status.id_status)
             );
-
             
         } catch (error) {
             console.error('Erreur lors du déplacement du ticket:', error);
@@ -394,8 +394,10 @@ export default function FOTicketList(){
                         <div className="fo-ticket-modal-header">
                             <button type="button" onClick={closePopUpInverse}>Fermer</button>
                         </div>
-                        <label htmlFor="area">Supprimer </label>
+                        <label htmlFor="">Supprimer</label>
                         <button onClick={() => remove()}>Remove</button>
+                        <label htmlFor="">Reouvrir</label>
+                        <input max={100} name="" type="number" onChange={(e) => setPourcetange(Number(e.target.value))}/>
                         <button onClick={() => ouverture()}>Reouvrir</button>
                     </div>
                 </dialog>
