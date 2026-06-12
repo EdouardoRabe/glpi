@@ -38,6 +38,27 @@ export function getCostTicketCompletByStatusAll(ticketsComplet, status){
     });
 }
 
+export function ticketWithElement(ticketsCompletes, element) {
+    return ticketsCompletes.filter((ticket) =>
+        ticket.assets.some((asset) =>
+            asset.itemType === element.itemType && Number(asset.id) === Number(element.id)
+        )
+    );
+}
+
+export function getCostTicketElement(ticketsCompletes, element) {
+    const filtered = ticketWithElement(ticketsCompletes, element);
+    return getCostTotal(filtered);
+}
+
+export function getCostTicketsElements(ticketsCompletes, elements) {
+    return elements.map((element) => {
+        const cost = getCostTicketElement(ticketsCompletes, element);
+        return { label: element.name, cost };
+    });
+}
+
+
 export function ticketCompletGroupByStatus(tic, statusList) {
     return statusList.map((stat) => {
         const status = stat;
