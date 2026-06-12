@@ -110,6 +110,7 @@ export function getCostTicketAsset(ticketsCompletes){
         }, 0 );
 
         console.log(cost , " cost ");
+        
         return {label: type, cost : cost ?? 0, super_cost: super_cost ?? 0, total: (cost + super_cost).toFixed(2) ?? 0};
 
 
