@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Ticket from "../../backend/model/Ticket";
-import { getCostTicketAsset } from "../../backend/services/ticket";
+import { getCostTicketAsset, getCostTotalTicketAsset } from "../../backend/services/ticket";
 
 export default function BOCostTicket(){
 
@@ -12,7 +12,7 @@ export default function BOCostTicket(){
           
             const ticketComplet = await Ticket.getAllComplete();
             console.log(ticketComplet, "ticket");
-            const cost = getCostTicketAsset(ticketComplet) ;
+            const cost = getCostTicketAsset(ticketComplet);
             console.log(cost, "coute");
             setCost(cost);
             setTickets(ticketComplet);
@@ -20,6 +20,7 @@ export default function BOCostTicket(){
         load();
     }, [])
 
+    const total = tickets ? getCostTotalTicketAsset(tickets) : null;
 
     return (
         <div>
@@ -45,6 +46,16 @@ export default function BOCostTicket(){
                             )
                         }                  
                         )}
+                        {
+                            total && (
+                                <tr>
+                                    <td>Total</td>
+                                    <td>{total.cost}</td>
+                                    <td>{total.super_cost}</td>
+                                    <td>{total.total}</td>
+                                </tr>
+                            )
+                        }
                     </tbody>
                 </table>
         </div>

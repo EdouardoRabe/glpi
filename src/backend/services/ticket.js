@@ -117,6 +117,15 @@ export function getCostTicketAsset(ticketsCompletes){
     });
 }
 
+export function getCostTotalTicketAsset(ticketsCompletes){
+    const cost = getCostTicketAsset(ticketsCompletes);
+    return {
+        cost: cost.reduce((acc, c) => acc + Number(c.cost), 0).toFixed(2),
+        super_cost: cost.reduce((acc, c) => acc + Number(c.super_cost), 0).toFixed(2),
+        total: cost.reduce((acc, c) => acc + Number(c.cost) + Number(c.super_cost), 0).toFixed(2)
+    }
+} 
+
 
 
 export function getCostTicketAssetIsAll(ticketsCompletes, type){
