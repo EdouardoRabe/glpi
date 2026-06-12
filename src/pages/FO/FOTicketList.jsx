@@ -396,6 +396,7 @@ export default function FOTicketList(){
                         </div>
                         <label htmlFor="">Supprimer</label>
                         <button onClick={() => remove()}>Remove</button>
+                        <br />
                         <label htmlFor="">Reouvrir</label>
                         <input max={100} name="" type="number" onChange={(e) => setPourcetange(Number(e.target.value))}/>
                         <button onClick={() => ouverture()}>Reouvrir</button>
