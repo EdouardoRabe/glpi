@@ -6,13 +6,13 @@ import {validateImportBatch} from "./importValidation"
 
 export const executeImport = async (file1, file2, file3, file4, importImage) => {
     try {
-        // const validationResult = await validateImportBatch({file1,file2,file3})
-        // if (!validationResult.valid) {
-		// 		const errorMessages = validationResult.errors
-		// 			.map((err) => `${err.file} (ligne ${err.line}): ${err.message}`)
-		// 			.join('\n')
-		// 		throw new Error(`Validation échouée:\n${errorMessages}`)
-		// }
+        const validationResult = await validateImportBatch({file1,file2,file3})
+        if (!validationResult.valid) {
+				const errorMessages = validationResult.errors
+					.map((err) => `${err.file} (ligne ${err.line}): ${err.message}`)
+					.join('\n')
+				throw new Error(`Validation échouée:\n${errorMessages}`)
+		}
         
         if (file1) {
             await importFile1(file1);

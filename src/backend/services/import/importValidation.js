@@ -138,7 +138,7 @@ const validateSingleCsvFile = async ({ file, fileKey, errors, options = {} }) =>
 export const validateImportBatch = async ({ file1, file2, file3 } = {}) => {
 	const errors = []
 	if (file1){ await validateSingleCsvFile({ file: file1, fileKey: 'file1', errors})}
-	if (file2){ await validateSingleCsvFile({ file: file2, fileKey: 'file2', errors, options: { dateField: 'date'} } )}
+	if (file2){ await validateSingleCsvFile({ file: file2, fileKey: 'file2', errors } )}
 	if (file3){ await validateSingleCsvFile({ file: file3, fileKey: 'file3', errors, options: {  amountFields: ['duration', 'time_cost', 'fixed_cost'] } })}
 	console.log("Validation result: ", { valid: errors.length === 0, errors })
 	return {
