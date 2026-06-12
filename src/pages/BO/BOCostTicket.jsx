@@ -31,16 +31,18 @@ export default function BOCostTicket(){
                             <th>Type d'asset</th>
                             <th>Coût</th>
                             <th>Super Coût</th>
+                            <th>Super Coût</th>
                             <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        { cost?.map(({ label, cost: c, super_cost, total }) =>       {
+                        { cost?.map(({ label, cost: c, super_cost, total, ouverture_cost }) =>       {
                             return (
                                 <tr key={label}>
                                     <td>{label}</td>
                                     <td>{c}</td>
                                     <td>{super_cost}</td>
+                                    <td>{ouverture_cost}</td>
                                     <td>{total}</td>
                                 </tr>
                             )

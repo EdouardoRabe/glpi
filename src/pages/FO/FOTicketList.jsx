@@ -15,6 +15,7 @@ export default function FOTicketList(){
     const [dragOverGroup, setDragOverGroup] = useState(null);
     const navigate = useNavigate();
     const [showPopUp, setShowPopUp] = useState(false);
+    const [showPopUpInverse, setShowPopUpInverse] = useState(false);
     const [cost, setCost] = useState(0);
     const [target, setTarget] = useState(null);
     const move = [
@@ -22,9 +23,19 @@ export default function FOTicketList(){
         {current : 1, target: 6}
     ];
 
+    const moveInverse = [
+        {current: 6, target: 2},
+        {current : 6,  target: 1}
+    ];
+
     const matchMove =(tabId) =>{
         return move.some((mv) => (tabId[0]===mv.current && tabId[1]===mv.target));
     }
+
+    const matchInverseMove =(tabId) =>{
+        return moveInverse.some((mv) => (tabId[0]===mv.current && tabId[1]===mv.target));
+    }
+    
     
 
     useEffect(()=>{
@@ -95,6 +106,13 @@ export default function FOTicketList(){
             return;
         }
 
+        if(matchInverseMove(tab)){
+            openPopUpInverse();
+            setTarget(targetGroup);
+            console.log("move pop up detecte: ", draggedTicket.status.id, " vers ", targetGroup.status.id_status);
+            return;
+        }
+
 
         try {
             const data = { status: { id: targetGroup.status.id_status } };
@@ -148,11 +166,70 @@ export default function FOTicketList(){
         setShowPopUp(null);
     }
 
+    const ouverture = async () =>{
+        console.log("[CONTINUER] ", draggedTicket.status.id, " vers ", target.status.id_status, "cost", cost);
+         try {
+
+             await CostTicket.reouvrir(draggedTicket.id);
+            console.log("cost ajouter");
+
+            const data = { status: { id: target.status.id_status } };
+            await draggedTicket.update(data);
+            
+            setGroups(prevGroups =>
+                moveTicketBetweenGroups(prevGroups, draggedTicket.id, target.status.id_status)
+            );
+
+            
+        } catch (error) {
+            console.error('Erreur lors du déplacement du ticket:', error);
+
+            const tic = await Ticket.getAllComplete();
+            const stat = await StatusTicket.getAll();
+            const grouped = ticketCompletGroupByStatus(tic, stat);
+            setGroups(grouped);
+        }
+        setDraggedTicket(null);
+        setTarget(null);
+        setShowPopUpInverse(null);
+    }
+
+    const remove = async () =>{
+        console.log("[CONTINUER] ", draggedTicket.status.id, " vers ", target.status.id_status, "cost", cost);
+         try {
+
+            await CostTicket.remove(draggedTicket.id);
+            console.log("cost remover");
+
+            const data = { status: { id: target.status.id_status } };
+            await draggedTicket.update(data);
+            
+            setGroups(prevGroups =>
+                moveTicketBetweenGroups(prevGroups, draggedTicket.id, target.status.id_status)
+            );
+
+            
+        } catch (error) {
+            console.error('Erreur lors du déplacement du ticket:', error);
+
+            const tic = await Ticket.getAllComplete();
+            const stat = await StatusTicket.getAll();
+            const grouped = ticketCompletGroupByStatus(tic, stat);
+            setGroups(grouped);
+        }
+        setDraggedTicket(null);
+        setTarget(null);
+        setShowPopUpInverse(null);
+    }
+
     const openTicketDetails = (complete) => setSelectedTicket(complete ?? null);
     const closeTicketDetails = () => setSelectedTicket(null);
 
     const openPopUp = () => setShowPopUp(true);
     const closePopUp = () => setShowPopUp(false);
+
+    const openPopUpInverse = () => setShowPopUpInverse(true);
+    const closePopUpInverse = () => setShowPopUpInverse(false);
 
     const nbAssetInTicket = selectedTicket ? getNbAssetInTicket(selectedTicket) : [];
 
@@ -308,6 +385,18 @@ export default function FOTicketList(){
                         <label htmlFor="area">Entrer le cost</label>
                         <input  name="" type="number" onChange={(e) => setCost(Number(e.target.value))}/>
                         <button onClick={() => continuer()}>Continuer</button>
+                    </div>
+                </dialog>
+            )}
+            {showPopUpInverse && (
+                <dialog open onCancel={closePopUpInverse}>
+                    <div className="fo-ticket-modal">
+                        <div className="fo-ticket-modal-header">
+                            <button type="button" onClick={closePopUpInverse}>Fermer</button>
+                        </div>
+                        <label htmlFor="area">Supprimer </label>
+                        <button onClick={() => remove()}>Remove</button>
+                        <button onClick={() => ouverture()}>Reouvrir</button>
                     </div>
                 </dialog>
             )}

@@ -109,9 +109,17 @@ export function getCostTicketAsset(ticketsCompletes){
             return acc + reponse;
         }, 0 );
 
+         const ouverture_cost = filtered.reduce((acc, tic) => {
+            const count = tic.assets.length;
+            const cost = tic.super_cost?.ouverture_cost ?? 0;
+            const reponse = cost / count;
+            console.log("reponse ", reponse, " cost ", cost, " count ", count, type);
+            return acc + reponse;
+        }, 0 );
+
         console.log(cost , " cost ");
         
-        return {label: type, cost : cost ?? 0, super_cost: super_cost ?? 0, total: (cost + super_cost).toFixed(2) ?? 0};
+        return {label: type, cost : cost ?? 0, super_cost: super_cost ?? 0, ouverture_cost : ouverture_cost ?? 0, total: (cost + super_cost).toFixed(2) ?? 0};
 
 
     });

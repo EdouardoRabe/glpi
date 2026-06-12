@@ -17,5 +17,14 @@ class CostTicket {
         const all = await CostTicket.getAll();
         return all.find((cost) => Number(cost.id_ticket) === Number(id_ticket));
     }
+
+   
+    static async remove(id_ticket){
+         return await del(`/cost/remove/${id_ticket}`);
+    }
+
+    static async reouvrir(id_ticket){
+         return await post(`/cost/ouvrir/${id_ticket}`);
+    }
 }
 export default CostTicket;
