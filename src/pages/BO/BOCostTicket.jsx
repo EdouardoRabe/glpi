@@ -24,14 +24,29 @@ export default function BOCostTicket(){
     return (
         <div>
             <h1>Page de cost</h1>
-            {
-                cost &&  cost.map( ({label, cost})=>(
-                    <div key={label}>
-                        <p>{label} - {cost}</p>
-                    </div>
-                )
-                )
-            }
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type d'asset</th>
+                            <th>Coût</th>
+                            <th>Super Coût</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { cost?.map(({ label, cost: c, super_cost, total }) =>       {
+                            return (
+                                <tr key={label}>
+                                    <td>{label}</td>
+                                    <td>{c}</td>
+                                    <td>{super_cost}</td>
+                                    <td>{total}</td>
+                                </tr>
+                            )
+                        }                  
+                        )}
+                    </tbody>
+                </table>
         </div>
     )
 }

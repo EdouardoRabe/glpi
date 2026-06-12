@@ -92,7 +92,7 @@ export function getCostTicketAsset(ticketsCompletes){
 
         const filtered = ticketWithAsset(ticketsCompletes, type); 
         
-        if(filtered.length === 0) { return {label : type, cost : 0}};
+        if(filtered.length === 0) { return {label : type, cost : 0, super_cost: 0, total: 0}; };
             
         const cost = filtered.reduce((acc, tic) => {
                 const count = tic.assets.length;
@@ -103,7 +103,7 @@ export function getCostTicketAsset(ticketsCompletes){
 
         const super_cost = filtered.reduce((acc, tic) => {
             const count = tic.assets.length;
-            const cost = tic.super_cost.cost ?? 0;
+            const cost = tic.super_cost?.cost ?? 0;
             const reponse = cost / count;
             console.log("reponse ", reponse, " cost ", cost, " count ", count, type);
             return acc + reponse;
